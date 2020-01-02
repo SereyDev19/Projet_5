@@ -1,0 +1,193 @@
+<?php
+
+namespace SC19DEV\Blog\Model;
+
+use phpDocumentor\Reflection\Types\Integer;
+
+require_once("model/GetAPIData.php");
+
+class AdSetManager extends GetAPIData
+{
+    public $AdSetList = [];
+    public $adsetData = [];
+    public $optimization_goal = '';
+    public $actions = []; // ['landing_page_view' : 78, 'link_click' : 1588]
+    public $cost_per_action = [];
+    public $fieldRes = [];
+    public $hasData = false;
+
+
+    public function getAdSets($account_id)
+    {
+        try {
+            $response = $this->fb->get(
+                '/act_' . $account_id . '/adsets',
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+
+            $data = $getDecodeBody['data'];
+
+            foreach ($data as $value) {
+                array_push($this->AdSetList, $value['id']);
+            }
+
+            return $this->AdSetList;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function getName($adSetId)
+    {
+        try {
+            $response = $this->fb->get(
+                '/' . $adSetId . '?fields=name',
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+
+            return $getDecodeBody['name'];
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function optimGoal($adSetId)
+    {
+        try {
+            $response = $this->fb->get(
+                '/' . $adSetId . '?fields=optimization_goal',
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+            $this->optimization_goal = $getDecodeBody['optimization_goal'];
+            return $this->optimization_goal;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function DataFromFields($adSetId, $fields)
+    {
+        $this->setFields($fields);
+
+        try {
+            $response = $this->fb->get(
+                '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+
+            if (empty($getDecodeBody['data'][0])) {
+                $this->hasData = false;
+            } else {
+                $this->hasData = true;
+                foreach ($fields as $field) {
+                    $this->fieldRes[$field] = $getDecodeBody['data'][0][$field];
+                }
+
+                $this->adsetData[$adSetId] = $this->fieldRes;
+                return $this->adsetData;
+            }
+
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function getDataActions($adSetId, $fields)
+    {
+        $this->setFields($fields);
+
+        try {
+            $response = $this->fb->get(
+                '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+            $data = $getDecodeBody['data'][0]['actions'];
+
+            foreach ($data as $value) {
+                $action_type = $value['action_type'];
+                $this->actions[$action_type] = $value['value'];
+            }
+
+            return $this->actions;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function getCost($adSetId, $fields)
+    {
+        $this->setFields($fields);
+
+        try {
+            $response = $this->fb->get(
+                '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+            $data = $getDecodeBody['data'][0]['cost_per_action_type'];
+
+            foreach ($data as $value) {
+                $cost_per_action_type = $value['action_type'];
+//                $this->cost_per_action[$cost_per_action_type] = number_format($value['value'], 2);
+                $this->cost_per_action[$cost_per_action_type] = $value['value'];
+            }
+//            $this->cost_per_action = number_format($this->cost_per_action, 2);
+            return $this->cost_per_action;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
+    public function getResult($adSetId)
+    {
+
+        $this->optimGoal($adSetId);
+        if ($this->optimization_goal == 'LEAD_GENERATION') {
+            $action = 'lead';
+            $result = $this->getDataActions($adSetId, ['actions'])[$action];
+            $cost_per_result = $this->getCost($adSetId, ['cost_per_action_type'])[$action];
+        } elseif ($this->optimization_goal == 'THRUPLAY') {
+            $action = 'video_thruplay_watched_actions';
+            $result = $this->DataFromFields($adSetId, [$action])[$adSetId][$action][0]['value'];
+            $cost_per_action = 'cost_per_thruplay';
+            $cost_per_result = $this->DataFromFields($adSetId, [$cost_per_action])[$adSetId][$cost_per_action][0]['value'];
+        }
+
+        return [$action, $result, $cost_per_result];
+    }
+}

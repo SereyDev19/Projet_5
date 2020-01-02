@@ -1,0 +1,1 @@
+ALTER TABLE `commentaires` ADD `reported` INT NOT NULL AFTER `comment_date`;

@@ -1,0 +1,1 @@
+UPDATE `users` SET `user_password` = '$2y$10$/vqKGkcPKVqn9YeV9Zu7Ce.WpCtVfSyc6W9dUcByKVkkmIslQvicm' WHERE `users`.`user_id` = 1;

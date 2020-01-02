@@ -1,0 +1,1 @@
+UPDATE `billets` SET `edit_date`=`creation_date`

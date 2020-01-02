@@ -1,0 +1,65 @@
+/*COLORS
+ 27, 132, 180: #1b84b4
+ 0, 185, 173 : #00b9ae
+ 3, 113, 113 : #037171
+ 3, 49, 46 :   #03312e
+ 2, 195, 189 : #02c3bd
+*/
+
+body {
+    background: #044370;
+}
+
+#container {
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 10%;
+}
+
+/* Bordered form */
+form {
+    width: 100%;
+    padding: 30px;
+    border: 1px solid #f1f1f1;
+    background: #fff;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#container h1 {
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+input[type=submit] {
+    background-color: #044370;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+input[type=submit]:hover {
+    background-color: white;
+    color: #044370;
+    border: 1px solid #044370;
+}
+
+@media (max-width: 400px) {
+    #container {
+        width: 100%;
+    }
+}
