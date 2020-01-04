@@ -1,6 +1,6 @@
 <?php
 
-namespace SC19DEV\Blog\Router;
+namespace SC19DEV\App\Router;
 
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -36,6 +36,9 @@ class Router
                 break;
             case 'updateAccountData':
                 APIGlobalReport();
+                break;
+            case 'manageAccess':
+                adminManageAccess();
                 break;
             case '':
                 adminGlobalReport();

@@ -1,6 +1,6 @@
 <?php
 
-namespace SC19DEV\Blog\Model;
+namespace SC19DEV\App\Model;
 require_once("model/Manager.php");
 
 class GetAPIData extends Manager
@@ -9,7 +9,7 @@ class GetAPIData extends Manager
 
     public $fieldsConc = '';
     public $fieldRes = [];
-    public $actions = []; // ['landing_page_view' : 78, 'link_click' : 1588]
+    public $actions = [];
     public $cost_per_action = [];
     public $accounts = [];
     public $AccountList = [];

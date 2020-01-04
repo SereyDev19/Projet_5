@@ -1,6 +1,6 @@
 <?php
 
-namespace SC19DEV\Blog\Model;
+namespace SC19DEV\App\Model;
 
 use phpDocumentor\Reflection\Types\Integer;
 

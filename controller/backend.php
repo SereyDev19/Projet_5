@@ -15,10 +15,10 @@ require_once('model/backend/FlashBag.php');
 
 function adminVerification()
 {
-    $userManager = new SC19DEV\Blog\Model\UserManager();
+    $userManager = new SC19DEV\App\Model\UserManager();
     $userExists = $userManager->verifyUser($_POST['username'], $_POST['password']);
 
-    $flashbag = new SC19DEV\Blog\Model\FlashBag();
+    $flashbag = new SC19DEV\App\Model\FlashBag();
 
     if (!$userManager->isCorrect) {
         adminLogin();
@@ -28,7 +28,7 @@ function adminVerification()
         exit();
     }
 
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     $userSession->registerUser($userManager->username, $userManager->user_id);
 
     $flashbag->add($userManager->message, 'success');
@@ -40,11 +40,11 @@ function adminVerification()
 
 function APIGlobalReport()
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
-        $getAPIData = new \SC19DEV\Blog\Model\GetAPIData();
-        $synData = new \SC19DEV\Blog\Model\SyncData();
-        $getDBaccounts = new \SC19DEV\Blog\Model\GetDBData();
+        $getAPIData = new \SC19DEV\App\Model\GetAPIData();
+        $synData = new \SC19DEV\App\Model\SyncData();
+        $getDBaccounts = new \SC19DEV\App\Model\GetDBData();
         //Get data from FB API
         $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
         $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
@@ -52,12 +52,12 @@ function APIGlobalReport()
 
         foreach ($getAccountsId as $iterAccount) {
 //            $iterAccount = substr($iterAccount, 4, strlen($iterAccount));
-            $getAPIData = new \SC19DEV\Blog\Model\GetAPIData();
+            $getAPIData = new \SC19DEV\App\Model\GetAPIData();
             $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
 
             if ($getAPIData->hasData) {
                 // Make a TRY
-                $adSet = new \SC19DEV\Blog\Model\AdSetManager();
+                $adSet = new \SC19DEV\App\Model\AdSetManager();
                 $adSetList = $adSet->getAdSets($iterAccount);
                 $goal = '';
                 foreach ($adSetList as $iterAdSet) {
@@ -92,9 +92,9 @@ function APIGlobalReport()
 
 function adminGlobalReport()
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
-        $getDBData = new \SC19DEV\Blog\Model\GetDBData();
+        $getDBData = new \SC19DEV\App\Model\GetDBData();
         $DBaccounts = $getDBData->getAccounts();
 
 
@@ -107,9 +107,9 @@ function adminGlobalReport()
 
 function adminReportAccount($accountId)
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
-        $getDBData = new \SC19DEV\Blog\Model\GetDBData();
+        $getDBData = new \SC19DEV\App\Model\GetDBData();
         $DBaccount = $getDBData->getAccount($accountId);
 
         require('view/frontend/reportAccount.php');
@@ -119,10 +119,10 @@ function adminReportAccount($accountId)
 
 function admindetailedReport($accountId)
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
 
-        $getDBData = new \SC19DEV\Blog\Model\GetDBData();
+        $getDBData = new \SC19DEV\App\Model\GetDBData();
         $adSets = $getDBData->getAccountAdSets($accountId);
         $account = $getDBData->getAccounts($accountId);
 
@@ -139,9 +139,9 @@ function admindetailedReport($accountId)
 
 function APIReportAccount($accountId)
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
-        $getAPIData = new \SC19DEV\Blog\Model\GetAPIData();
+        $getAPIData = new \SC19DEV\App\Model\GetAPIData();
 
         $res = $getAPIData->getFromFields($accountId, ['spend']);
         $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -152,14 +152,14 @@ function APIReportAccount($accountId)
 function APIdetailedReport($accountId)
 {
 
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
 
-        $getAPIData = new \SC19DEV\Blog\Model\GetAPIData();
-        $adSet = new \SC19DEV\Blog\Model\AdSetManager();
-        $ad = new \SC19DEV\Blog\Model\AdManager();
-        $bddAdSet = new \SC19DEV\Blog\Model\SyncData();
-        $bddAd = new \SC19DEV\Blog\Model\SyncData();
+        $getAPIData = new \SC19DEV\App\Model\GetAPIData();
+        $adSet = new \SC19DEV\App\Model\AdSetManager();
+        $ad = new \SC19DEV\App\Model\AdManager();
+        $bddAdSet = new \SC19DEV\App\Model\SyncData();
+        $bddAd = new \SC19DEV\App\Model\SyncData();
 
         $res = $getAPIData->getFromFields($accountId, ['spend']);
         $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -173,7 +173,7 @@ function APIdetailedReport($accountId)
         $registerAdSet = $bddAdSet->getBddAdSets($accountId);
         foreach ($adSetList as $iterAdSet) {
 
-            $adSet = new \SC19DEV\Blog\Model\AdSetManager();
+            $adSet = new \SC19DEV\App\Model\AdSetManager();
             $adSetData = $adSet->DataFromFields($iterAdSet, ['spend', 'cpm', 'clicks', 'cpc']);
 
             if ($adSet->hasData) {
@@ -195,7 +195,7 @@ function APIdetailedReport($accountId)
                 $adsList = $ad->getAdsfromAdList($iterAdSet);
 
                 foreach ($adsList as $iterAd) {
-                    $ad = new \SC19DEV\Blog\Model\AdManager();
+                    $ad = new \SC19DEV\App\Model\AdManager();
                     // $Goal is the same as the ad's adlist
                     $name = $ad->getName($iterAd);
                     $adData = $ad->DataFromFields($iterAd, ['spend', 'cpm', 'clicks', 'cpc']);
@@ -219,9 +219,23 @@ function APIdetailedReport($accountId)
     }
 }
 
+function adminManageAccess()
+{
+    $userSession = new SC19DEV\App\Model\UserSession();
+    if ($userSession->isLogged()) {
+        $getDBData = new \SC19DEV\App\Model\GetDBData();
+        $DBaccounts = $getDBData->getAccounts();
+//        $var = random_int(1e6, 1e9);
+
+        require('view/frontend/access.php');
+    } else {
+        require('view/backend/login.php');
+    }
+}
+
 function adminLogout()
 {
-    $session = new SC19DEV\Blog\Model\Session();
+    $session = new SC19DEV\App\Model\Session();
     $session->stopSession();
     header("Location: index.php");
     exit;
@@ -230,7 +244,7 @@ function adminLogout()
 
 function adminLogin()
 {
-    $userSession = new SC19DEV\Blog\Model\UserSession();
+    $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
         require('view/frontend/dashboard.php');
     } else {

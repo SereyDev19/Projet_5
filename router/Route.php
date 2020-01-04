@@ -1,7 +1,7 @@
 <?php
 
 
-namespace SC19DEV\Blog\Router;
+namespace SC19DEV\App\Router;
 
 
 class Route

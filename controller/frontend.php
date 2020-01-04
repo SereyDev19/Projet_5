@@ -15,8 +15,8 @@ function listPosts($online)
 function post($online)
 {
 
-    $postManager = new SC19DEV\Blog\Model\PostManager();
-    $commentManager = new SC19DEV\Blog\Model\CommentManager();
+    $postManager = new SC19DEV\App\Model\PostManager();
+    $commentManager = new SC19DEV\App\Model\CommentManager();
 //    $posts = $postManager->getPosts($online,'postid','ASC');
     $posts = $postManager->getPosts(false,'postid','ASC');
 
@@ -37,7 +37,7 @@ function post($online)
 
 function addComment($postId, $author, $comment)
 {
-    $commentManager = new SC19DEV\Blog\Model\CommentManager();
+    $commentManager = new SC19DEV\App\Model\CommentManager();
 
     $affectedLines = $commentManager->postComment($postId, $author, $comment);
 
@@ -50,10 +50,10 @@ function addComment($postId, $author, $comment)
 
 function reportComment($postId, $id)
 {
-    $commentManager = new SC19DEV\Blog\Model\CommentManager();
+    $commentManager = new SC19DEV\App\Model\CommentManager();
     $report = $commentManager->reportComment($id);
 
-    $notificationManager = new \SC19DEV\Blog\Model\NotificationManager();
+    $notificationManager = new \SC19DEV\App\Model\NotificationManager();
     $notificationManager->NewNotification();
     $notificationManager->isNewNotification();
 //    var_dump($notificationManager->isNewNotification());

@@ -23,7 +23,7 @@ $date = new date();
                     <i class="fas fa-home"></i>Actions
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="admin.php?action=manageAccess">
+                    <a class="dropdown-item" href="admin.php?action=globalreport">
                         Gérer les accès
                     </a>
                     <a class="dropdown-item" href="admin.php?action=globalreport">
@@ -71,40 +71,47 @@ $date = new date();
             </div>
         </div>
         <section class="col-xl-12">
-            <table class="container table table-striped table-condensed">
-                <thead>
-                <tr>
-                    <th>
-                        <i class="fas fa-wallet"></i>
-                        <span class="responsive_title">Compte client</span>
-                    </th>
-                    <th>
-                        <i class="fas fa-chart-area"></i>
-                        <span class="responsive_title">Plateforme(s)</span>
-                    </th>
-                    <th>
-                        <i class="far fa-comment-alt"></i>
-                        <span class="responsive_title">Autres</span>
-                    </th>
-                </thead>
-                <?php
-                foreach ($DBaccounts as $account): ?>
+            <?php
+            foreach ($DBaccounts as $account): ?>
+                <a href="admin.php?action=reportAccount&amp;account_id=<?= $account['account_id']; ?>">
+                    <?= $account['account_name']; ?>
+                    <?= $account['account_id']; ?>
+                </a>
+                <table class="container table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>
+                            <i class="fas fa-chart-area"></i>
+                            <span class="responsive_title">Accès pour les identifiants</span>
+                        </th>
+                        <th>
+                            <i class="far fa-comment-alt"></i>
+                            <span class="responsive_title">E-mail</span>
+                        </th>
+                        <th>
+                            <i class="far fa-comment-alt"></i>
+                            <span class="responsive_title">Nom</span>
+                        </th>
+                        <th>
+                            <i class="far fa-comment-alt"></i>
+                            <span class="responsive_title">Prénom</span>
+                        </th>
+                    </thead>
+
+
                     <tr>
                         <td>
-                            <a href="admin.php?action=reportAccount&amp;account_id=<?=$account['account_id'] ;?>">
-                                <?= $account['account_name']; ?>
-                                <?= $account['account_id']; ?>
-                            </a>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td>
 
                         </td>
-                        <td>
-                            <i class="fab fa-facebook-square"></i>
-                        </td>
-                        <td>
-                        </td>
                     </tr>
-                <?php endforeach; ?>
-            </table>
+                </table>
+            <?php endforeach; ?>
+
         </section>
     </div>
     <footer class="row col-sm-12">

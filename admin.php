@@ -2,7 +2,7 @@
 require('controller/backend.php');
 require('router/router.php');
 try {
-    $router = new \SC19DEV\Blog\Router\Router();
+    $router = new \SC19DEV\App\Router\Router();
     $router->method();
     $router->run();
 } catch

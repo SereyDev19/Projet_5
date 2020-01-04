@@ -60,7 +60,7 @@ $date = new date();
         </a>
         <button type="button" class="btn btn-info">
             <a href="admin.php?action=updateAccountData&amp;account_id=<?= $accountId; ?>">
-                Mise à jour des données
+                <i class="fas fa-sync-alt"></i> à jour des données
             </a>
         </button>
         <div class="btn-group row col-sm-12 sort">

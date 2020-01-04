@@ -1,6 +1,6 @@
 <?php
 
-namespace SC19DEV\Blog\Model;
+namespace SC19DEV\App\Model;
 require_once("model/Manager.php");
 require_once("model/CommentManager.php");
 
