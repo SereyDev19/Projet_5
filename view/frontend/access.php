@@ -1,7 +1,7 @@
 <?php ob_start(); ?>
 <?php $Url = urlencode("http://" . $_SERVER['SERVER_NAME'] . $_SERVER["REQUEST_URI"]);
-require('view/helper.php');
-$date = new date();
+//require('view/helper.php');
+//$date = new date();
 ?>
 
     <body>
@@ -75,7 +75,10 @@ $date = new date();
             foreach ($DBaccounts as $account): ?>
                 <a href="admin.php?action=reportAccount&amp;account_id=<?= $account['account_id']; ?>">
                     <?= $account['account_name']; ?>
-                    <?= $account['account_id']; ?>
+                    (<?= $account['account_id']; ?>)
+                </a>
+                <a href="admin.php?action=addAccess&amp;account_id=<?= $account['account_id']; ?>">
+                    <button>Ajouter un accès</button>
                 </a>
                 <table class="container table table-striped table-condensed">
                     <thead>
@@ -96,19 +99,43 @@ $date = new date();
                             <i class="far fa-comment-alt"></i>
                             <span class="responsive_title">Prénom</span>
                         </th>
+                        <th>
+                            Action
+                        </th>
                     </thead>
 
+                    <?php
+                    foreach ($allAccess as $iterAccess): ?>
+                        <?php if ($iterAccess['account_id'] == $account['account_id']): ?>
+                            <tr>
+                                <td>
+                                    <?= $iterAccess['access_id']; ?>
+                                </td>
+                                <td>
+                                <?php if ($iterAccess['access_email'] != ''): ?>
+                                <?= $iterAccess['access_email'] ;?>
+                                <?php endif; ?>
+                                </td>
 
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td></td>
-                        <td>
+                                <td>
+                                    <?php if ($iterAccess['access_name'] != ''): ?>
+                                        <?= $iterAccess['access_name'] ;?>
+                                    <?php endif; ?>
+                                </td>
 
-                        </td>
-                    </tr>
+                                <td>
+                                    <?php if ($iterAccess['access_firstname'] != ''): ?>
+                                        <?= $iterAccess['access_firstname'] ;?>
+                                    <?php endif; ?>
+                                </td>
+
+                                <td>
+
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
                 </table>
             <?php endforeach; ?>
 

@@ -5,7 +5,7 @@ $date = new date();
 
     <header class="row col-sm-12">
         <div class="page-header">
-            <h1>Application ReportMe</h1>
+            <h1>ReportMe</h1>
         </div>
         <div>
             <img id="logo" src="../../images/LOGOreportmeWHITE.png">
@@ -40,6 +40,9 @@ $date = new date();
             else:?>
                 <div>
                     <button class="connect"><a href="admin.php">Connexion</a></button>
+                </div>
+                <div>
+                    <button class="connect signIn"><a href="admin.php?action=signIn">S'enregistrer</a></button>
                 </div>
             <?php endif; ?>
         </div>

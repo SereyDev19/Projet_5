@@ -23,6 +23,9 @@ class Router
             case 'reportAccount':
                 adminReportAccount($params['account_id']);
                 break;
+            case 'signIn':
+                adminSignIn();
+                break;
             case 'logout':
                 adminLogout();
                 break;
@@ -40,14 +43,26 @@ class Router
             case 'manageAccess':
                 adminManageAccess();
                 break;
+            case 'addAccess':
+                adminAddAccess($params['account_id']);
             case '':
                 adminGlobalReport();
         }
     }
 
-    public function post()
+    public function post($action, array $params)
     {
-        adminVerification();
+        var_dump($action);
+        switch ($action) {
+            case 'signIn':
+                var_dump('signin');
+                adminRegisterNewAccess($params);
+                break;
+            case 'logIn':
+                var_dump('login');
+                adminVerification();
+                break;
+        }
     }
 
     public function method()
@@ -62,7 +77,15 @@ class Router
 
         } else {
             $this->post = $_POST;
+            if (in_array('Inscription', $this->post)) {
+                $this->action = 'signIn';
+            } else {
+                $this->action = 'logIn';
+            }
+            $this->params = $this->post;
+            unset($this->params[$this->action]);
         }
+
     }
 
     public function run()
@@ -70,7 +93,8 @@ class Router
         if ($this->request == 'GET') {
             $this->get($this->action, $this->params);
         } else {
-            $this->post();
+            var_dump('lancement requete post');
+            $this->post($this->action, $this->params);
         }
 
     }

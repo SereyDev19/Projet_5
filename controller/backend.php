@@ -7,6 +7,7 @@ require_once('model/AdSetManager.php');
 require_once('model/AdManager.php');
 require_once('model/SyncData.php');
 require_once('model/GetDBData.php');
+require_once('model/ManageAccess.php');
 require_once('model/CommentManager.php');
 require_once('model/NotificationManager.php');
 require_once('model/backend/UserSession.php');
@@ -37,6 +38,17 @@ function adminVerification()
 
     adminGlobalReport();
 }
+
+function adminSignIn()
+{
+    $userSession = new SC19DEV\App\Model\UserSession();
+    if ($userSession->isLogged()) {
+        require('view/frontend/dashboard.php');
+    } else {
+        require('view/backend/CreateAccount.php');
+    }
+}
+
 
 function APIGlobalReport()
 {
@@ -224,13 +236,47 @@ function adminManageAccess()
     $userSession = new SC19DEV\App\Model\UserSession();
     if ($userSession->isLogged()) {
         $getDBData = new \SC19DEV\App\Model\GetDBData();
+        $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+
         $DBaccounts = $getDBData->getAccounts();
-//        $var = random_int(1e6, 1e9);
+        $allAccess = $AccessManager->getAccess();
 
         require('view/frontend/access.php');
     } else {
         require('view/backend/login.php');
     }
+}
+
+function adminAddAccess($account_id)
+{
+    $userSession = new SC19DEV\App\Model\UserSession();
+    if ($userSession->isLogged()) {
+        $getDBData = new \SC19DEV\App\Model\GetDBData();
+        $DBaccounts = $getDBData->getAccounts();
+        $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+        $var = random_int(1e6, 1e9 - 1);
+        $AccessManager->addAccess($account_id, $var);
+
+        adminManageAccess();
+
+    } else {
+        require('view/backend/login.php');
+    }
+}
+
+function adminRegisterNewAccess($params)
+{
+    $getDBData = new \SC19DEV\App\Model\GetDBData();
+    $DBaccounts = $getDBData->getAccounts();
+    $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+    $access_id = $params['access_id'];
+    $access_email = $params['access_email'];
+    $access_name = $params['access_name'];
+    $access_firstname = $params['access_firstname'];
+    $access_password = $params['access_password'];
+    $AccessManager->registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password);
+
+    //Page de bienvenue
 }
 
 function adminLogout()
