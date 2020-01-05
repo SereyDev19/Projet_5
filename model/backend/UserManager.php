@@ -7,8 +7,31 @@ class UserManager extends Manager
 {
     public $message = '';
     public $isCorrect = false;
+    public $isId = false;
     public $username = '';
     public $user_id = '';
+
+    public function verifyAccessId($accessId)
+    {
+        if ($accessId !== "") {
+
+            $db = $this->db;
+
+            //  Test si l'Id existe
+            $sql = 'SELECT access_firstname FROM access WHERE access_id = ?';
+            $resultat = $this->getOne($sql, [$accessId]);
+
+            if ($resultat == null) {
+                $this->message = 'Identifiant non reconnu';
+            } else {
+                $this->username = $resultat['access_firstname'];
+                $this->user_id = $accessId;
+                $this->message = 'Bienvenue ' . $resultat['access_firstname'];
+                $this->isId = true;
+            }
+            return $this->isId;
+        }
+    }
 
     public function verifyUser($username, $password)
     {

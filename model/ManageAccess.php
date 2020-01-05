@@ -10,6 +10,7 @@ class ManageAccess extends Manager
     public $adSets = [];
     public $ads = [];
     public $access = [];
+    public $IdAccess = [];
 
     public function addAccess($account_id, $access_id)
     {
@@ -34,6 +35,9 @@ class ManageAccess extends Manager
     {
         $sql = 'SELECT * FROM access';
         $this->accounts = $this->getAll($sql, []);
+        foreach ($this->accounts as $iterAccount) {
+            array_push($this->IdAccess, $iterAccount['access_id']);
+        }
         return $this->accounts;
     }
 

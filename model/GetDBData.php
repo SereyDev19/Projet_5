@@ -17,10 +17,28 @@ class GetDBData extends Manager
         return $this->accounts;
     }
 
+    public function getAccessAccountsId($forAccessId)
+    {
+        $sql = 'SELECT account_id FROM access where access_id = ?';
+        $this->accountsId = $this->getOne($sql, [$forAccessId]);
+        return $this->accountsId;
+    }
+
     public function getAccount($accountId)
     {
         $sql = 'SELECT * FROM accounts WHERE account_id = ?';
         $this->accounts = $this->getAll($sql, [$accountId])[0];
+        return $this->accounts;
+    }
+
+    public function getAccountsFromList(array $accountIdList)
+    {
+
+        $this->accounts = [];
+        foreach ($accountIdList as $accountId) {
+            $sql = 'SELECT * FROM accounts WHERE account_id = ?';
+            array_push($this->accounts, $this->getAll($sql, [$accountId])[0]);
+        }
         return $this->accounts;
     }
 

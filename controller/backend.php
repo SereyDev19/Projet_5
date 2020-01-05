@@ -266,17 +266,47 @@ function adminAddAccess($account_id)
 
 function adminRegisterNewAccess($params)
 {
+    $userManager = new SC19DEV\App\Model\UserManager();
+//    $userExists = $userManager->verifyUser($_POST['username'], $_POST['password']);
+
+    $flashbag = new SC19DEV\App\Model\FlashBag();
+
     $getDBData = new \SC19DEV\App\Model\GetDBData();
     $DBaccounts = $getDBData->getAccounts();
     $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+    $AccessManager->getAccess();
+
     $access_id = $params['access_id'];
     $access_email = $params['access_email'];
     $access_name = $params['access_name'];
     $access_firstname = $params['access_firstname'];
     $access_password = $params['access_password'];
+
+    $IdExists = $userManager->verifyAccessId($access_id);
+
+    if (!$userManager->isId) { //If no Id founded
+        adminSignIn(); // Other function
+        $flashbag->add($userManager->message, 'error');
+        $flashbag->flash();
+        $flashbag->fetchMessages();
+        exit();
+    }
+
+    $userSession = new SC19DEV\App\Model\UserSession();
+    $userSession->registerUser($userManager->username, $userManager->user_id);
+
+    $flashbag->add($userManager->message, 'success');
+    $flashbag->flash();
+    $flashbag->fetchMessages();
+
     $AccessManager->registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password);
 
-    //Page de bienvenue
+    //Creer une Page de bienvenue
+    $toto = $getDBData->getAccessAccountsId($access_id);
+    var_dump($toto);
+    $newAccessAccount = $getDBData->getAccountsFromList($toto);
+    var_dump($newAccessAccount);
+
 }
 
 function adminLogout()

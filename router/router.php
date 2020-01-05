@@ -52,14 +52,11 @@ class Router
 
     public function post($action, array $params)
     {
-        var_dump($action);
         switch ($action) {
             case 'signIn':
-                var_dump('signin');
                 adminRegisterNewAccess($params);
                 break;
             case 'logIn':
-                var_dump('login');
                 adminVerification();
                 break;
         }
@@ -93,7 +90,6 @@ class Router
         if ($this->request == 'GET') {
             $this->get($this->action, $this->params);
         } else {
-            var_dump('lancement requete post');
             $this->post($this->action, $this->params);
         }
 
