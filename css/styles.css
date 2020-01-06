@@ -20,6 +20,7 @@
 
 body {
     font-family: Lato, Helvetica, sans-serif;
+    background-color: #f8f9fa;
     /*height: 1800px;*/
     /*background-image: url("../images/rod-long-alaska.jpg");*/
     /*background-position: bottom;*/
@@ -34,16 +35,17 @@ header {
     flex-direction: row;
     justify-content: space-between;
     background-color: #223265;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,.12), inset 0 -1px 0 0 #dadce0;
     /*padding-right: 0;*/
     /*padding-left: 0;*/
 }
 
 #main-img {
-    height: 500px;
-    background-image: url("../images/analytics.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    /*height: 500px;*/
+    /*background-image: url("../images/analytics.png");*/
+    /*background-position: center;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
     /*background-attachment: fixed;*/
 }
 
@@ -56,6 +58,13 @@ header {
     color: #ea5a63;
     font-size: 3.4rem;
     text-shadow: 2px 2px #1b84b4;
+}
+
+#connection {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
 }
 
 .connect {
@@ -80,7 +89,7 @@ header {
     border-bottom-left-radius: 38px;
     text-indent: 0px;
     border: 3px solid #eeb44f;
-    display: inline-block;
+    /*display: inline-block;*/
     color: #ffffff;
     font-family: Arial;
     font-size: 15px;
@@ -143,12 +152,6 @@ header {
     margin-bottom: 50px;
     padding: 15px 10px;
     color: #787878;
-}
-
-#content div#connection {
-    display: flex;
-    justify-content: center;
-    width: 100%;
 }
 
 input#author {

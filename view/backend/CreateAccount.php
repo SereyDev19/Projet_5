@@ -8,6 +8,9 @@
     <!-- zone de connexion -->
 
     <form action="admin.php?action=CreateAccount" method="POST">
+        <div class="logo">
+            <img id="logo" src="../../images/LOGOreportme.png">
+        </div>
         <h1>Connexion</h1>
 
         <label><b>Identifiant</b></label>

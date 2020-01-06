@@ -17,7 +17,7 @@ require_once('model/backend/FlashBag.php');
 function adminVerification()
 {
     $userManager = new SC19DEV\App\Model\UserManager();
-    $userExists = $userManager->verifyUser($_POST['username'], $_POST['password']);
+    $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
 
     $flashbag = new SC19DEV\App\Model\FlashBag();
 
@@ -112,7 +112,9 @@ function adminGlobalReport()
 
         require('view/frontend/dashboard.php');
     } else {
-        require('view/backend/login.php');
+//        require('view/backend/login.php');
+        require('view/backend/loginEmail.php');
+
     }
 
 }
@@ -324,6 +326,8 @@ function adminLogin()
     if ($userSession->isLogged()) {
         require('view/frontend/dashboard.php');
     } else {
-        require('view/backend/login.php');
+//        require('view/backend/login.php');
+        require('view/backend/loginEmail.php');
+
     }
 }

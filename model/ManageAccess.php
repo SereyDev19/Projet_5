@@ -24,6 +24,7 @@ class ManageAccess extends Manager
 
     public function registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password)
     {
+        $access_password = $str = password_hash($access_password, PASSWORD_BCRYPT);
         $sql = 'UPDATE access SET access_email = ?, access_name = ?, access_firstname = ?, access_password = ?
                 WHERE access_id = ?';
         $req = $this->executeStatement($sql, [$access_email, $access_name, $access_firstname, $access_password, $access_id]);

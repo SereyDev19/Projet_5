@@ -33,30 +33,31 @@ class UserManager extends Manager
         }
     }
 
-    public function verifyUser($username, $password)
+    public function verifyUser($email, $password)
     {
-        if ($username !== "" && $password !== "") {
+        if ($email !== "" && $password !== "") {
 
             $db = $this->db;
 
             //  Test si l'utilisateur existe
-            $req = $db->prepare('SELECT user_id, user_password FROM users WHERE user_name = ?');
-            $req->execute(array($username));
-            $resultat = $req->fetch();
+            $sql = 'SELECT access_id, access_firstname ,access_password FROM access WHERE access_email = ?';
+            $resultat = $this->getOne($sql, [$email]);
 
             if ($resultat == null) {
-                $this->message = 'Utilisateur non reconnu';
+                $this->message = 'E-mail non reconnu';
             } else {
 
-                $isPasswordCorrect = password_verify($password, $resultat['user_password']);
+//                $str = password_hash('admin',PASSWORD_BCRYPT);
+
+                $isPasswordCorrect = password_verify($password, $resultat['access_password']);
 
                 if ($isPasswordCorrect == false) {
                     $this->message = 'Mot de passe incorrect';
                 } else {
-                    $this->message = 'Bienvenue ' . $username;
+                    $this->message = 'Bienvenue ' . $resultat['access_firstname'] . '!';
                     $this->isCorrect = true;
-                    $this->username = $username;
-                    $this->user_id = $resultat['user_id'];
+                    $this->username = $resultat['access_firstname'];
+                    $this->user_id = $resultat['access_id'];
                 }
             }
             return $this->isCorrect;

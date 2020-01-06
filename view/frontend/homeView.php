@@ -4,29 +4,10 @@ $date = new date();
 ?>
 
     <header class="row col-sm-12">
-        <div class="page-header">
-            <h1>ReportMe</h1>
-        </div>
         <div>
             <img id="logo" src="../../images/LOGOreportmeWHITE.png">
         </div>
-    </header>
 
-
-    <div id="content">
-<!--    <h1 id="apptitle">ReportMe</h1>-->
-    <div class="tag">
-        Tous les indicateurs de performance
-    </div>
-    <div class="tag">
-        en 1 clic
-    </div>
-
-
-    <div id= "main-img" class="row col-sm-12">
-    </div>
-
-    <div class="row col-sm-12">
         <div id="connection">
             <?php
             if (isset($_SESSION['user_id']) AND isset($_SESSION['username'])):?>
@@ -46,9 +27,21 @@ $date = new date();
                 </div>
             <?php endif; ?>
         </div>
-    </div>
+    </header>
 
-    <div id="main">
+
+    <div id="content">
+
+        <div id="main-img" class="row col-sm-12">
+        </div>
+
+        <div class="row col-sm-12">
+
+
+        </div>
+
+        <div id="main">
+        </div>
     </div>
 
 
