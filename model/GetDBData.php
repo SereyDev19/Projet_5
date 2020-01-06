@@ -9,6 +9,7 @@ class GetDBData extends Manager
     public $accounts = [];
     public $adSets = [];
     public $ads = [];
+    public $accountsId = [];
 
     public function getAccounts()
     {
@@ -21,6 +22,7 @@ class GetDBData extends Manager
     {
         $sql = 'SELECT account_id FROM access where access_id = ?';
         $this->accountsId = $this->getOne($sql, [$forAccessId]);
+        unset($this->accountsId['account_id']);
         return $this->accountsId;
     }
 
@@ -33,7 +35,6 @@ class GetDBData extends Manager
 
     public function getAccountsFromList(array $accountIdList)
     {
-
         $this->accounts = [];
         foreach ($accountIdList as $accountId) {
             $sql = 'SELECT * FROM accounts WHERE account_id = ?';

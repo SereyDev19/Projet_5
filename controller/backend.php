@@ -1,53 +1,15 @@
 <?php
-
 // Chargement des classes
-require_once('model/PostManager.php');
 require_once('model/GetAPIData.php');
 require_once('model/AdSetManager.php');
 require_once('model/AdManager.php');
 require_once('model/SyncData.php');
 require_once('model/GetDBData.php');
 require_once('model/ManageAccess.php');
-require_once('model/CommentManager.php');
-require_once('model/NotificationManager.php');
+
 require_once('model/backend/UserSession.php');
 require_once('model/backend/UserManager.php');
 require_once('model/backend/FlashBag.php');
-
-function adminVerification()
-{
-    $userManager = new SC19DEV\App\Model\UserManager();
-    $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
-
-    $flashbag = new SC19DEV\App\Model\FlashBag();
-
-    if (!$userManager->isCorrect) {
-        adminLogin();
-        $flashbag->add($userManager->message, 'error');
-        $flashbag->flash();
-        $flashbag->fetchMessages();
-        exit();
-    }
-
-    $userSession = new SC19DEV\App\Model\UserSession();
-    $userSession->registerUser($userManager->username, $userManager->user_id);
-
-    $flashbag->add($userManager->message, 'success');
-    $flashbag->flash();
-    $flashbag->fetchMessages();
-
-    adminGlobalReport();
-}
-
-function adminSignIn()
-{
-    $userSession = new SC19DEV\App\Model\UserSession();
-    if ($userSession->isLogged()) {
-        require('view/frontend/dashboard.php');
-    } else {
-        require('view/backend/CreateAccount.php');
-    }
-}
 
 
 function APIGlobalReport()
@@ -60,10 +22,8 @@ function APIGlobalReport()
         //Get data from FB API
         $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
         $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
-//        $bddAccount = $getDBaccounts->getAccounts();
 
         foreach ($getAccountsId as $iterAccount) {
-//            $iterAccount = substr($iterAccount, 4, strlen($iterAccount));
             $getAPIData = new \SC19DEV\App\Model\GetAPIData();
             $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
 
@@ -102,35 +62,6 @@ function APIGlobalReport()
     }
 }
 
-function adminGlobalReport()
-{
-    $userSession = new SC19DEV\App\Model\UserSession();
-    if ($userSession->isLogged()) {
-        $getDBData = new \SC19DEV\App\Model\GetDBData();
-        $DBaccounts = $getDBData->getAccounts();
-
-
-        require('view/frontend/dashboard.php');
-    } else {
-//        require('view/backend/login.php');
-        require('view/backend/loginEmail.php');
-
-    }
-
-}
-
-function adminReportAccount($accountId)
-{
-    $userSession = new SC19DEV\App\Model\UserSession();
-    if ($userSession->isLogged()) {
-        $getDBData = new \SC19DEV\App\Model\GetDBData();
-        $DBaccount = $getDBData->getAccount($accountId);
-
-        require('view/frontend/reportAccount.php');
-    }
-
-}
-
 function admindetailedReport($accountId)
 {
     $userSession = new SC19DEV\App\Model\UserSession();
@@ -144,7 +75,6 @@ function admindetailedReport($accountId)
         foreach ($adSets as $iterAdSet) {
             $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
             $allAds[$iterAdSet['adset_id']] = $ads;
-//            array_push($allAds, $ads);
         }
 
         require('view/frontend/detailedReport.php');
@@ -180,7 +110,6 @@ function APIdetailedReport($accountId)
         $cost_lead = $getAPIData->getCost($accountId, ['cost_per_action_type']); // cost per lead
         $adSetList = $adSet->getAdSets($accountId);
 
-//        $adsList = $ad->getads($accountId);
         $registerAd = $bddAd->getBddAds($accountId);
 
 
@@ -269,7 +198,6 @@ function adminAddAccess($account_id)
 function adminRegisterNewAccess($params)
 {
     $userManager = new SC19DEV\App\Model\UserManager();
-//    $userExists = $userManager->verifyUser($_POST['username'], $_POST['password']);
 
     $flashbag = new SC19DEV\App\Model\FlashBag();
 
@@ -285,6 +213,15 @@ function adminRegisterNewAccess($params)
     $access_password = $params['access_password'];
 
     $IdExists = $userManager->verifyAccessId($access_id);
+    $AccountCreated = $userManager->passwordDefined($access_id);
+
+    if ($userManager->alreadyDefined) {
+        adminSignIn(); // Other function
+        $flashbag->add($userManager->message, 'error');
+        $flashbag->flash();
+        $flashbag->fetchMessages();
+        exit();
+    }
 
     if (!$userManager->isId) { //If no Id founded
         adminSignIn(); // Other function
@@ -305,29 +242,9 @@ function adminRegisterNewAccess($params)
 
     //Creer une Page de bienvenue
     $toto = $getDBData->getAccessAccountsId($access_id);
-    var_dump($toto);
     $newAccessAccount = $getDBData->getAccountsFromList($toto);
-    var_dump($newAccessAccount);
+    $DBaccounts = $newAccessAccount;
 
-}
+    require('view/frontend/dashboard.php');
 
-function adminLogout()
-{
-    $session = new SC19DEV\App\Model\Session();
-    $session->stopSession();
-    header("Location: index.php");
-    exit;
-}
-
-
-function adminLogin()
-{
-    $userSession = new SC19DEV\App\Model\UserSession();
-    if ($userSession->isLogged()) {
-        require('view/frontend/dashboard.php');
-    } else {
-//        require('view/backend/login.php');
-        require('view/backend/loginEmail.php');
-
-    }
 }

@@ -23,8 +23,11 @@ $date = new date();
                     <i class="fas fa-home"></i>Actions
                 </button>
                 <div class="dropdown-menu">
+                    <a class="dropdown-item" href="admin.php?action=manageAccess">
+                        Gérer les accès
+                    </a>
                     <a class="dropdown-item" href="admin.php?action=globalreport">
-                        Mes comptes
+                        Voir les comptes
                     </a>
                 </div>
             </div>

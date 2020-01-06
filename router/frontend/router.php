@@ -1,16 +1,8 @@
 <?php
 
-namespace SC19DEV\App\Router;
-
-require('controller/Controller.php');
-require('controller/FrontController.php');
-require('controller/BackController.php');
-
+namespace SC19DEV\App\Router\Frontend;
 
 use phpDocumentor\Reflection\Types\Null_;
-use SC19DEV\App\Controller\BackController;
-use SC19DEV\App\Controller\Controller;
-use SC19DEV\App\Controller\FrontController;
 
 class Router
 {
@@ -24,22 +16,16 @@ class Router
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
 
-
     }
 
     public function get($action, array $params)
     {
-        $this->Controller = new Controller();
-
         switch ($action) {
-            case 'reportAccount':
-                $this->Controller->ReportAccount($params['account_id']);
-                break;
             case 'signIn':
-                $this->Controller->SignIn();
+                adminSignIn();
                 break;
             case 'logout':
-                $this->Controller->Logout();
+                adminLogout();
                 break;
             case 'detailedReport':
                 admindetailedReport($params['account_id']);
@@ -47,34 +33,23 @@ class Router
             case 'updateData':
                 APIdetailedReport($params['account_id']);
             case 'globalreport':
-                $this->Controller->GlobalReport();
+                adminGlobalReport();
                 break;
-            case 'updateAccountData':
-                APIGlobalReport();
-                break;
-            case 'manageAccess':
-                $this->Controller->ManageAccess();
-                break;
-            case 'addAccess':
-                adminAddAccess($params['account_id']);
             case '':
-                $this->Controller->GlobalReport();
+                listPosts(true);
                 break;
+
         }
     }
 
     public function post($action, array $params)
     {
-        $this->Controller = new Controller();
-
         switch ($action) {
             case 'signIn':
                 adminRegisterNewAccess($params);
                 break;
             case 'logIn':
-                $this->Controller->Verification();
-
-//                adminVerification();
+                adminVerification();
                 break;
         }
     }
