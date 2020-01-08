@@ -3,6 +3,8 @@
 namespace SC19DEV\App\Router\Frontend;
 
 use phpDocumentor\Reflection\Types\Null_;
+use SC19DEV\App\Controller\Controller;
+use SC19DEV\App\Controller\FrontController;
 
 class Router
 {
@@ -20,36 +22,42 @@ class Router
 
     public function get($action, array $params)
     {
+        $this->Controller = new Controller();
+        $this->FrontController = new FrontController();
+
         switch ($action) {
             case 'signIn':
-                adminSignIn();
+                $this->Controller->SignIn();
                 break;
             case 'logout':
-                adminLogout();
+                $this->Controller->Logout();
                 break;
             case 'detailedReport':
-                admindetailedReport($params['account_id']);
+                $this->FrontController->DetailedReport($params['account_id']);
                 break;
             case 'updateData':
-                APIdetailedReport($params['account_id']);
+                $this->Controller->APIdetailedReport($params['account_id']);
             case 'globalreport':
-                adminGlobalReport();
+                $this->Controller->GlobalReport();
                 break;
             case '':
-                listPosts(true);
+                $this->FrontController->home(true);
                 break;
-
         }
     }
 
     public function post($action, array $params)
     {
+        $this->Controller = new Controller();
+        $this->BackController = new BackController();
+        $this->FrontController = new FrontController();
+
         switch ($action) {
             case 'signIn':
-                adminRegisterNewAccess($params);
+                $this->Controller->RegisterNewAccess($params);
                 break;
             case 'logIn':
-                adminVerification();
+                $this->Controller->Verification();
                 break;
         }
     }

@@ -19,9 +19,13 @@ use SC19DEV\App\Model\UserSession;
 use SC19DEV\App\Model\UserManager;
 
 
-
 class BackController extends Controller
 {
+//    public function __construct()
+//    {
+//        var_dump('Instanciation BackController');
+//    }
+
     public function adminVerification()
     {
         $userManager = new UserManager();
@@ -30,7 +34,8 @@ class BackController extends Controller
         $flashbag = new SC19DEV\App\Model\FlashBag();
 
         if (!$userManager->isCorrect) {
-            adminLogin();
+            $this->Login();
+//            adminLogin();
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
@@ -65,7 +70,7 @@ class BackController extends Controller
 
     public function adminManageAccess()
     {
-        $userSession = new SC19DEV\App\Model\UserSession();
+        $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $getDBData = new \SC19DEV\App\Model\GetDBData();
             $AccessManager = new \SC19DEV\App\Model\ManageAccess();
@@ -79,6 +84,36 @@ class BackController extends Controller
         }
     }
 
+    public function adminAddAccess($account_id)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $getDBData = new \SC19DEV\App\Model\GetDBData();
+            $DBaccounts = $getDBData->getAccounts();
+            $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+            $var = random_int(1e6, 1e9 - 1);
+            while ($AccessManager->IdAlreadyUsed($var)) {
+                $var = random_int(1e6, 1e9 - 1);
+            }
+            $AccessManager->addAccess($account_id, $var);
 
+            $this->adminManageAccess();
 
+        } else {
+            require('view/backend/login.php');
+        }
+    }
+
+    public function adminDeleteAccess($access_id)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $getDBData = new \SC19DEV\App\Model\GetDBData();
+            $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+            $AccessManager->deleteAccess($access_id);
+
+//            $this->adminManageAccess();
+
+        }
+    }
 }

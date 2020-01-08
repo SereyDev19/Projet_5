@@ -31,26 +31,6 @@
                     </a>
                 </div>
             </div>
-            <div class="btn-group dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <i class="far fa-list-alt"></i>
-                    Item 2
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=false">
-                        Sous-item 1
-                    </a>
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=true">
-                        Sous-item 2
-                    </a>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary">
-                    <a class="nav-link" href="admin.php?action=logout"><i
-                                class="fas fa-sign-out-alt"></i>Déconnexion</a>
-                </button>
-            </div>
         </div>
         <div class="btn-group row col-sm-12 sort">
             <div class="btn-group dropdown col-sm-2 offset-sm-9">
@@ -112,25 +92,25 @@
                                     <?= $iterAccess['access_id']; ?>
                                 </td>
                                 <td>
-                                <?php if ($iterAccess['access_email'] != ''): ?>
-                                <?= $iterAccess['access_email'] ;?>
-                                <?php endif; ?>
+                                    <?php if ($iterAccess['access_email'] != ''): ?>
+                                        <?= $iterAccess['access_email']; ?>
+                                    <?php endif; ?>
                                 </td>
 
                                 <td>
                                     <?php if ($iterAccess['access_name'] != ''): ?>
-                                        <?= $iterAccess['access_name'] ;?>
+                                        <?= $iterAccess['access_name']; ?>
                                     <?php endif; ?>
                                 </td>
 
                                 <td>
                                     <?php if ($iterAccess['access_firstname'] != ''): ?>
-                                        <?= $iterAccess['access_firstname'] ;?>
+                                        <?= $iterAccess['access_firstname']; ?>
                                     <?php endif; ?>
                                 </td>
 
                                 <td>
-
+                                    <?= '<a href="admin.php?action=deleteAccess&amp;access_id=' . $iterAccess['access_id'] . '">Supprimer</a>'; ?>
                                 </td>
                             </tr>
                         <?php endif; ?>

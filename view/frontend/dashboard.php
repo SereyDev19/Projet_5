@@ -7,11 +7,14 @@ $date = new date();
     <body>
     <div id="dashboard" class="container">
         <header class="row col-sm-12">
+            <div>
+                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+            </div>
             <div class="page-header">
                 <h1>Rapport global</h1>
             </div>
             <div>
-                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+                <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
             </div>
         </header>
         <div class="row col-sm-12">
@@ -27,26 +30,6 @@ $date = new date();
                         Mes comptes
                     </a>
                 </div>
-            </div>
-            <div class="btn-group dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <i class="far fa-list-alt"></i>
-                    Item 2
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=false">
-                        Sous-item 1
-                    </a>
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=true">
-                        Sous-item 2
-                    </a>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary">
-                    <a class="nav-link" href="admin.php?action=logout"><i
-                                class="fas fa-sign-out-alt"></i>Déconnexion</a>
-                </button>
             </div>
         </div>
         <div class="btn-group row col-sm-12 sort">
@@ -88,7 +71,7 @@ $date = new date();
                 foreach ($DBaccounts as $account): ?>
                     <tr>
                         <td>
-                            <a href="admin.php?action=reportAccount&amp;account_id=<?=$account['account_id'] ;?>">
+                            <a href="admin.php?action=reportAccount&amp;account_id=<?= $account['account_id']; ?>">
                                 <?= $account['account_name']; ?>
                                 <?= $account['account_id']; ?>
                             </a>

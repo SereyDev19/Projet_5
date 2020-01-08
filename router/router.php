@@ -30,6 +30,8 @@ class Router
     public function get($action, array $params)
     {
         $this->Controller = new Controller();
+        $this->BackController = new BackController();
+        $this->FrontController = new FrontController();
 
         switch ($action) {
             case 'reportAccount':
@@ -42,21 +44,23 @@ class Router
                 $this->Controller->Logout();
                 break;
             case 'detailedReport':
-                admindetailedReport($params['account_id']);
+                $this->FrontController->DetailedReport($params['account_id']);
                 break;
             case 'updateData':
-                APIdetailedReport($params['account_id']);
+                $this->Controller->APIdetailedReport($params['account_id']);
             case 'globalreport':
                 $this->Controller->GlobalReport();
                 break;
             case 'updateAccountData':
-                APIGlobalReport();
+                $this->Controller->APIGlobalReport();
                 break;
             case 'manageAccess':
                 $this->Controller->ManageAccess();
                 break;
             case 'addAccess':
-                adminAddAccess($params['account_id']);
+                $this->BackController->adminAddAccess($params['account_id']);
+            case 'deleteAccess':
+                $this->BackController->adminDeleteAccess($params['access_id']);
             case '':
                 $this->Controller->GlobalReport();
                 break;
@@ -66,15 +70,15 @@ class Router
     public function post($action, array $params)
     {
         $this->Controller = new Controller();
+        $this->BackController = new BackController();
+        $this->FrontController = new FrontController();
 
         switch ($action) {
             case 'signIn':
-                adminRegisterNewAccess($params);
+                $this->Controller->RegisterNewAccess($params);
                 break;
             case 'logIn':
                 $this->Controller->Verification();
-
-//                adminVerification();
                 break;
         }
     }

@@ -6,9 +6,14 @@ use SC19DEV\App\Model\Session;
 use SC19DEV\App\Model\UserSession;
 use SC19DEV\App\Model\UserManager;
 
-class FrontController
+class FrontController extends Controller
 {
-    public function GlobalReport($access_id)
+//    public function __construct()
+//    {
+//        var_dump('Instanciation FrontController');
+//    }
+
+    public function FrontGlobalReport($access_id)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -20,6 +25,11 @@ class FrontController
         } else {
             require('view/backend/loginEmail.php');
         }
+    }
+
+    public function home()
+    {
+        require('view/frontend/homeView.php');
     }
 
 }

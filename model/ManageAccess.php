@@ -11,6 +11,7 @@ class ManageAccess extends Manager
     public $ads = [];
     public $access = [];
     public $IdAccess = [];
+    public $IdAlreadyUsed = false;
 
     public function addAccess($account_id, $access_id)
     {
@@ -18,6 +19,26 @@ class ManageAccess extends Manager
                 VALUES(?, ?)';
 
         $affectedLines = $this->executeStatement($sql, [$access_id, $account_id]);
+
+        return $affectedLines;
+    }
+
+    public function IdUsed($access_id)
+    {
+        $sql = 'SELECT * FROM access WHERE access_id = ?';
+        $this->accounts = $this->getAll($sql, [$access_id]);
+
+        if ($this->accounts == null) {
+            $this->IdAlreadyUsed = true;
+        }
+        return $this->IdAlreadyUsed;
+    }
+
+    public function deleteAccess($access_id)
+    {
+        $sql = 'DELETE FROM access WHERE access_id = ?';
+
+        $affectedLines = $this->executeStatement($sql, [$access_id]);
 
         return $affectedLines;
     }

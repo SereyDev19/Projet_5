@@ -7,11 +7,14 @@ $date = new date();
     <body>
     <div id="dashboard" class="container">
         <header class="row col-sm-12">
+            <div>
+                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+            </div>
             <div class="page-header">
                 <h1>Rapport détaillé de : <?= $account[0]['account_name']; ?></h1>
             </div>
             <div>
-                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+                <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
             </div>
         </header>
         <div class="row col-sm-12">
@@ -20,44 +23,19 @@ $date = new date();
         <div class="btn-group row col-sm-12">
             <div class="btn-group dropdown">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <i class="fas fa-home"></i>Item 1
+                    <i class="fas fa-home"></i>Aller à
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="admin.php?action=allPosts">
-                        Sous-item 1
+                    <a class="dropdown-item" href="admin.php?action=globalreport">
+                        Tous les comptes
                     </a>
-                    <a class="dropdown-item" href="admin.php?action=newPost">
-                        Sous-item 2
-                    </a>
-                </div>
-            </div>
-            <div class="btn-group dropdown">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <i class="far fa-list-alt"></i>
-                    Item 2
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=false">
-                        Sous-item 1
-                    </a>
-                    <a class="dropdown-item" href="admin.php?action=allComments&amp;reported=true">
-                        Sous-item 2
+                    <a class="dropdown-item" href="admin.php?action=reportAccount&amp;account_id=<?= $accountId; ?>">
+                        Rapport synthétique
                     </a>
                 </div>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary">
-                    <a class="nav-link" href="admin.php?action=logout"><i
-                                class="fas fa-sign-out-alt"></i>Déconnexion</a>
-                </button>
             </div>
         </div>
-        <a href="admin.php?action=globalreport">
-            Tous les comptes
-        </a>
-        <a href="admin.php?action=reportAccount&amp;account_id=<?= $accountId; ?>">
-            Rapport synthétique
-        </a>
+
         <button type="button" class="btn btn-info">
             <a href="admin.php?action=updateData&amp;account_id=<?= $accountId; ?>">
                 <i class="fas fa-sync-alt"></i>Mise à jour des données
