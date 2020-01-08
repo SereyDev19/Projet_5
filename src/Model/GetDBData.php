@@ -1,7 +1,6 @@
 <?php
 
-namespace SC19DEV\App\Model;
-require_once("model/Manager.php");
+namespace App\Model;
 
 class GetDBData extends Manager
 {

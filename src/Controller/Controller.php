@@ -1,11 +1,11 @@
 <?php
 
-namespace SC19DEV\App\Controller;
+namespace App\Controller;
 
-use SC19DEV\App\Model\Session;
-use SC19DEV\App\Model\UserSession;
-use SC19DEV\App\Model\UserManager;
-use SC19DEV\App\Model\FlashBag;
+use App\Model\backend\Session;
+use App\Model\backend\UserSession;
+use App\Model\backend\UserManager;
+use App\Model\backend\FlashBag;
 
 class Controller
 {
@@ -92,7 +92,7 @@ class Controller
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
 
-            $getDBData = new \SC19DEV\App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData();
             $adSets = $getDBData->getAccountAdSets($accountId);
             $account = $getDBData->getAccounts($accountId);
 
@@ -110,7 +110,7 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getDBData = new \SC19DEV\App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData();
             $DBaccount = $getDBData->getAccount($accountId);
 
             require('view/frontend/reportAccount.php');
@@ -130,13 +130,13 @@ class Controller
 
     public function RegisterNewAccess($params)
     {
-        $userManager = new SC19DEV\App\Model\UserManager();
+        $userManager = new UserManager();
 
-        $flashbag = new SC19DEV\App\Model\FlashBag();
+        $flashbag = new FlashBag();
 
-        $getDBData = new \SC19DEV\App\Model\GetDBData();
+        $getDBData = new \App\Model\GetDBData();
         $DBaccounts = $getDBData->getAccounts();
-        $AccessManager = new \SC19DEV\App\Model\ManageAccess();
+        $AccessManager = new \App\Model\ManageAccess();
         $AccessManager->getAccess();
 
         $access_id = $params['access_id'];
@@ -166,8 +166,8 @@ class Controller
             exit();
         }
 
-        $userSession = new SC19DEV\App\Model\UserSession();
-        $userSession->registerUser($userManager->username, $userManager->user_id);
+        $userSession = new UserSession();
+        $userSession->registerUser($userManager->username, $userManager->user_id,$userManager->access_level);
 
         $flashbag->add($userManager->message, 'success');
         $flashbag->flash();
@@ -188,20 +188,20 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getAPIData = new \SC19DEV\App\Model\GetAPIData();
-            $synData = new \SC19DEV\App\Model\SyncData();
-            $getDBaccounts = new \SC19DEV\App\Model\GetDBData();
+            $getAPIData = new \App\Model\GetAPIData();
+            $synData = new \App\Model\SyncData();
+            $getDBaccounts = new \App\Model\GetDBData();
             //Get data from FB API
             $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
             $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
 
             foreach ($getAccountsId as $iterAccount) {
-                $getAPIData = new \SC19DEV\App\Model\GetAPIData();
+                $getAPIData = new \App\Model\GetAPIData();
                 $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
 
                 if ($getAPIData->hasData) {
                     // Make a TRY
-                    $adSet = new \SC19DEV\App\Model\AdSetManager();
+                    $adSet = new \App\Model\AdSetManager();
                     $adSetList = $adSet->getAdSets($iterAccount);
                     $goal = '';
                     foreach ($adSetList as $iterAdSet) {
@@ -238,7 +238,7 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getAPIData = new \SC19DEV\App\Model\GetAPIData();
+            $getAPIData = new \App\Model\GetAPIData();
 
             $res = $getAPIData->getFromFields($accountId, ['spend']);
             $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -252,11 +252,11 @@ class Controller
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
 
-            $getAPIData = new \SC19DEV\App\Model\GetAPIData();
-            $adSet = new \SC19DEV\App\Model\AdSetManager();
-            $ad = new \SC19DEV\App\Model\AdManager();
-            $bddAdSet = new \SC19DEV\App\Model\SyncData();
-            $bddAd = new \SC19DEV\App\Model\SyncData();
+            $getAPIData = new \App\Model\GetAPIData();
+            $adSet = new \App\Model\AdSetManager();
+            $ad = new \App\Model\AdManager();
+            $bddAdSet = new \App\Model\SyncData();
+            $bddAd = new \App\Model\SyncData();
 
             $res = $getAPIData->getFromFields($accountId, ['spend']);
             $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -269,7 +269,7 @@ class Controller
             $registerAdSet = $bddAdSet->getBddAdSets($accountId);
             foreach ($adSetList as $iterAdSet) {
 
-                $adSet = new \SC19DEV\App\Model\AdSetManager();
+                $adSet = new \App\Model\AdSetManager();
                 $adSetData = $adSet->DataFromFields($iterAdSet, ['spend', 'cpm', 'clicks', 'cpc']);
 
                 if ($adSet->hasData) {
@@ -291,7 +291,7 @@ class Controller
                     $adsList = $ad->getAdsfromAdList($iterAdSet);
 
                     foreach ($adsList as $iterAd) {
-                        $ad = new \SC19DEV\App\Model\AdManager();
+                        $ad = new \App\Model\AdManager();
                         // $Goal is the same as the ad's adlist
                         $name = $ad->getName($iterAd);
                         $adData = $ad->DataFromFields($iterAd, ['spend', 'cpm', 'clicks', 'cpc']);

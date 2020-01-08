@@ -1,6 +1,7 @@
 <?php
 
-namespace SC19DEV\App\Model;
+namespace App\Model;
+
 class Manager
 {
     protected $db = '';

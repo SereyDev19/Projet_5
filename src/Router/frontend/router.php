@@ -1,10 +1,10 @@
 <?php
 
-namespace SC19DEV\App\Router\Frontend;
+namespace App\Router\Frontend;
 
 use phpDocumentor\Reflection\Types\Null_;
-use SC19DEV\App\Controller\Controller;
-use SC19DEV\App\Controller\FrontController;
+use App\Controller\Controller;
+use App\Controller\FrontController;
 
 class Router
 {

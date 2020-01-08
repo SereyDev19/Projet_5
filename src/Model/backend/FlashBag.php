@@ -1,7 +1,7 @@
 <?php
 
-namespace SC19DEV\App\Model;
-require_once("model/backend/Session.php");
+namespace App\Model\backend;
+//require_once("model/backend/Session.php");
 
 class FlashBag extends Session
 {

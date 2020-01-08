@@ -1,8 +1,10 @@
 <?php
-require('router/router.php');
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Router;
 
 try {
-    $router = new \SC19DEV\App\Router\Router();
+    $router = new \App\Router\Router();
     $router->method();
     $router->run();
 } catch

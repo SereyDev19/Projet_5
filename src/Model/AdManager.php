@@ -1,15 +1,14 @@
 <?php
 
-namespace SC19DEV\App\Model;
+namespace App\Model;
 
 use phpDocumentor\Reflection\Types\Integer;
 
-require_once("model/GetAPIData.php");
 
-class AdSetManager extends GetAPIData
+class AdManager extends GetAPIData
 {
-    public $AdSetList = [];
-    public $adsetData = [];
+    public $AdList = [];
+    public $adData = [];
     public $optimization_goal = '';
     public $actions = []; // ['landing_page_view' : 78, 'link_click' : 1588]
     public $cost_per_action = [];
@@ -17,11 +16,41 @@ class AdSetManager extends GetAPIData
     public $hasData = false;
 
 
-    public function getAdSets($account_id)
+    public function getAdsfromAccount($account_id)
+{
+    $this->AdList = [];
+
+    try {
+        $response = $this->fb->get(
+            '/act_' . $account_id . '/ads',
+            self::accessToken
+        );
+        $getDecodeBody = $response->getDecodedBody();
+
+        $data = $getDecodeBody['data'];
+
+        foreach ($data as $value) {
+            array_push($this->AdList, $value['id']);
+        }
+
+        return $this->AdList;
+
+    } catch (FacebookExceptionsFacebookResponseException $e) {
+        echo 'Graph returned an error: ' . $e->getMessage();
+        exit;
+    } catch (FacebookExceptionsFacebookSDKException $e) {
+        echo 'Facebook SDK returned an error: ' . $e->getMessage();
+        exit;
+    }
+
+}
+
+    public function getAdsfromAdList($adList_id)
     {
+        $this->AdList = [];
         try {
             $response = $this->fb->get(
-                '/act_' . $account_id . '/adsets',
+                '/' . $adList_id . '/ads',
                 self::accessToken
             );
             $getDecodeBody = $response->getDecodedBody();
@@ -29,10 +58,10 @@ class AdSetManager extends GetAPIData
             $data = $getDecodeBody['data'];
 
             foreach ($data as $value) {
-                array_push($this->AdSetList, $value['id']);
+                array_push($this->AdList, $value['id']);
             }
 
-            return $this->AdSetList;
+            return $this->AdList;
 
         } catch (FacebookExceptionsFacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
@@ -41,13 +70,13 @@ class AdSetManager extends GetAPIData
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
             exit;
         }
-    }
 
-    public function getName($adSetId)
+    }
+    public function getName($adId)
     {
         try {
             $response = $this->fb->get(
-                '/' . $adSetId . '?fields=name',
+                '/' . $adId . '?fields=name',
                 self::accessToken
             );
             $getDecodeBody = $response->getDecodedBody();
@@ -63,11 +92,11 @@ class AdSetManager extends GetAPIData
         }
     }
 
-    public function optimGoal($adSetId)
+    public function optimGoal($adId)
     {
         try {
             $response = $this->fb->get(
-                '/' . $adSetId . '?fields=optimization_goal',
+                '/' . $adId . '?fields=optimization_goal',
                 self::accessToken
             );
             $getDecodeBody = $response->getDecodedBody();
@@ -83,13 +112,13 @@ class AdSetManager extends GetAPIData
         }
     }
 
-    public function DataFromFields($adSetId, $fields)
+    public function DataFromFields($adId, $fields)
     {
         $this->setFields($fields);
 
         try {
             $response = $this->fb->get(
-                '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
+                '/' . $adId . '/insights?fields=' . $this->fieldsConc,
                 self::accessToken
             );
             $getDecodeBody = $response->getDecodedBody();
@@ -102,8 +131,8 @@ class AdSetManager extends GetAPIData
                     $this->fieldRes[$field] = $getDecodeBody['data'][0][$field];
                 }
 
-                $this->adsetData[$adSetId] = $this->fieldRes;
-                return $this->adsetData;
+                $this->adData[$adId] = $this->fieldRes;
+                return $this->adData;
             }
 
 
@@ -173,19 +202,19 @@ class AdSetManager extends GetAPIData
         }
     }
 
-    public function getResult($adSetId)
+    public function getAdResult($adId,$adSetId)
     {
 
         $this->optimGoal($adSetId);
         if ($this->optimization_goal == 'LEAD_GENERATION') {
             $action = 'lead';
-            $result = $this->getDataActions($adSetId, ['actions'])[$action];
-            $cost_per_result = $this->getCost($adSetId, ['cost_per_action_type'])[$action];
+            $result = $this->getDataActions($adId, ['actions'])[$action];
+            $cost_per_result = $this->getCost($adId, ['cost_per_action_type'])[$action];
         } elseif ($this->optimization_goal == 'THRUPLAY') {
             $action = 'video_thruplay_watched_actions';
-            $result = $this->DataFromFields($adSetId, [$action])[$adSetId][$action][0]['value'];
+            $result = $this->DataFromFields($adId, [$action])[$adId][$action][0]['value'];
             $cost_per_action = 'cost_per_thruplay';
-            $cost_per_result = $this->DataFromFields($adSetId, [$cost_per_action])[$adSetId][$cost_per_action][0]['value'];
+            $cost_per_result = $this->DataFromFields($adId, [$cost_per_action])[$adId][$cost_per_action][0]['value'];
         }
 
         return [$action, $result, $cost_per_result];

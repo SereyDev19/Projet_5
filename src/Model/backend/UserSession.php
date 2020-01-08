@@ -1,7 +1,9 @@
 <?php
 
-namespace SC19DEV\App\Model;
-require_once("model/backend/Session.php");
+namespace App\Model\backend;
+use App\Model\backend\Session;
+
+//require_once("model/backend/Session.php");
 
 class UserSession extends Session
 {
@@ -23,7 +25,6 @@ class UserSession extends Session
     public function isLogged()
     {
         if (isset($_SESSION['username'])) {
-//            var_dump($_SESSION);
             $this->USER = $_SESSION['username'];
             $this->userName = $_SESSION['username'];
             $this->userId = $_SESSION['user_id'];

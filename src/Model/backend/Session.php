@@ -1,6 +1,6 @@
 <?php
 
-namespace SC19DEV\App\Model;
+namespace App\Model\backend;
 
 class Session
 {

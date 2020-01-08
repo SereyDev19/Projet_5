@@ -7,11 +7,14 @@
     <body>
     <div id="dashboard" class="container">
         <header class="row col-sm-12">
+            <div>
+                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+            </div>
             <div class="page-header">
                 <h1>Rapport global</h1>
             </div>
             <div>
-                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+                <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
             </div>
         </header>
         <div class="row col-sm-12">

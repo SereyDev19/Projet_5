@@ -1,7 +1,8 @@
 <?php
 
-namespace SC19DEV\App\Model;
-require_once("model/Manager.php");
+namespace App\Model;
+
+//require_once("model/Manager.php");
 
 class ManageAccess extends Manager
 {

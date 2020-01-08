@@ -30,19 +30,19 @@ $date = new date();
     </header>
 
 
-    <div id="content">
-
-        <div id="main-img" class="row col-sm-12">
-        </div>
-
-        <div class="row col-sm-12">
-
-
-        </div>
-
-        <div id="main">
-        </div>
-    </div>
+<!--    <div id="content">-->
+<!---->
+<!--        <div id="main-img" class="row col-sm-12">-->
+<!--        </div>-->
+<!---->
+<!--        <div class="row col-sm-12">-->
+<!---->
+<!---->
+<!--        </div>-->
+<!---->
+<!--        <div id="main">-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 <?php $content = ob_get_clean(); ?>

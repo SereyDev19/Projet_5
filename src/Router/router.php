@@ -1,16 +1,16 @@
 <?php
 
-namespace SC19DEV\App\Router;
+namespace App\Router;
 
-require('controller/Controller.php');
-require('controller/FrontController.php');
-require('controller/BackController.php');
+//require('controller/Controller.php');
+//require('controller/FrontController.php');
+//require('controller/BackController.php');
 
 
 use phpDocumentor\Reflection\Types\Null_;
-use SC19DEV\App\Controller\BackController;
-use SC19DEV\App\Controller\Controller;
-use SC19DEV\App\Controller\FrontController;
+use App\Controller\BackController;
+use App\Controller\Controller;
+use App\Controller\FrontController;
 
 class Router
 {

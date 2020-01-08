@@ -1,10 +1,10 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 
-require('router/frontend/router.php');
-require('router/router.php');
+use App\Router\Frontend;
 
 try {
-    $router = new \SC19DEV\App\Router\Frontend\Router();
+    $router = new \App\Router\frontend\Router();
     $router->method();
     $router->run();
 } catch

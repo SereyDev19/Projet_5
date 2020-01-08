@@ -1,7 +1,7 @@
 <?php
 
-namespace SC19DEV\App\Model;
-require_once("model/Manager.php");
+namespace App\Model\backend;
+//require_once("model/Manager.php");
 
 class UserManager extends Manager
 {
