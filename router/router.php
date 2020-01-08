@@ -48,19 +48,24 @@ class Router
                 break;
             case 'updateData':
                 $this->Controller->APIdetailedReport($params['account_id']);
+                $this->FrontController->DetailedReport($params['account_id']);
+                break;
             case 'globalreport':
                 $this->Controller->GlobalReport();
                 break;
             case 'updateAccountData':
                 $this->Controller->APIGlobalReport();
+                $this->Controller->ReportAccount($params['account_id']);
                 break;
             case 'manageAccess':
                 $this->Controller->ManageAccess();
                 break;
             case 'addAccess':
                 $this->BackController->adminAddAccess($params['account_id']);
+                break;
             case 'deleteAccess':
                 $this->BackController->adminDeleteAccess($params['access_id']);
+                break;
             case '':
                 $this->Controller->GlobalReport();
                 break;

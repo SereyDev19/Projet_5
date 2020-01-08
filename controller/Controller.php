@@ -184,7 +184,7 @@ class Controller
 
     }
 
-    function APIGlobalReport()
+    public function APIGlobalReport()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -234,7 +234,7 @@ class Controller
         }
     }
 
-    function APIReportAccount($accountId)
+    public function APIReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -246,7 +246,7 @@ class Controller
         }
     }
 
-    function APIdetailedReport($accountId)
+    public function APIdetailedReport($accountId)
     {
 
         $userSession = new UserSession();

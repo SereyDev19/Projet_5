@@ -11,7 +11,7 @@ class ManageAccess extends Manager
     public $ads = [];
     public $access = [];
     public $IdAccess = [];
-    public $IdAlreadyUsed = false;
+    public $IdUsed = false;
 
     public function addAccess($account_id, $access_id)
     {
@@ -23,15 +23,15 @@ class ManageAccess extends Manager
         return $affectedLines;
     }
 
-    public function IdUsed($access_id)
+    public function IdAlreadyUsed($access_id)
     {
         $sql = 'SELECT * FROM access WHERE access_id = ?';
         $this->accounts = $this->getAll($sql, [$access_id]);
 
         if ($this->accounts == null) {
-            $this->IdAlreadyUsed = true;
+            $this->IdUsed = true;
         }
-        return $this->IdAlreadyUsed;
+        return $this->IdUsed;
     }
 
     public function deleteAccess($access_id)

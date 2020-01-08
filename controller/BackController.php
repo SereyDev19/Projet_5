@@ -92,8 +92,9 @@ class BackController extends Controller
             $DBaccounts = $getDBData->getAccounts();
             $AccessManager = new \SC19DEV\App\Model\ManageAccess();
             $var = random_int(1e6, 1e9 - 1);
-            while ($AccessManager->IdAlreadyUsed($var)) {
+            while (!$AccessManager->IdAlreadyUsed($var)) {
                 $var = random_int(1e6, 1e9 - 1);
+                var_dump($AccessManager->IdAlreadyUsed($var));
             }
             $AccessManager->addAccess($account_id, $var);
 

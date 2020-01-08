@@ -35,12 +35,14 @@ $date = new date();
                 </div>
             </div>
         </div>
+        <?php if ($userSession->levelAccess != 0): ; ?>
+            <button type="button" class="btn btn-info">
+                <a href="admin.php?action=updateData&amp;account_id=<?= $accountId; ?>">
+                    <i class="fas fa-sync-alt"></i>Mise à jour des données
+                </a>
+            </button>
+        <?php endif; ?>
 
-        <button type="button" class="btn btn-info">
-            <a href="admin.php?action=updateData&amp;account_id=<?= $accountId; ?>">
-                <i class="fas fa-sync-alt"></i>Mise à jour des données
-            </a>
-        </button>
         <div class="btn-group row col-sm-12 sort">
             <div class="btn-group dropdown col-sm-2 offset-sm-9">
                 <div class="dropdown-menu">
