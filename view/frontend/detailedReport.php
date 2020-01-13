@@ -222,6 +222,8 @@ $date = new date();
                     endforeach; ?>
                 </table>
             </div>
+            <a class="exportButton" href="">Export des données</a>
+
         </section>
     </div>
     <footer class="row col-sm-12">

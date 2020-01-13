@@ -63,6 +63,7 @@ $date = new date();
         </div>
         <section class="col-xl-12">
             <div class="panel panel-primary">
+                <h2>Rapport sur les trentes derniers jours</h2>
                 <table class="container table table-striped table-condensed">
                     <thead>
                     <tr>
@@ -130,6 +131,72 @@ $date = new date();
 
                 </table>
             </div>
+            <a class="exportButton" href="">Export des données</a>
+            <a class="exportButton" href="admin.php?action=updateAccountDataWithDates&amp;
+            account_id=<?= $accountId; ?>&amp;start=2019-01-1&amp;end=2020-01-12">Test
+                dates</a>
+        </section>
+
+        <section class="col-xl-12">
+            <div class="panel panel-primary">
+                <h2>Rapport sur la période nnnn à nnn</h2>
+                <table class="container table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>
+                            <i class="far fa-calendar-alt"></i>
+                            <span class="responsive_title">Mois</span>
+                        </th>
+                        <?php $i = 0;
+                        foreach ($historySpend as $data):
+                            if (!$data['spend'] == null) :; ?>
+                                <th>
+                                    <i class="far fa-calendar-alt"></i>
+                                    <span class="responsive_title"><?= date('F-Y',strtotime($datesSpend[$i])); ?></span>
+                                </th>
+                            <?php endif;
+                            $i++;
+                        endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <th>
+                            <i class="far fa-calendar-alt"></i>
+                            <span class="responsive_title">Dépense pub Facebook</span>
+                        </th>
+                        <?php $i = 0;
+                        foreach ($historySpend as $data):
+                            if (!$data['spend'] == null) :; ?>
+                                <td>
+                                    <?= $data['spend']; ?> €
+                                </td>
+                            <?php endif;
+                            $i++;
+                        endforeach; ?>
+                    </tr>
+                    <tr>
+                        <th>
+                            <i class="far fa-calendar-alt"></i>
+                            <span class="responsive_title">Nombre de leads</span>
+                        </th>
+                        <?php $i = 0;
+                        foreach ($historylead as $data):
+                            if (!$data== null) :; ?>
+                                <td>
+                                    <?= $data; ?>
+                                </td>
+                            <?php endif;
+                            $i++;
+                        endforeach; ?>
+                    </tr>
+                </table>
+                <a class="exportButton" href="">Tracer la courbe des dépenses</a>
+                <section>
+                    <h2>Graphique</h2>
+                    <canvas id="<?='Spend';?>"></canvas>
+                    <canvas id="<?='Lead';?>"></canvas>
+                </section>
+            </div>
         </section>
     </div>
     <footer class="row col-sm-12">
@@ -137,5 +204,19 @@ $date = new date();
     </div>
 
 <?php $content = ob_get_clean(); ?>
+
+<?php ob_start();
+if (isset($datesSpend) and isset($valuesSpend)): ; ?>
+    <script>
+        var app = new App();
+        var js_dates = [<?php echo '"' . implode('","', $datesSpend) . '"' ?>];
+        var js_values = [<?php echo '"' . implode('","', $valuesSpend) . '"' ?>];
+        app.trace('Spend','Dépenses', js_dates, js_values)
+        var js_dates = [<?php echo '"' . implode('","', $dateslead) . '"' ?>];
+        var js_values = [<?php echo '"' . implode('","', $valuesLead) . '"' ?>];
+        app.trace('Lead','Dépenses', js_dates, js_values)
+    </script>
+<?php endif;
+$scripts = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>

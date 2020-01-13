@@ -52,7 +52,6 @@ class GetAPIData extends Manager
             }
             return $this->accounts;
 
-
         } catch (FacebookExceptionsFacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
@@ -163,6 +162,37 @@ class GetAPIData extends Manager
         }
     }
 
+    public function getFromFieldsDate($account_id, $fields, $start, $end)
+    {
+        $this->setFields($fields);
+        try {
+            $response = $this->fb->get(
+                '/act_' . $account_id . '/insights?time_range={\'since\':\'' . $start . '\',\'until\':\'' . $end . '\'}&
+                fields=' . $this->fieldsConc,
+//                'act_331859797400599/insights?time_range={\'since\':\'2019-10-17\',\'until\':\'2019-12-17\'}&fields=spend',
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+
+            if (empty($getDecodeBody['data'][0])) {
+                $this->hasData = false;
+            } else {
+                $this->hasData = true;
+                foreach ($fields as $field) {
+                    $this->fieldRes[$field] = $getDecodeBody['data'][0][$field];
+                }
+                return $this->fieldRes;
+            }
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
 
     public function getDataActions($account_id, $fields)
     {
@@ -191,6 +221,34 @@ class GetAPIData extends Manager
         }
     }
 
+    public function getDataActionsDates($account_id, $fields, $start, $end)
+    {
+
+        $this->setFields($fields);
+        try {
+            $response = $this->fb->get(
+                '/act_' . $account_id . '/insights?time_range={\'since\':\'' . $start . '\',\'until\':\'' . $end . '\'}&fields=' . $this->fieldsConc,
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+
+            $data = $getDecodeBody['data'][0]['actions'];
+
+            foreach ($data as $value) {
+                $action_type = $value['action_type'];
+                $this->actions[$action_type] = $value['value'];
+            }
+            return $this->actions;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+
     public function getCost($account_id, $fields)
     {
         $this->setFields($fields);
@@ -198,6 +256,33 @@ class GetAPIData extends Manager
         try {
             $response = $this->fb->get(
                 '/act_' . $account_id . '/insights?fields=' . $this->fieldsConc,
+                self::accessToken
+            );
+            $getDecodeBody = $response->getDecodedBody();
+            $data = $getDecodeBody['data'][0]['cost_per_action_type'];
+
+            foreach ($data as $value) {
+                $cost_per_action_type = $value['action_type'];
+//                $this->cost_per_action[$cost_per_action_type] = number_format($value['value'], 2);
+                $this->cost_per_action[$cost_per_action_type] = $value['value'];
+            }
+            return $this->cost_per_action;
+
+        } catch (FacebookExceptionsFacebookResponseException $e) {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (FacebookExceptionsFacebookSDKException $e) {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+    }
+    public function getCostDates($account_id, $fields,$start,$end)
+    {
+        $this->setFields($fields);
+
+        try {
+            $response = $this->fb->get(
+                '/act_' . $account_id . '/insights?time_range={\'since\':\'' . $start . '\',\'until\':\'' . $end . '\'}&fields=' . $this->fieldsConc,
                 self::accessToken
             );
             $getDecodeBody = $response->getDecodedBody();

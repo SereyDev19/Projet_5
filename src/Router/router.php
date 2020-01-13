@@ -53,6 +53,10 @@ class Router
             case 'globalreport':
                 $this->Controller->GlobalReport();
                 break;
+            case 'updateAccountDataWithDates':
+                $this->Controller->APIGlobalReportDates($params['account_id'], $params['start'], $params['end']);
+                $this->Controller->ReportAccount($params['account_id']);
+                break;
             case 'updateAccountData':
                 $this->Controller->APIGlobalReport();
                 $this->Controller->ReportAccount($params['account_id']);
@@ -84,6 +88,8 @@ class Router
                 break;
             case 'logIn':
                 $this->Controller->Verification();
+                $this->Controller->GlobalReport();
+
                 break;
         }
     }

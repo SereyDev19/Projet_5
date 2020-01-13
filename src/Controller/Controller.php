@@ -6,6 +6,7 @@ use App\Model\backend\Session;
 use App\Model\backend\UserSession;
 use App\Model\backend\UserManager;
 use App\Model\backend\FlashBag;
+use App\Model\GetMonths;
 
 class Controller
 {
@@ -39,12 +40,15 @@ class Controller
 
         $userSession = new UserSession();
         $userSession->registerUser($userManager->username, $userManager->user_id, $userManager->access_level);
+        $userSession->isLogged();
+        $this->access_id = $userSession->userId;
+        $this->level_Access = $userManager->access_level;
 
         $flashbag->add($userManager->message, 'success');
         $flashbag->flash();
         $flashbag->fetchMessages();
 
-        $this->GlobalReport();
+//        $this->GlobalReport();
     }
 
     public function SignIn()
@@ -79,6 +83,7 @@ class Controller
     public function GlobalReport()
     {
         if ($this->level_Access == 0) {
+
             $FrontController = new FrontController();
             $FrontController->FrontGlobalReport($this->access_id);
         } else {
@@ -106,12 +111,40 @@ class Controller
         }
     }
 
-    function ReportAccount($accountId)
+    public function ReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $getDBData = new \App\Model\GetDBData();
             $DBaccount = $getDBData->getAccount($accountId);
+            $historySpend = json_decode($DBaccount['history_spend'], true);
+            $historylead = json_decode($DBaccount['history_lead'], true);
+            $historycostperlead = json_decode($DBaccount['history_costperlead'], true);
+
+            $datesSpend = array_keys($historySpend);
+            $dateslead = array_keys($historylead);
+            $datescostperlead = array_keys($historycostperlead);
+
+            $valuesSpend = [];
+            $valuesLead = [];
+            $valuesCostperlead = [];
+            foreach ($historySpend as $data) {
+                array_push($valuesSpend, $data['spend']);
+            }
+
+            foreach ($historylead as $data) {
+                array_push($valuesLead, $data);
+            }
+            foreach ($historycostperlead as $data) {
+                array_push($valuesCostperlead, $data);
+            }
+//            var_dump($dates);
+//            var_dump($values);
+//            $history = $DBaccount['history_spend'];
+//            var_dump($history);
+//            foreach ($history as $data){
+//                var_dump($data);
+//            }
 
             require('view/frontend/reportAccount.php');
         }
@@ -167,7 +200,7 @@ class Controller
         }
 
         $userSession = new UserSession();
-        $userSession->registerUser($userManager->username, $userManager->user_id,$userManager->access_level);
+        $userSession->registerUser($userManager->username, $userManager->user_id, $userManager->access_level);
 
         $flashbag->add($userManager->message, 'success');
         $flashbag->flash();
@@ -184,6 +217,108 @@ class Controller
 
     }
 
+    public function APIGlobalReportDates($account_Id, $start, $end)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+//            die();
+            $getAPIData = new \App\Model\GetAPIData();
+            $synData = new \App\Model\SyncData();
+            $getDBaccounts = new \App\Model\GetDBData();
+            //Get data from FB API
+//            $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
+//            $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
+            $getMonths = new GetMonths();
+
+            $diff = $getMonths->intervalDate($start, $end);
+            $historyData = [];
+            foreach ($diff as $currentDate) {
+                $bounds = $getMonths->DateBounds($currentDate);
+                $compare = $getMonths->isSooner($bounds[1], $end);
+
+                if ($compare < 0) {
+                    $historyData[$bounds[0]] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $bounds[1]);
+                } else {
+                    $historyData[$bounds[0]] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $end);
+                }
+            }
+            $historyData = json_encode($historyData);
+            $synData->UpdateJSONspend($account_Id, [$historyData]);
+
+
+//            foreach ($getAccountsId as $iterAccount) {
+            $getAPIData = new \App\Model\GetAPIData();
+//                $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
+            $getAPIData->getFromFields($account_Id, ['spend']);
+            if ($getAPIData->hasData) {
+                // Make a TRY
+                $adSet = new \App\Model\AdSetManager();
+                $adSetList = $adSet->getAdSets($account_Id);
+                $goal = '';
+                foreach ($adSetList as $iterAdSet) {
+                    if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
+                        $goal = 'LEAD_GENERATION';
+                    }
+                }
+//                if ($goal == 'LEAD_GENERATION') {
+//                    $lead = $getAPIData->getDataActionsDates($account_Id, ['actions'], $start, $end)['lead']; // lead
+//                    $cost_lead = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+//                } else {
+//                    $lead = -1;
+//                    $cost_lead = -1;
+//                }
+
+
+                $historyLead = [];
+                $historyCostperLead = [];
+                foreach ($diff as $currentDate) {
+                    $bounds = $getMonths->DateBounds($currentDate);
+                    $compare = $getMonths->isSooner($bounds[1], $end);
+                    if ($goal == 'LEAD_GENERATION') {
+                        if ($compare < 0) {
+                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
+                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+                        } else {
+                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
+                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+                        }
+                    } else {
+                        $historyLead[$bounds[0]] = -1;
+                        $historyCostperLead[$bounds[0]] = -1;
+                    }
+
+                }
+//                var_dump('MAJ des leads');
+                $historyLead = json_encode($historyLead);
+                $historyCostperLead = json_encode($historyCostperLead);
+                $synData->UpdateJSONlead($account_Id, [$historyLead]);
+                $synData->UpdateJSONcostperlead($account_Id, [$historyCostperLead]);
+//                var_dump('historylead', $historyLead);
+//                echo '<br />';
+//                echo '<br />';
+//                echo '<br />';
+//                var_dump('historycostperlead', $historyCostperLead);
+            }
+
+
+//
+//                $name = $getAPIData->getName($account_Id);
+//                $synData->isregisteredAccount($account_Id, $getAccountsId);
+//
+//                $synData->syncAccount($account_Id, [
+//                    $name,
+//                    $accountData['spend'], //SPEND
+//                    $lead,
+//                    $cost_lead
+//                ]);
+
+//            }
+            //Get data from BD MYSQL
+            $DBaccounts = $getDBaccounts->getAccounts();
+        } else {
+        }
+    }
+
     public function APIGlobalReport()
     {
         $userSession = new UserSession();
@@ -198,6 +333,13 @@ class Controller
             foreach ($getAccountsId as $iterAccount) {
                 $getAPIData = new \App\Model\GetAPIData();
                 $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
+                // DEBUT DU TEST
+//                $test = $getAPIData->getFromFieldsDate($iterAccount, ['spend'], '2019-06-01', '2019-10-01');
+//
+//                var_dump($test);
+//
+//                die();
+                // FIN DU TEST
 
                 if ($getAPIData->hasData) {
                     // Make a TRY
@@ -234,7 +376,8 @@ class Controller
         }
     }
 
-    public function APIReportAccount($accountId)
+    public
+    function APIReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -246,7 +389,8 @@ class Controller
         }
     }
 
-    public function APIdetailedReport($accountId)
+    public
+    function APIdetailedReport($accountId)
     {
 
         $userSession = new UserSession();

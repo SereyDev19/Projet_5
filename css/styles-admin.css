@@ -42,6 +42,10 @@ body {
     background-image: none;
 }
 
+h2 {
+    color: #223265;
+}
+
 h2.white {
     color: #fff;
     font-size: 1.2rem;
@@ -73,6 +77,32 @@ h2.white {
 #dashboard th, #dashboard th i {
     color: #223265;
     /*background-color: #00b9ae;*/
+}
+
+.exportButton {
+    box-shadow: 0px 0px 0px 2px #9fb4f2;
+    background: linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+    background-color: #7892c2;
+    border-radius: 10px;
+    border: 1px solid #4e6096;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 19px;
+    padding: 12px 37px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #283966;
+}
+
+.exportButton:hover {
+    background: linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+    background-color: #476e9e;
+}
+
+.exportButton:active {
+    position: relative;
+    top: 1px;
 }
 
 .alert {
@@ -117,6 +147,10 @@ h2.white {
     vertical-align: middle;
     text-align: center;
     border-bottom: 2px solid #dee2e6;
+}
+
+#dashboard .table th {
+    text-align: center;
 }
 
 .table thead th.action {
@@ -210,6 +244,15 @@ section {
     margin-top: 10px;
 }
 
+section{
+    margin-top: 75px;
+}
+
+section:first {
+    margin-top: 10px;
+
+}
+
 .accountList {
     display: flex;
     flex-direction: row;
@@ -225,7 +268,7 @@ section {
     text-align: center;
     vertical-align: center;
     border-radius: 5px;
-    border:1px solid #1b84b4;
+    border: 1px solid #1b84b4;
     background-color: #00b9ae;
 }
 

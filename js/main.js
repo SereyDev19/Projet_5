@@ -5,3 +5,5 @@ jQuery(function ($) {
         alert.height(50);
     }
 });
+
+var app = new App;

@@ -14,6 +14,23 @@ class GetDBData extends Manager
     {
         $sql = 'SELECT * FROM accounts';
         $this->accounts = $this->getAll($sql, []);
+//        var_dump($this->accounts);
+//        echo '<br />';
+//        echo '<br />';
+//        echo '<br />';
+//
+//        var_dump(json_encode($this->accounts));
+//        echo '<br />';
+//        echo '<br />';
+//        echo '<br />';
+//
+//        var_dump(json_decode(json_encode($this->accounts)));
+//
+//        $sql = 'UPDATE accounts SET     test_JSON = ?
+//                                        WHERE account_id= 331859797400599';
+//        $req = $this->executeStatement($sql, [json_encode($this->accounts)]);
+//
+//        die();
         return $this->accounts;
     }
 

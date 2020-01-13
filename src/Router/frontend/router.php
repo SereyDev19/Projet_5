@@ -41,7 +41,8 @@ class Router
                 $this->Controller->GlobalReport();
                 break;
             case '':
-                $this->FrontController->home(true);
+//                $this->Controller->GlobalReport();
+                $this->FrontController->home();
                 break;
         }
     }
@@ -58,6 +59,7 @@ class Router
                 break;
             case 'logIn':
                 $this->Controller->Verification();
+                $this->Controller->GlobalReport();
                 break;
         }
     }

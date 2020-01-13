@@ -96,6 +96,33 @@ class SyncData extends Manager
         $req = $this->executeStatement($sql, $values);
     }
 
+    public function UpdateJSONspend($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_spend = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    public function UpdateJSONlead($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_lead = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    public function UpdateJSONcostperlead($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_costperlead = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
     public function CreateAccount($accountId, $values)
     {
         $firstArr = [$accountId];

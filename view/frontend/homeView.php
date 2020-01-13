@@ -46,5 +46,14 @@ $date = new date();
 
 
 <?php $content = ob_get_clean(); ?>
-
+<?php ob_start();
+if (isset($dates) and isset($values)): ; ?>
+    <script>
+        var app = new App();
+        var js_dates = [<?php echo '"' . implode('","', $dates) . '"' ?>];
+        var js_values = [<?php echo '"' . implode('","', $values) . '"' ?>];
+        app.trace('Dépenses', js_dates, js_values)
+    </script>
+<?php endif;
+$scripts = ob_get_clean(); ?>
 <?php require('template.php'); ?>
