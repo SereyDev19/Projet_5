@@ -12,25 +12,9 @@ class GetDBData extends Manager
 
     public function getAccounts()
     {
+        $this->accounts = [];
         $sql = 'SELECT * FROM accounts';
         $this->accounts = $this->getAll($sql, []);
-//        var_dump($this->accounts);
-//        echo '<br />';
-//        echo '<br />';
-//        echo '<br />';
-//
-//        var_dump(json_encode($this->accounts));
-//        echo '<br />';
-//        echo '<br />';
-//        echo '<br />';
-//
-//        var_dump(json_decode(json_encode($this->accounts)));
-//
-//        $sql = 'UPDATE accounts SET     test_JSON = ?
-//                                        WHERE account_id= 331859797400599';
-//        $req = $this->executeStatement($sql, [json_encode($this->accounts)]);
-//
-//        die();
         return $this->accounts;
     }
 
@@ -45,7 +29,7 @@ class GetDBData extends Manager
     public function getAccount($accountId)
     {
         $sql = 'SELECT * FROM accounts WHERE account_id = ?';
-        $this->accounts = $this->getAll($sql, [$accountId])[0];
+        $this->accounts = $this->getOne($sql, [$accountId]);
         return $this->accounts;
     }
 

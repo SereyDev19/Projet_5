@@ -70,6 +70,10 @@ class Router
             case 'deleteAccess':
                 $this->BackController->adminDeleteAccess($params['access_id']);
                 break;
+            case 'exportAccountData':
+                $this->Controller->exportData($params['account_id']);
+                $this->Controller->ReportAccount($params['account_id']);
+                break;
             case '':
                 $this->Controller->GlobalReport();
                 break;

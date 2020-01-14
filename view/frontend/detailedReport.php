@@ -232,4 +232,18 @@ $date = new date();
 
 <?php $content = ob_get_clean(); ?>
 
+<?php ob_start();
+if (isset($datesSpend) and isset($valuesSpend)): ; ?>
+    <script>
+        var app = new App();
+        var js_dates = [<?php echo '"' . implode('","', $datesSpend) . '"' ?>];
+        var js_values = [<?php echo '"' . implode('","', $valuesSpend) . '"' ?>];
+        app.trace('Spend','Dépenses', js_dates, js_values)
+        var js_dates = [<?php echo '"' . implode('","', $dateslead) . '"' ?>];
+        var js_values = [<?php echo '"' . implode('","', $valuesLead) . '"' ?>];
+        app.trace('Lead','Dépenses', js_dates, js_values)
+    </script>
+<?php endif;
+$scripts = ob_get_clean(); ?>
+
 <?php require('template.php'); ?>

@@ -131,7 +131,6 @@ class Controller
             foreach ($historySpend as $data) {
                 array_push($valuesSpend, $data['spend']);
             }
-
             foreach ($historylead as $data) {
                 array_push($valuesLead, $data);
             }
@@ -158,6 +157,25 @@ class Controller
         } else {
             $BackController = new BackController();
             $BackController->adminManageAccess();
+        }
+    }
+
+    public function exportData($account_Id)
+    {
+        $userSession = new UserSession();
+
+        if ($userSession->isLogged()) {
+            $getDBData = new \App\Model\GetDBData();
+            $DBaccounts = $getDBData->getAccount($account_Id);
+            $list = array(array('Nom', 'Depenses 30 derniers jours', 'Leads 30 derniers jours', 'Cout par lead 30 derniers jours'),
+                array($DBaccounts['account_name'], $DBaccounts['spend30d'], $DBaccounts['leads30d'], $DBaccounts['cost_per_lead30d']));
+
+            $fp = fopen('file.csv', 'w');
+
+            foreach ($list as $fields) {
+                fputcsv($fp, $fields, ",");
+            }
+            fclose($fp);
         }
     }
 
@@ -376,8 +394,7 @@ class Controller
         }
     }
 
-    public
-    function APIReportAccount($accountId)
+    public function APIReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -389,8 +406,7 @@ class Controller
         }
     }
 
-    public
-    function APIdetailedReport($accountId)
+    public function APIdetailedReport($accountId)
     {
 
         $userSession = new UserSession();
