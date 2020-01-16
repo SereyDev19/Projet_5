@@ -32,6 +32,9 @@
 <script src="js/AjaxRequest.js"></script>
 <script src="js/Graphe.js"></script>
 <script src="js/CallButton.js"></script>
+<script src="js/Plot.js"></script>
+<script src="js/PlotSpend.js"></script>
+<script src="js/PlotLead.js"></script>
 <script src="js/App.js"></script>
 <script src="js/main.js"></script>
 <?= $scripts ?>

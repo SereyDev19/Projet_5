@@ -10,9 +10,15 @@ class App {
 
     }
 
-    plot(id, title, labelsValues, dataValues){
-        var Plot = new Graphe();
-        Plot.plot(id, title, labelsValues, dataValues);
+    plotSpend(id) {
+        this.PlotSpend = new PlotSpend(id);
+
+    }
+
+    plotLead(id) {
+
+        this.PlotLead = new PlotLead(id);
+
     }
 
 

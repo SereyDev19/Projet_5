@@ -3,6 +3,7 @@ class Graphe {
     }
 
     plot(id, title, labelsValues, dataValues) {
+        console.log(id)
         this.ctx = document.getElementById(id).getContext('2d');
         this.chart = new Chart(this.ctx, {
             // The type of chart we want to create
@@ -22,7 +23,26 @@ class Graphe {
             },
 
             // Configuration options go here
-            options: {}
+            options: {
+                legend: {
+                    labels: {
+                        fontSize: 30
+
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            fontSize: 20
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 20
+                        }
+                    }]
+                }
+            }
         })
     }
 }
