@@ -28,6 +28,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/AjaxRequest.js"></script>
+<script src="js/Graphe.js"></script>
+<script src="js/CallButton.js"></script>
 <script src="js/App.js"></script>
 <script src="js/main.js"></script>
 <?= $scripts ?>

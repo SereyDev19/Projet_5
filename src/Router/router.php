@@ -71,8 +71,12 @@ class Router
                 $this->BackController->adminDeleteAccess($params['access_id']);
                 break;
             case 'exportAccountData':
-                $this->Controller->exportData($params['account_id']);
+//                $this->Controller->exportData($params['account_id']);
+                $this->Controller->newExportData($params['account_id']);
                 $this->Controller->ReportAccount($params['account_id']);
+                break;
+            case 'testAJAX':
+                $this->Controller->testAJAX($params['account_id']);
                 break;
             case '':
                 $this->Controller->GlobalReport();

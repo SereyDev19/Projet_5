@@ -50,6 +50,7 @@ $date = new date();
 if (isset($dates) and isset($values)): ; ?>
     <script>
         var app = new App();
+        app.init();
         var js_dates = [<?php echo '"' . implode('","', $dates) . '"' ?>];
         var js_values = [<?php echo '"' . implode('","', $values) . '"' ?>];
         app.trace('Dépenses', js_dates, js_values)

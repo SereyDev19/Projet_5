@@ -26,6 +26,7 @@ class Manager
         try {
             $db = new \PDO('mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME . ';charset=utf8', self::DB_USERNAME, self::DB_PWD);
             $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
             return $db;
         } catch (PDOException $e) {
             die("Database connection failed: " . $e->getMessage());

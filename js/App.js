@@ -4,29 +4,16 @@ class App {
         // this.init();
     }
 
-    trace(id, title, labelsvalues, datavalues) {
-        this.ctx = document.getElementById(id).getContext('2d');
-        this.chart = new Chart(this.ctx, {
-            // The type of chart we want to create
-            type: 'line',
-
-            // The data for our dataset
-            data: {
-                // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                labels: labelsvalues,
-                datasets: [{
-                    label: title,
-                    // backgroundColor: 'rgb(24, 169, 93)',
-                    borderColor: 'rgb(24, 169, 93)',
-                    // data: [0, 10, 5, 2, 20, 30, 45]
-                    data: datavalues
-                }]
-            },
-
-            // Configuration options go here
-            options: {}
-        })
+    init() {
+        this.CallButton = new CallButton();
 
 
     }
+
+    plot(id, title, labelsValues, dataValues){
+        var Plot = new Graphe();
+        Plot.plot(id, title, labelsValues, dataValues);
+    }
+
+
 }

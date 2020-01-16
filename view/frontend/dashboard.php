@@ -97,6 +97,7 @@ $date = new date();
 if (isset($datesSpend) and isset($valuesSpend)): ; ?>
     <script>
         var app = new App();
+        app.init();
         var js_dates = [<?php echo '"' . implode('","', $datesSpend) . '"' ?>];
         var js_values = [<?php echo '"' . implode('","', $valuesSpend) . '"' ?>];
         app.trace('Spend','Dépenses', js_dates, js_values)

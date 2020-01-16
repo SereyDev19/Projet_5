@@ -150,6 +150,24 @@ class Controller
 
     }
 
+    public function testAJAX($accountId)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $getDBData = new \App\Model\GetDBData();
+            $DBaccount = $getDBData->getAccount($accountId);
+
+            $historySpend = json_decode($DBaccount['history_spend'], true);
+            $historylead = json_decode($DBaccount['history_lead'], true);
+            $historycostperlead = json_decode($DBaccount['history_costperlead'], true);
+
+            $allData['history_spend'] = $historySpend;
+            $allData['history_lead'] = $historylead;
+            $allData['history_costperlead'] = $historycostperlead;
+            echo json_encode($allData);
+        }
+    }
+
     public function ManageAccess()
     {
         if ($this->level_Access == 0) {
@@ -160,22 +178,43 @@ class Controller
         }
     }
 
-    public function exportData($account_Id)
+    public function newExportData($account_Id)
     {
         $userSession = new UserSession();
 
         if ($userSession->isLogged()) {
+
             $getDBData = new \App\Model\GetDBData();
             $DBaccounts = $getDBData->getAccount($account_Id);
             $list = array(array('Nom', 'Depenses 30 derniers jours', 'Leads 30 derniers jours', 'Cout par lead 30 derniers jours'),
                 array($DBaccounts['account_name'], $DBaccounts['spend30d'], $DBaccounts['leads30d'], $DBaccounts['cost_per_lead30d']));
 
-            $fp = fopen('file.csv', 'w');
+            $filename = "export.csv";
+            $delimiter = ";";
+            header('Content-Type: application/csv');
+//            header('Content-Disposition: attachment; filename="' . $filename . '";');
+            header('Content-Disposition: attachment;filename="' . $filename . '";');
+            # Disable caching - HTTP 1.1
+            header("Cache-Control: no-cache, no-store, must-revalidate");
+            # Disable caching - HTTP 1.0
+            header("Pragma: no-cache");
+            # Disable caching - Proxies
+            header("Expires: 0");
 
-            foreach ($list as $fields) {
-                fputcsv($fp, $fields, ",");
+            // open the "output" stream
+            // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
+            $f = fopen('php://output', 'w');
+//            $f = fopen($filename, 'w');
+            ob_start();
+
+            foreach ($list as $line) {
+                fputcsv($f, $line, $delimiter);
             }
-            fclose($fp);
+            $string = ob_get_clean();
+            exit($string);
+
+            fclose($f);
+
         }
     }
 

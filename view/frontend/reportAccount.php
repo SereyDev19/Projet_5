@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
 <?php $Url = urlencode("http://" . $_SERVER['SERVER_NAME'] . $_SERVER["REQUEST_URI"]);
+var_dump($_SERVER['SERVER_NAME']);
 require('view/helper.php');
 $date = new date();
 ?>
@@ -131,10 +132,14 @@ $date = new date();
 
                 </table>
             </div>
-            <a class="exportButton" href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>">Export des données</a>
+            <span id="export" class="exportButton">Test AJAX</span>
+            <a class="exportButton" href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>">Télécharger
+                le rapport en format CSV</a>
             <a class="exportButton" href="admin.php?action=updateAccountDataWithDates&amp;
             account_id=<?= $accountId; ?>&amp;start=2019-01-1&amp;end=2020-01-12">Test
                 dates</a>
+            <a class="exportButton" href="admin.php?action=testAJAX&amp;
+                        account_id=<?= $accountId; ?>">Test AJAX</a>
         </section>
 
         <section class="col-xl-12">
@@ -190,7 +195,7 @@ $date = new date();
                         endforeach; ?>
                     </tr>
                 </table>
-                <a class="exportButton" href="">Tracer la courbe des dépenses</a>
+                <span class="plotButton exportButton">Tracer la courbe des dépenses</span>
                 <section>
                     <h2>Graphique</h2>
                     <canvas id="<?= 'Spend'; ?>"></canvas>
@@ -206,15 +211,24 @@ $date = new date();
 <?php $content = ob_get_clean(); ?>
 
 <?php ob_start();
-if (isset($datesSpend) and isset($valuesSpend)): ; ?>
+if (isset($datesSpend) and isset($valuesSpend)): ;
+    $Url = urlencode("http://" . $_SERVER['SERVER_NAME'] . "action=testAJAX&amp;account_id=" . $accountId);
+    var_dump($Url); ?>
     <script>
         var app = new App();
+        app.init();
+
         var js_dates = [<?php echo '"' . implode('","', $datesSpend) . '"' ?>];
         var js_values = [<?php echo '"' . implode('","', $valuesSpend) . '"' ?>];
-        app.trace('Spend', 'Dépenses', js_dates, js_values)
+        app.plot('Spend', 'Dépenses', js_dates, js_values)
         var js_dates = [<?php echo '"' . implode('","', $dateslead) . '"' ?>];
         var js_values = [<?php echo '"' . implode('","', $valuesLead) . '"' ?>];
-        app.trace('Lead', 'Dépenses', js_dates, js_values)
+        app.plot('Lead', 'Dépenses', js_dates, js_values);
+
+        var url = "<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/admin.php?action=testAJAX&account_id=" . $accountId; ?>";
+        console.log(url);
+
+        app.CallButton.AJAX(url);
     </script>
 <?php endif;
 $scripts = ob_get_clean(); ?>
