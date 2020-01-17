@@ -241,16 +241,23 @@ div.content {
 }
 
 section {
+    margin: auto;
     margin-top: 10px;
 }
 
-section{
+section {
     margin-top: 75px;
 }
 
 section:first {
     margin-top: 10px;
 
+}
+
+.fa-file-csv, .fa-file-pdf {
+    /*color: #18a85c!important;*/
+    /*background-color: #18a85c;*/
+    font-size: 26px;
 }
 
 .accountList {

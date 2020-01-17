@@ -63,6 +63,8 @@ $date = new date();
         </div>
         <section class="col-xl-12">
             <div class="panel panel-primary">
+                <h2>Rapport sur les trentes derniers jours</h2>
+
                 <table class="container table table-striped table-condensed">
                     <thead>
                     <tr>

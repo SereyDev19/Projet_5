@@ -3,7 +3,6 @@ class PlotSpend {
         this.button = document.getElementById(id);
 
 
-
         this.init();
     }
 
@@ -11,15 +10,27 @@ class PlotSpend {
         this.button.addEventListener('click', function () {
             this.ajaxrequest = new AjaxRequest();
             this.ajaxrequest.ajax(url).then(function (response) {
-                this.listCanvas =  document.getElementsByTagName("canvas");
-                for (var item of this.listCanvas){
-                    console.log(item);
-                    item.parentNode.removeChild(item);
+                this.listCanvas = document.getElementsByTagName("canvas");
+                for (var item of this.listCanvas) {
+                    item.remove();
                 }
+                var t = document.getElementById("plotarea").getElementsByTagName("h2");
+                if (t.length > 0) {
+                    for (var item of t) {
+                        item.remove();
+                    }
+                }
+                this.h2 = document.createElement("h2");
+
+                this.h2.innerHTML = "Zone graphique";
+                this.plotarea = document.getElementById("plotarea");
+
+
+                this.plotarea.insertAdjacentElement("afterbegin", this.h2);
+
 
                 this.canvas = document.createElement("canvas");
-                this.canvas.setAttribute("id","Spend");
-                this.plotarea = document.getElementById("plotarea");
+                this.canvas.setAttribute("id", "Spend");
                 this.plotarea.insertAdjacentElement("beforeend", this.canvas);
 
                 console.log('tracer depenses')

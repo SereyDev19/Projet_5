@@ -61,9 +61,13 @@ $date = new date();
                 </div>
             </div>
         </div>
-        <section class="col-xl-12">
+        <section class="col-xl-6">
             <div class="panel panel-primary">
-                <h2>Rapport sur les trentes derniers jours</h2>
+                <h2>Rapport (30 derniers jours par défaut)</h2>
+                <a class="" href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>"><i
+                            class="fas fa-file-csv"></i></a>
+                <a href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>"><i
+                            class="far fa-file-pdf"></i></a>
                 <table class="container table table-striped table-condensed">
                     <thead>
                     <tr>
@@ -85,44 +89,10 @@ $date = new date();
                     </thead>
                     <tr>
                         <td>
-                            <?= $DBaccount['spend30d']; ?> €
+                            <span id="plotSpend" class="exportButton"><?= $DBaccount['spend30d']; ?> €</span>
                         </td>
                         <td>
-                            <?= $DBaccount['leads30d']; ?>
-                        </td>
-                        <td>
-                            <?= $DBaccount['cost_per_lead30d']; ?> €
-                        </td>
-                    </tr>
-
-                </table>
-
-                <table class="container table table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="responsive_title">Dépense pub totale</span>
-                        </th>
-
-                        <th>
-                            <i class="far fa-newspaper"></i>
-                            <span class="responsive_title">Nombre de leads ou de ventes total(es)</span>
-                        </th>
-                        <!--                            <th style="width: 10%">-->
-                        <th>
-                            <i class="far fa-comment-alt"></i>
-                            <span class="responsive_title">Coût par lead ou retour sur dépense pub Facebook (totale)</span>
-                        </th>
-
-                    </tr>
-                    </thead>
-                    <tr>
-                        <td>
-                            <?= $DBaccount['spend30d']; ?> €
-                        </td>
-                        <td>
-                            <?= $DBaccount['leads30d']; ?>
+                            <span id="plotLead" class="exportButton"><?= $DBaccount['leads30d']; ?></span>
                         </td>
                         <td>
                             <?= $DBaccount['cost_per_lead30d']; ?> €
@@ -131,73 +101,13 @@ $date = new date();
 
                 </table>
             </div>
-            <span id="export" class="exportButton">Test AJAX</span>
-            <a class="exportButton" href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>">Télécharger
-                le rapport en format CSV</a>
-            <a class="exportButton" href="admin.php?action=updateAccountDataWithDates&amp;
-            account_id=<?= $accountId; ?>&amp;start=2019-01-1&amp;end=2020-01-12">Test
-                dates</a>
+
         </section>
 
         <section class="col-xl-12">
             <div class="panel panel-primary">
-                <h2>Rapport sur la période <?= $datesSpend[0]; ?> à <?= end($datesSpend); ?></h2>
-                <table class="container table table-striped table-condensed">
-                    <thead>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="responsive_title">Mois</span>
-                        </th>
-                        <?php $i = 0;
-                        foreach ($historySpend as $data):
-                            if (!$data['spend'] == null) :; ?>
-                                <th>
-                                    <i class="far fa-calendar-alt"></i>
-                                    <span class="responsive_title"><?= date('F-Y', strtotime($datesSpend[$i])); ?></span>
-                                </th>
-                            <?php endif;
-                            $i++;
-                        endforeach; ?>
-                    </tr>
-                    </thead>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="responsive_title">Dépense pub Facebook</span>
-                        </th>
-                        <?php $i = 0;
-                        foreach ($historySpend as $data):
-                            if (!$data['spend'] == null) :; ?>
-                                <td>
-                                    <?= $data['spend']; ?> €
-                                </td>
-                            <?php endif;
-                            $i++;
-                        endforeach; ?>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="responsive_title">Nombre de leads</span>
-                        </th>
-                        <?php $i = 0;
-                        foreach ($historylead as $data):
-                            if (!$data == null) :; ?>
-                                <td>
-                                    <?= $data; ?>
-                                </td>
-                            <?php endif;
-                            $i++;
-                        endforeach; ?>
-                    </tr>
-                </table>
-                <span id="plotSpend" class="exportButton">Tracer la courbe des dépenses</span>
-                <span id="plotLead" class="exportButton">Tracer la courbe des leads</span>
                 <section id="plotarea">
-                    <h2>Graphique</h2>
-<!--                    <canvas id="--><?//= 'Spend'; ?><!--"></canvas>-->
-<!--                    <canvas id="--><?//= 'Lead'; ?><!--"></canvas>-->
+<!--                    <h2>Zone graphique</h2>-->
                 </section>
             </div>
         </section>
@@ -214,16 +124,7 @@ if (isset($datesSpend) and isset($valuesSpend)): ; ?>
         var app = new App();
         app.init();
 
-        //var js_dates = [<?php //echo '"' . implode('","', $datesSpend) . '"' ?>//];
-        //var js_values = [<?php //echo '"' . implode('","', $valuesSpend) . '"' ?>//];
-        // app.plot('Spend', 'Dépenses', js_dates, js_values)
-        //var js_dates = [<?php //echo '"' . implode('","', $dateslead) . '"' ?>//];
-        //var js_values = [<?php //echo '"' . implode('","', $valuesLead) . '"' ?>//];
-        // app.plot('Lead', 'Dépenses', js_dates, js_values);
-
         var url = "<?php echo "http://" . $_SERVER['SERVER_NAME'] . "/admin.php?action=testAJAX&account_id=" . $accountId; ?>";
-
-        // app.CallButton.AJAX(url);
 
         app.plotSpend('plotSpend');
         app.plotLead('plotLead');

@@ -16,9 +16,10 @@ class Graphe {
                 datasets: [{
                     label: title,
                     // backgroundColor: 'rgb(24, 169, 93)',
-                    borderColor: 'rgb(24, 169, 93)',
+                    borderColor: '#f8ad22',
                     // data: [0, 10, 5, 2, 20, 30, 45]
-                    data: dataValues
+                    data: dataValues,
+                    hoverBackgroundColor: "rgba(232,105,90,0.8)"
                 }]
             },
 
@@ -26,19 +27,35 @@ class Graphe {
             options: {
                 legend: {
                     labels: {
+                        fontColor: '#fff',
                         fontSize: 30
 
                     }
                 },
+
                 scales: {
                     yAxes: [{
                         ticks: {
-                            fontSize: 20
+                            fontSize: 20,
+                            fontColor: "#fff"
+                        },
+                        gridLines: {
+                            color: "#fff",
+                            lineWidth: 0.1,
+                            zeroLineColor: "#fff",
+                            zeroLineWidth: 0.1
                         }
                     }],
                     xAxes: [{
                         ticks: {
-                            fontSize: 20
+                            fontSize: 20,
+                            fontColor: "#fff"
+                        },
+                        gridLines: {
+                            color: "#fff",
+                            lineWidth: 0.1,
+                            zeroLineColor: "#fff",
+                            zeroLineWidth: 0.1
                         }
                     }]
                 }

@@ -114,6 +114,10 @@ header {
     text-shadow: 1px 1px 0px #cc9f52;
 }
 
+canvas {
+    background-color: #223265;
+}
+
 .connect:hover {
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477));
     background: -moz-linear-gradient(center top, #fb9e25 5%, #ffc477 100%);
@@ -253,6 +257,7 @@ p.chapterName {
     color: #00b9ae;
     text-align: center;
 }
+
 
 div.date {
     margin-bottom: 5px;
