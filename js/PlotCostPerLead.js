@@ -1,7 +1,6 @@
-class PlotLead {
+class PlotCostPerLead {
     constructor(id) {
         this.button = document.getElementById(id);
-
 
 
         this.init();
@@ -9,14 +8,12 @@ class PlotLead {
 
     init() {
         this.button.addEventListener('click', function () {
-
             this.ajaxrequest = new AjaxRequest();
             this.ajaxrequest.ajax(url).then(function (response) {
-                this.listCanvas =  document.getElementsByTagName("canvas");
-                for (var item of this.listCanvas){
+                this.listCanvas = document.getElementsByTagName("canvas");
+                for (var item of this.listCanvas) {
                     item.remove();
                 }
-
                 var t = document.getElementById("plotarea").getElementsByTagName("h2");
                 if (t.length > 0) {
                     for (var item of t) {
@@ -31,20 +28,18 @@ class PlotLead {
 
                 this.plotarea.insertAdjacentElement("afterbegin", this.h2);
 
+
                 this.canvas = document.createElement("canvas");
-                this.canvas.setAttribute("id", "Lead");
-                this.plotarea = document.getElementById("plotarea");
+                this.canvas.setAttribute("id", "CostPerLead");
                 this.plotarea.insertAdjacentElement("beforeend", this.canvas);
 
 
-                console.log('tracer leads')
-                console.log('Donnees recues');
                 this.graph = new Graphe();
-                var js_dates = Object.keys(response.history_lead);
-                var js_values = Object.values(response.history_lead);
+                var js_dates = Object.keys(response.history_costperlead);
+                var js_values = Object.values(response.history_costperlead);
 
-                this.Canvasid = 'Lead';
-                this.title = 'Lead';
+                this.Canvasid = 'CostPerLead';
+                this.title = 'Cost per lead';
 
                 this.graph.plot(this.Canvasid, this.title, js_dates, js_values);
 

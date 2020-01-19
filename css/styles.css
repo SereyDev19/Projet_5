@@ -78,7 +78,7 @@ header {
     width: 275px;
 }
 
-.connect {
+.connect, #step1Next, #step2Next {
     -moz-box-shadow: inset 0px 1px 0px 0px #fce2c1;
     -webkit-box-shadow: inset 0px 1px 0px 0px #fce2c1;
     box-shadow: inset 0px 1px 0px 0px #fce2c1;
@@ -100,7 +100,42 @@ header {
     border-bottom-left-radius: 38px;
     text-indent: 0px;
     border: 3px solid #eeb44f;
-    /*display: inline-block;*/
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+    height: 50px;
+    line-height: 50px;
+    width: 130px;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0px #cc9f52;
+}
+
+.user {
+    margin-right: 60px;
+    -moz-box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25));
+    background: -moz-linear-gradient(center top, #ffc477 5%, #fb9e25 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
+    background-color: #ffc477;
+    -webkit-border-top-left-radius: 38px;
+    -moz-border-radius-topleft: 38px;
+    border-top-left-radius: 38px;
+    -webkit-border-top-right-radius: 38px;
+    -moz-border-radius-topright: 38px;
+    border-top-right-radius: 38px;
+    -webkit-border-bottom-right-radius: 38px;
+    -moz-border-radius-bottomright: 38px;
+    border-bottom-right-radius: 38px;
+    -webkit-border-bottom-left-radius: 38px;
+    -moz-border-radius-bottomleft: 38px;
+    border-bottom-left-radius: 38px;
+    text-indent: 0px;
+    border: 3px solid #eeb44f;
     color: #ffffff;
     font-family: Arial;
     font-size: 15px;
@@ -116,6 +151,10 @@ header {
 
 canvas {
     background-color: #223265;
+
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 .connect:hover {

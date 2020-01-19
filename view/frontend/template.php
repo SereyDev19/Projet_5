@@ -35,9 +35,13 @@
 <script src="js/Plot.js"></script>
 <script src="js/PlotSpend.js"></script>
 <script src="js/PlotLead.js"></script>
+<script src="js/PlotCostPerLead.js"></script>
 <script src="js/App.js"></script>
 <script src="js/main.js"></script>
-<?= $scripts ?>
+<?php
+if (isset($scripts)):; ?>
+    <?= $scripts ?>
+<?php endif; ?>
 
 </body>
 </html>

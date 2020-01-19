@@ -14,7 +14,16 @@ $date = new date();
                 <h1>Synthèse : <?= $DBaccount['account_name']; ?></h1>
             </div>
             <div>
-                <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
+                <div class="btn-group dropdown">
+                    <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <?= $_SESSION['username']; ?>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="admin.php?action=logout">
+                            <i class="fas fa-power-off"></i>Déconnexion
+                        </a>
+                    </div>
+                </div>
             </div>
         </header>
         <div class="row col-sm-12">
@@ -96,7 +105,7 @@ $date = new date();
                             <span id="plotLead" class="exportButton"><?= $DBaccount['leads30d']; ?></span>
                         </td>
                         <td>
-                            <?= $DBaccount['cost_per_lead30d']; ?> €
+                            <span id="plotCostPerLead" class="exportButton"><?= $DBaccount['cost_per_lead30d']; ?>€</span>
                         </td>
                     </tr>
 
@@ -107,7 +116,7 @@ $date = new date();
 
         <section class="col-xl-12">
             <div class="panel panel-primary">
-                <div id="plotarea" class="chart-container" style="position: relative; height:850px; width:850px">
+                <div id="plotarea" class="chart-container" style="position: relative; width:850px">
 
                 </div>
             </div>
@@ -129,6 +138,8 @@ if (isset($datesSpend) and isset($valuesSpend)): ; ?>
 
         app.plotSpend('plotSpend');
         app.plotLead('plotLead');
+        app.plotCostPerLead('plotCostPerLead');
+
     </script>
 <?php endif;
 $scripts = ob_get_clean(); ?>

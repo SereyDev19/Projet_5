@@ -100,9 +100,6 @@ class BackController extends Controller
             $getDBData = new \App\Model\GetDBData();
             $AccessManager = new \App\Model\ManageAccess();
             $AccessManager->deleteAccess($access_id);
-
-//            $this->adminManageAccess();
-
         }
     }
 }

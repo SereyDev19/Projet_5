@@ -16,10 +16,11 @@ class App {
     }
 
     plotLead(id) {
-
         this.PlotLead = new PlotLead(id);
-
     }
 
+    plotCostPerLead(id) {
+        this.PlotCostPerLead = new PlotCostPerLead(id);
+    }
 
 }

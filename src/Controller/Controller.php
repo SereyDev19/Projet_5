@@ -238,7 +238,7 @@ class Controller
         $access_password = $params['access_password'];
         $confirm_password = $params['confirm_password'];
 
-        //Check errors in password
+        //Check errors in typing password x2
         if ($userManager->errorDefiningPassword($access_password, $confirm_password)) {
             $this->SignIn();
             $flashbag->add($userManager->message, 'error');
@@ -249,6 +249,15 @@ class Controller
 
         $IdExists = $userManager->verifyAccessId($access_id);
         $AccountCreated = $userManager->passwordDefined($access_id);
+        var_dump($userManager->verifyEmail($access_email));
+        if ($userManager->verifyEmail($access_email)) {
+            $this->SignIn();
+
+            $flashbag->add($userManager->message, 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            exit();
+        }
 
         if ($userManager->alreadyDefined) {
             $this->SignIn();

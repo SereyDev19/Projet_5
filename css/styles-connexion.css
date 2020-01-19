@@ -43,6 +43,34 @@ form, #confirm-message {
     padding-bottom: 10px;
 }
 
+form #step1 {
+    position: absolute;
+    margin: auto;
+    width: 390px;
+
+}
+
+form #step2 {
+    position: absolute;
+    width: 390px;
+    left: 450px;
+
+}
+
+form #step3 {
+    position: absolute;
+    width: 390px;
+    left: 450px;
+
+}
+
+form {
+    position: relative;
+    overflow-x: hidden;
+    height: 450px;
+    width: 450px;
+}
+
 form h1 {
     display: flex;
     flex-direction: row;

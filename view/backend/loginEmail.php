@@ -3,25 +3,28 @@
     <link href="css/styles-connexion.css" rel="stylesheet">
 
     <body>
-<div id="container">
-    <!-- zone de connexion -->
+    <div class="row col-sm-12">
+        <a class="text-white" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
+    </div>
+    <div id="container">
+        <!-- zone de connexion -->
 
-    <form action="admin.php" method="POST">
-        <div class="logo">
-            <img id="logo" src="../../images/LOGOreportme.png">
-        </div>
-        <h1>Connexion</h1>
+        <form action="admin.php" method="POST">
+            <div class="logo">
+                <img id="logo" src="../../images/LOGOreportme.png">
+            </div>
+            <h1>Connexion</h1>
 
-        <label><b>E-mail</b></label>
-        <input type="text" placeholder="Entrer votre e-mail" name="email" required>
+            <label><b>E-mail</b></label>
+            <input type="text" placeholder="Entrer votre e-mail" name="email" required>
 
-        <label><b>Mot de passe</b></label>
-        <input type="password" placeholder="Entrer le mot de passe" name="password" required>
+            <label><b>Mot de passe</b></label>
+            <input type="password" placeholder="Entrer le mot de passe" name="password" required>
 
-        <input type="submit" id='submit' name='logIn' value='Connexion'>
+            <input type="submit" id='submit' name='logIn' value='Connexion'>
 
-    </form>
-</div>
+        </form>
+    </div>
 
 <?php $content = ob_get_clean(); ?>
 

@@ -9,6 +9,7 @@ class UserManager extends Manager
     public $isCorrect = false;
     public $errorPassword = false;
     public $isId = false;
+    public $isEmail = false;
     public $alreadyDefined = false;
     public $username = '';
     public $user_id = '';
@@ -34,6 +35,22 @@ class UserManager extends Manager
             }
             return $this->isId;
         }
+    }
+
+    public function verifyEmail($email)
+    {
+            $db = $this->db;
+
+            //  Test si l'Id existe
+            $sql = 'SELECT * FROM access WHERE access_email = ?';
+            $resultat = $this->getOne($sql, [$email]);
+            if ($resultat != null) {
+                $this->isEmail = true;
+
+                $this->message = 'Email déjà utilisé';
+            }
+
+            return $this->isEmail;
     }
 
     public function verifyUser($email, $password)

@@ -14,7 +14,16 @@ $date = new date();
                 <h1>Rapport global</h1>
             </div>
             <div>
-                <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
+                <div class="btn-group dropdown">
+                    <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <?= $_SESSION['username']; ?>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="admin.php?action=logout">
+                            <i class="fas fa-power-off"></i>Déconnexion
+                        </a>
+                    </div>
+                </div>
             </div>
         </header>
         <div class="row col-sm-12">

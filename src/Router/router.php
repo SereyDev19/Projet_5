@@ -69,6 +69,7 @@ class Router
                 break;
             case 'deleteAccess':
                 $this->BackController->adminDeleteAccess($params['access_id']);
+                $this->Controller->ManageAccess();
                 break;
             case'click2validate':
                 $this->Controller->click2validate($params['token']);
