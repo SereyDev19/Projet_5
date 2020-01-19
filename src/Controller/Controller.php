@@ -7,6 +7,8 @@ use App\Model\backend\UserSession;
 use App\Model\backend\UserManager;
 use App\Model\backend\FlashBag;
 use App\Model\GetMonths;
+use App\Helper;
+use App\Model\ManageAccess;
 
 class Controller
 {
@@ -234,13 +236,22 @@ class Controller
         $access_name = $params['access_name'];
         $access_firstname = $params['access_firstname'];
         $access_password = $params['access_password'];
+        $confirm_password = $params['confirm_password'];
+
+        //Check errors in password
+        if ($userManager->errorDefiningPassword($access_password, $confirm_password)) {
+            $this->SignIn();
+            $flashbag->add($userManager->message, 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            exit();
+        }
 
         $IdExists = $userManager->verifyAccessId($access_id);
         $AccountCreated = $userManager->passwordDefined($access_id);
 
         if ($userManager->alreadyDefined) {
-            $this->SignIn(); // Other function
-//            adminSignIn(); // Other function
+            $this->SignIn();
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
@@ -248,8 +259,7 @@ class Controller
         }
 
         if (!$userManager->isId) { //If no Id founded
-            $this->SignIn(); // Other function
-//            adminSignIn(); // Other function
+            $this->SignIn();
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
@@ -263,15 +273,47 @@ class Controller
         $flashbag->flash();
         $flashbag->fetchMessages();
 
-        $AccessManager->registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password);
+        //Generate a random string.
+        $token = openssl_random_pseudo_bytes(56);
 
-        //Creer une Page de bienvenue
-        $toto = $getDBData->getAccessAccountsId($access_id);
-        $newAccessAccount = $getDBData->getAccountsFromList($toto);
-        $DBaccounts = $newAccessAccount;
+        //Convert the binary data into hexadecimal representation.
+        $access_token = bin2hex($token);
 
-        require('view/frontend/dashboard.php');
+        $AccessManager->registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password, $access_token);
 
+
+        //Send email with confirmation link
+
+        require('src/Controller/Mailer.php');
+        sendMailerTest('serey.chhim@gmail.com', $access_token);
+
+        require('view/frontend/confirmSignInProcess.php');
+
+    }
+
+    public function click2validate($token)
+    {
+        $accessManager = new ManageAccess();
+        $access = $accessManager->searchToken($token);
+        $flashbag = new FlashBag();
+
+        if ($access == false) {
+            $flashbag->add('token non reconnu', 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            exit();
+        };
+
+        if ($access['activated'] == 1) {
+            $flashbag->add('e-mail : ' . $access['access_email'] . ' déjà confirmé!', 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            exit();
+        };
+
+        $accessManager->confirmToken($token);
+
+        require('view/frontend/click2validate.php');
     }
 
     public function APIGlobalReportDates($account_Id, $start, $end)

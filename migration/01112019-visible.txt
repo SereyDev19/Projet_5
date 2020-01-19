@@ -1,4 +1,0 @@
-ALTER TABLE `commentaires` ADD `visible` BOOLEAN NOT NULL AFTER `reported`;
-
-UPDATE `commentaires` SET `visible` = '1'
-

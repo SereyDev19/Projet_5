@@ -7,6 +7,7 @@ class UserManager extends Manager
 {
     public $message = '';
     public $isCorrect = false;
+    public $errorPassword = false;
     public $isId = false;
     public $alreadyDefined = false;
     public $username = '';
@@ -82,5 +83,16 @@ class UserManager extends Manager
             $this->alreadyDefined = true;
         }
         return $this->alreadyDefined;
+    }
+
+    public function errorDefiningPassword($password, $confirmpassword)
+    {
+
+        if ($password != $confirmpassword) {
+            $this->message = 'Le mot de passe n\'a pas été correctement saisi';
+
+            $this->errorPassword = true;
+        }
+        return $this->errorPassword;
     }
 }

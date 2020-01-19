@@ -1,1 +1,0 @@
-UPDATE `billets` SET `online`=1 WHERE 1

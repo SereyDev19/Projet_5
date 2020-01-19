@@ -234,6 +234,11 @@ div.content {
     padding-bottom: 0;
 }
 
+
+#plotarea {
+    margin: auto;
+}
+
 #submit {
     padding: 0;
     margin: 0;

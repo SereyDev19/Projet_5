@@ -70,8 +70,10 @@ class Router
             case 'deleteAccess':
                 $this->BackController->adminDeleteAccess($params['access_id']);
                 break;
+            case'click2validate':
+                $this->Controller->click2validate($params['token']);
+                break;
             case 'exportAccountData':
-//                $this->Controller->exportData($params['account_id']);
                 $this->Controller->newExportData($params['account_id']);
                 $this->Controller->ReportAccount($params['account_id']);
                 break;
@@ -93,6 +95,7 @@ class Router
         switch ($action) {
             case 'signIn':
                 $this->Controller->RegisterNewAccess($params);
+//                $this->Controller->sendEmail('serey.chhim@gmail.com');
                 break;
             case 'logIn':
                 $this->Controller->Verification();

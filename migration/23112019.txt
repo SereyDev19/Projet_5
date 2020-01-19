@@ -1,2 +1,0 @@
-alter table billets rename to posts
-alter table commentaires rename to comments

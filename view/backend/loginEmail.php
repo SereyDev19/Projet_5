@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php ob_start(); ?>
+
     <link href="css/styles-connexion.css" rel="stylesheet">
-    <!--</head>-->
-<body>
+
+    <body>
 <div id="container">
     <!-- zone de connexion -->
 
@@ -23,3 +22,7 @@
 
     </form>
 </div>
+
+<?php $content = ob_get_clean(); ?>
+
+<?php require('template.php'); ?>

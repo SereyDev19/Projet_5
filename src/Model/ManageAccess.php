@@ -44,14 +44,29 @@ class ManageAccess extends Manager
         return $affectedLines;
     }
 
-    public function registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password)
+    public function registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password, $auth_token)
     {
         $access_password = $str = password_hash($access_password, PASSWORD_BCRYPT);
-        $sql = 'UPDATE access SET access_email = ?, access_name = ?, access_firstname = ?, access_password = ?
+        $sql = 'UPDATE access SET access_email = ?, access_name = ?, access_firstname = ?, access_password = ?, auth_token = ?
                 WHERE access_id = ?';
-        $req = $this->executeStatement($sql, [$access_email, $access_name, $access_firstname, $access_password, $access_id]);
+        $req = $this->executeStatement($sql, [$access_email, $access_name, $access_firstname, $access_password, $auth_token, $access_id,]);
 
         return $req;
+    }
+
+    public function searchToken($token)
+    {
+        $sql = 'SELECT * FROM access WHERE auth_token=?';
+        $this->access = $this->getOne($sql, [$token]);
+        return $this->access;
+    }
+
+
+    public function confirmToken($token)
+    {
+        $sql = 'UPDATE access SET activated = 1 WHERE auth_token=?';
+        $this->access = $this->executeStatement($sql, [$token]);
+        return $this->access;
     }
 
     public function getAccess()

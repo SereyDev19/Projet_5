@@ -7,7 +7,7 @@ class Graphe {
         this.ctx = document.getElementById(id).getContext('2d');
         this.chart = new Chart(this.ctx, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'bar',
 
             // The data for our dataset
             data: {
@@ -15,7 +15,7 @@ class Graphe {
                 labels: labelsValues,
                 datasets: [{
                     label: title,
-                    // backgroundColor: 'rgb(24, 169, 93)',
+                    backgroundColor: '#f8ad22',
                     borderColor: '#f8ad22',
                     // data: [0, 10, 5, 2, 20, 30, 45]
                     data: dataValues,

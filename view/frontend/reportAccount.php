@@ -64,6 +64,7 @@ $date = new date();
         <section class="col-xl-6">
             <div class="panel panel-primary">
                 <h2>Rapport (30 derniers jours par défaut)</h2>
+                <p>Exporter</p>
                 <a class="" href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>"><i
                             class="fas fa-file-csv"></i></a>
                 <a href="admin.php?action=exportAccountData&amp;account_id=<?= $accountId; ?>"><i
@@ -106,9 +107,9 @@ $date = new date();
 
         <section class="col-xl-12">
             <div class="panel panel-primary">
-                <section id="plotarea">
-<!--                    <h2>Zone graphique</h2>-->
-                </section>
+                <div id="plotarea" class="chart-container" style="position: relative; height:850px; width:850px">
+
+                </div>
             </div>
         </section>
     </div>

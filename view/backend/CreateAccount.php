@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php ob_start(); ?>
+
     <link href="css/styles-connexion.css" rel="stylesheet">
-    <!--</head>-->
 <body>
 <div id="container">
-    <!-- zone de connexion -->
+    <div class="row col-sm-12">
+        <a class="" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
+    </div>
 
     <form action="admin.php?action=CreateAccount" method="POST">
         <div class="logo">
@@ -28,7 +28,14 @@
         <label><b>Mot de passe</b></label>
         <input type="password" placeholder="Définir le mot de passe" name="access_password" required>
 
+        <label><b>Confirmer le mot de passe</b></label>
+        <input type="password" placeholder="Confirmer le mot de passe" name="confirm_password" required>
+
         <input type="submit" id='submit' name='signIn' value='Inscription'>
 
     </form>
 </div>
+
+<?php $content = ob_get_clean(); ?>
+
+<?php require('template.php'); ?>

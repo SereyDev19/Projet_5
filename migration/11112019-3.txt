@@ -1,1 +1,0 @@
-UPDATE `billets` SET `creation_date` = '2019-07-16 06:14:00' WHERE `billets`.`id` = 3;

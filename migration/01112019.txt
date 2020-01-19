@@ -1,1 +1,0 @@
-ALTER TABLE `billets` ADD `comment_number` INT NOT NULL AFTER `creation_date`;
