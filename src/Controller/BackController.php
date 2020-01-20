@@ -9,10 +9,10 @@ use App\Model;
 
 class BackController extends Controller
 {
-//    public function __construct()
-//    {
-//        var_dump('Instanciation BackController');
-//    }
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     public function adminVerification()
     {

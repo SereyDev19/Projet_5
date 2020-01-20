@@ -31,20 +31,29 @@ class LogForm {
     }
 
     addListener() {
-        this.step1Next.addEventListener('click', function titi() {
+        this.step1Next.addEventListener('click', function () {
             if (!this.accessId.validity.valueMissing && !this.email.validity.valueMissing) {
+                console.log('le bouton 1')
                 this.displayForm('1');
             }
-        }.bind(this))
-        this.step2Next.addEventListener('click', function titi() {
+        }.bind(this));
+        this.step2Next.addEventListener('click', function () {
+            console.log('le bouton 2')
             this.displayForm('2');
-        }.bind(this))
+        }.bind(this));
     }
 
 
     displayForm(i) {
-        var start = -(parseInt(i) - 1) * this.Formwidth;
-        var end = -(parseInt(i)) * this.Formwidth;
+        if (i != 2) {
+            // i =1
+            var start = 0;
+            var end = -450;
+        } else {
+            // i =2
+            var start = -450;
+            var end = -900;
+        }
 
         var divname = 'step' + i;
         console.log(divname)
@@ -53,10 +62,10 @@ class LogForm {
         this.animation = div.animate([
             // keyframes
             {
-                transform: 'translateX(' + start + 'px)'
+                transform: 'translateX(' + start + 'px)',
             },
             {
-                transform: 'translateX(' + end + 'px)'
+                transform: 'translateX(' + end + 'px)',
             }
         ], {
             // timing options
@@ -64,14 +73,15 @@ class LogForm {
             duration: 500
         });
 
+
         var j = parseInt(i) + 1;
         console.log(j)
-        var divname = 'step' + j;
-        var div = document.getElementById(divname);
+        divname = 'step' + j;
+        div = document.getElementById(divname);
         console.log(div)
 
         var start = 0;
-        var end = -this.Formwidth;
+        var end = -420;
 
         this.animation = div.animate([
             // keyframes

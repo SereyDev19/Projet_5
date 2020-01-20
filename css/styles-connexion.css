@@ -47,28 +47,38 @@ form #step1 {
     position: absolute;
     margin: auto;
     width: 390px;
-
 }
 
 form #step2 {
     position: absolute;
     width: 390px;
     left: 450px;
-
 }
 
 form #step3 {
     position: absolute;
     width: 390px;
     left: 450px;
+    z-index: 1;
 
 }
 
 form {
     position: relative;
-    overflow-x: hidden;
     height: 450px;
     width: 450px;
+    z-index: 1;
+}
+
+#form {
+    position: absolute;
+    height: 450px;
+    width: 450px;
+    /*left: -30px;*/
+    /*top: -30px;*/
+    background-color: white;
+    overflow: hidden;
+    z-index: 100;
 }
 
 form h1 {

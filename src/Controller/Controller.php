@@ -9,6 +9,8 @@ use App\Model\backend\FlashBag;
 use App\Model\GetMonths;
 use App\Helper;
 use App\Model\ManageAccess;
+use Twig_Loader_Filesystem;
+use Twig_Environment;
 
 class Controller
 {
@@ -17,12 +19,16 @@ class Controller
 
     public function __construct()
     {
-//        var_dump('Instanciation Controller');
         $userSession = new UserSession();
         $userSession->isLogged();
 
         $this->level_Access = $userSession->levelAccess;
         $this->access_id = $userSession->userId;
+
+        $this->loader = new Twig_Loader_Filesystem('C:\laragon\www\Projet_5_Test\templates');
+        $this->twig = new Twig_Environment($this->loader, [
+            'cache' => false
+        ]);
     }
 
     public function Verification()
@@ -70,7 +76,7 @@ class Controller
             require('view/frontend/dashboard.php');
         } else {
             require('view/backend/loginEmail.php');
-
+//            echo $twig->render('loginEmail.twig');
         }
     }
 
@@ -296,7 +302,8 @@ class Controller
         require('src/Controller/Mailer.php');
         sendMailerTest('serey.chhim@gmail.com', $access_token);
 
-        require('view/frontend/confirmSignInProcess.php');
+//        require('view/frontend/confirmSignInProcess.php');
+        echo $this->twig->render('confirmSignInProcess.twig', ['access_email' => $access_email]);
 
     }
 
@@ -322,7 +329,7 @@ class Controller
 
         $accessManager->confirmToken($token);
 
-        require('view/frontend/click2validate.php');
+        echo $this->twig->render('click2validate.twig', ['firstname' => $access['access_firstname']]);
     }
 
     public function APIGlobalReportDates($account_Id, $start, $end)

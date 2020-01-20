@@ -6,6 +6,7 @@
     <a class="text-white" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
 </div>
 <div id="container">
+    <!--    <div id="form">-->
     <form action="admin.php?action=CreateAccount" method="POST">
         <div class="logo">
             <img id="logo" src="../../images/LOGOreportme.png">
@@ -39,6 +40,8 @@
             <input type="submit" id='submit' name='signIn' value='Inscription'>
         </div>
     </form>
+    <!--    </div>-->
+
 </div>
 
 <?php $content = ob_get_clean(); ?>
