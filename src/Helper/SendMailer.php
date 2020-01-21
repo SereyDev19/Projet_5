@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-//require __DIR__ . '/vendor/autoload.php';
-
+use Swift_Mailer;
 
 class SendMailer extends Swift_Mailer
 {
 
-    public function testfonction()
+    public function sendMailerTest($email, $access_token)
     {
+        $content = '<a href="http://projet_5_test.test/admin.php?action=click2validate&token=' . $access_token . '">' . $access_token . '</a>';
+
         // Create the Transport
         $transport = (new Swift_SmtpTransport('smtp.mailtrap.io', 2525))
             ->setUsername('caa22725bc661f')
@@ -19,10 +20,13 @@ class SendMailer extends Swift_Mailer
         $mailer = new Swift_Mailer($transport);
 
 // Create a message
-        $message = (new Swift_Message('Wonderful Subject'))
+        $message = (new Swift_Message('Confirm your inscription'))
             ->setFrom(['john@doe.com' => 'John Doe'])
-            ->setTo(['receiver@domain.org', 'other@domain.org' => 'A name'])
-            ->setBody('test');
+            ->setTo([$email => 'A name'])
+            ->setBody($content);
+
+        // HTML Content
+        $message->setContentType("text/html");
 
 // Send the message
         $result = $mailer->send($message);

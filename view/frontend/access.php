@@ -1,8 +1,5 @@
 <?php ob_start(); ?>
-<?php $Url = urlencode("http://" . $_SERVER['SERVER_NAME'] . $_SERVER["REQUEST_URI"]);
-//require('view/helper.php');
-//$date = new date();
-?>
+<?php $Url = urlencode("http://" . $_SERVER['SERVER_NAME'] . $_SERVER["REQUEST_URI"]); ?>
 
     <body>
     <div id="dashboard" class="container">

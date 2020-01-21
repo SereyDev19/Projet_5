@@ -299,8 +299,10 @@ class Controller
 
         //Send email with confirmation link
 
-        require('src/Controller/Mailer.php');
-        sendMailerTest('serey.chhim@gmail.com', $access_token);
+//        require('src/Controller/Mailer.php');
+        $sendMailer = new SendMailer();
+        $sendMailer->sendMailerTest('serey.chhim@gmail.com', $access_token);
+//        sendMailerTest('serey.chhim@gmail.com', $access_token);
 
 //        require('view/frontend/confirmSignInProcess.php');
         echo $this->twig->render('confirmSignInProcess.twig', ['access_email' => $access_email]);

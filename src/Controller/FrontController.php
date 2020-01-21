@@ -35,7 +35,17 @@ class FrontController extends Controller
 
     public function home()
     {
-        require('view/frontend/homeView.php');
+//        require('view/frontend/homeView.php');
+
+        if (isset($_SESSION['user_id']) AND isset($_SESSION['username'])) {
+            $user_id = $_SESSION['user_id'];
+            $user_name = $_SESSION['username'];
+        } else {
+            $user_id = '';
+            $user_name = '';
+        }
+        echo $this->twig->render('homeView.twig', ['user_id' => $user_id, 'user_name' => $user_name]);
+
     }
 
 }
