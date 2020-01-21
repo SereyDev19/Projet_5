@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Helper;
 
 use Swift_Mailer;
+use Swift_SmtpTransport;
+use Swift_Message;
 
 class SendMailer extends Swift_Mailer
 {
