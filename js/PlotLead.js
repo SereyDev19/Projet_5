@@ -1,8 +1,7 @@
 class PlotLead {
-    constructor(id) {
+    constructor(id, url) {
         this.button = document.getElementById(id);
-
-
+        this.url = url;
 
         this.init();
     }
@@ -12,8 +11,8 @@ class PlotLead {
 
             this.ajaxrequest = new AjaxRequest();
             this.ajaxrequest.ajax(url).then(function (response) {
-                this.listCanvas =  document.getElementsByTagName("canvas");
-                for (var item of this.listCanvas){
+                this.listCanvas = document.getElementsByTagName("canvas");
+                for (var item of this.listCanvas) {
                     item.remove();
                 }
 

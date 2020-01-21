@@ -153,7 +153,9 @@ class Controller
 //                var_dump($data);
 //            }
 
-            require('view/frontend/reportAccount.php');
+//            require('view/frontend/reportAccount.php');
+            echo $this->twig->render('reportAccount.twig', ['DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
+
         }
 
     }

@@ -1,7 +1,7 @@
 class PlotCostPerLead {
-    constructor(id) {
+    constructor(id, url) {
         this.button = document.getElementById(id);
-
+        this.url = url;
 
         this.init();
     }

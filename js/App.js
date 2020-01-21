@@ -10,17 +10,17 @@ class App {
 
     }
 
-    plotSpend(id) {
-        this.PlotSpend = new PlotSpend(id);
+    plotSpend(id, url) {
+        this.PlotSpend = new PlotSpend(id, url);
 
     }
 
-    plotLead(id) {
-        this.PlotLead = new PlotLead(id);
+    plotLead(id, url) {
+        this.PlotLead = new PlotLead(id, url);
     }
 
-    plotCostPerLead(id) {
-        this.PlotCostPerLead = new PlotCostPerLead(id);
+    plotCostPerLead(id, url) {
+        this.PlotCostPerLead = new PlotCostPerLead(id, url);
     }
 
 }

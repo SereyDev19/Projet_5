@@ -27,16 +27,12 @@ class FrontController extends Controller
 
             require('view/frontend/dashboard.php');
         } else {
-//            require('view/backend/loginEmail.php');
             echo $this->twig->render('loginEmail.twig');
-
         }
     }
 
     public function home()
     {
-//        require('view/frontend/homeView.php');
-
         if (isset($_SESSION['user_id']) AND isset($_SESSION['username'])) {
             $user_id = $_SESSION['user_id'];
             $user_name = $_SESSION['username'];
@@ -45,7 +41,5 @@ class FrontController extends Controller
             $user_name = '';
         }
         echo $this->twig->render('homeView.twig', ['user_id' => $user_id, 'user_name' => $user_name]);
-
     }
-
 }
