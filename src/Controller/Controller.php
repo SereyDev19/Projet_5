@@ -8,6 +8,7 @@ use App\Model\backend\UserManager;
 use App\Model\backend\FlashBag;
 use App\Model\GetMonths;
 use App\Helper;
+use App\Services\SendMailer;
 use App\Model\ManageAccess;
 use Twig_Loader_Filesystem;
 use Twig_Environment;

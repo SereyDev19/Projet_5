@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Services;
 
 use Swift_Mailer;
 use Swift_SmtpTransport;
