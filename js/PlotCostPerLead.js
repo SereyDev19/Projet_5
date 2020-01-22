@@ -2,11 +2,13 @@ class PlotCostPerLead {
     constructor(id, url) {
         this.button = document.getElementById(id);
         this.url = url;
+        console.log(this.url);
 
         this.init();
     }
 
     init() {
+        var url = this.url
         this.button.addEventListener('click', function () {
             this.ajaxrequest = new AjaxRequest();
             this.ajaxrequest.ajax(url).then(function (response) {

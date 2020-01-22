@@ -39,18 +39,18 @@ class UserManager extends Manager
 
     public function verifyEmail($email)
     {
-            $db = $this->db;
+        $db = $this->db;
 
-            //  Test si l'Id existe
-            $sql = 'SELECT * FROM access WHERE access_email = ?';
-            $resultat = $this->getOne($sql, [$email]);
-            if ($resultat != null) {
-                $this->isEmail = true;
+        //  Test si l'Id existe
+        $sql = 'SELECT * FROM access WHERE access_email = ?';
+        $resultat = $this->getOne($sql, [$email]);
+        if ($resultat != null) {
+            $this->isEmail = true;
 
-                $this->message = 'Email déjà utilisé';
-            }
+            $this->message = 'Email déjà utilisé';
+        }
 
-            return $this->isEmail;
+        return $this->isEmail;
     }
 
     public function verifyUser($email, $password)
@@ -92,9 +92,11 @@ class UserManager extends Manager
         //  Test si le password existe
         $sql = 'SELECT access_password FROM access WHERE access_id = ?';
         $resultat = $this->getOne($sql, [$access_id]);
+        var_dump($resultat);
 
 
-        if ($resultat[0] != null) {
+//        if ($resultat[0] != null) {
+        if ($resultat['access_password'] != null) {
             $this->message = 'Un compte a déjà été créé pour l\'identifiant' . $access_id;
 
             $this->alreadyDefined = true;

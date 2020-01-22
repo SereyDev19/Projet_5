@@ -1,0 +1,100 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <header class="row col-sm-12">
+        <div>
+            <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+        </div>
+        <div class="page-header">
+            <h1>Mes comptes</h1>
+        </div>
+        <div>
+            <div class="btn-group dropdown">
+                <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    {{ user_name }}
+                </button>
+                <div class="dropdown-menu">
+                    {% if userSession.levelAccess !=0 %}
+                        <a class="dropdown-item" href="admin.php?action=manageAccess">
+                            Gérer les accès
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="admin.php?action=globalreport">
+                        Tableau de bord
+                    </a>
+                    <a class="dropdown-item" href="admin.php">
+                        Profil
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=logout">
+                        <i class="fas fa-power-off"></i>Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="dashboard" class="container">
+        <div class="row col-sm-12">
+            <a class="" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
+        </div>
+        <div class="btn-group row col-sm-12 sort">
+            <div class="btn-group dropdown col-sm-2 offset-sm-9">
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="admin.php?action=sortPosts&amp;sort=date&amp;order=ASC">
+                        Date <i class="fas fa-sort-up"></i>
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=sortPosts&amp;sort=date&amp;order=DESC">
+                        Date <i class="fas fa-sort-down"></i>
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=sortPosts&amp;sort=postid&amp;order=ASC">
+                        Article <i class="fas fa-sort-up"></i>
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=sortPosts&amp;sort=postid&amp;order=DESC">
+                        Article <i class="fas fa-sort-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <section class="col-xl-12">
+            <table class="container table table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>
+                        <i class="fas fa-wallet"></i>
+                        <span class="responsive_title">Compte client</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-chart-area"></i>
+                        <span class="responsive_title">Plateforme(s)</span>
+                    </th>
+                    <th>
+                        <i class="far fa-comment-alt"></i>
+                        <span class="responsive_title">Autres</span>
+                    </th>
+                </thead>
+                <?php
+            {% for account in DBaccounts %}
+                <tr>
+                <td>
+                    <a href="admin.php?action=reportAccount&amp;account_id={{ account.account_id }}">
+                        {{ account.account_name }}
+                        {{ account.account_id }}
+
+                    </a>
+
+                </td>
+                <td>
+                    <i class="fab fa-facebook-square"></i>
+                </td>
+                <td>
+                </td>
+                </tr>
+                {% endfor %}
+
+                <?php endforeach; ?>
+            </table>
+        </section>
+    </div>
+    <footer class="row col-sm-12">
+    </footer>
+    </div>
+{% endblock %}

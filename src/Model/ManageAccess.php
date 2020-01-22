@@ -13,6 +13,7 @@ class ManageAccess extends Manager
     public $access = [];
     public $IdAccess = [];
     public $IdUsed = false;
+    public $activated = false;
 
     public function addAccess($account_id, $access_id)
     {
@@ -34,6 +35,17 @@ class ManageAccess extends Manager
         }
         return $this->IdUsed;
     }
+
+    public function isActivated($access_email)
+    {
+        $sql = 'SELECT activated FROM access WHERE access_email = ?';
+        $this->value = $this->getOne($sql, [$access_email]);
+        if ($this->value['activated'] == 1) {
+            $this->activated = true;
+        }
+        return $this->activated;
+    }
+
 
     public function deleteAccess($access_id)
     {

@@ -1,15 +1,16 @@
 {% extends 'layout.twig' %}
 
-{% block content %}
+{% block links %}
     <link href="css/styles-connexion.css" rel="stylesheet">
+{% endblock %}
 
-    <body>
-    <div class="row col-sm-12">
-        <a class="text-white" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
-    </div>
+{% block content %}
+
+
     <div id="container">
-        <!-- zone de connexion -->
-
+        <div class="row col-sm-12">
+            <a class="text-white" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
+        </div>
         <form action="admin.php" method="POST">
             <div class="logo">
                 <img id="logo" src="../../images/LOGOreportme.png">

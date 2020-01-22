@@ -1,4 +1,9 @@
 <?php
+/**
+ * BackController class.
+ *
+ * @author Sérey Chhim
+ */
 
 namespace App\Controller;
 
@@ -6,6 +11,9 @@ use App\Model\backend\Session;
 use App\Model\backend\UserSession;
 use App\Model\backend\UserManager;
 use App\Model;
+
+use Twig_Loader_Filesystem;
+use Twig_Environment;
 
 class BackController extends Controller
 {
@@ -47,12 +55,15 @@ class BackController extends Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
             $getDBData = new \App\Model\GetDBData();
             $DBaccounts = $getDBData->getAccounts();
 
-            require('view/backend/dashboard.php');
+            echo $this->twig->render('dashboard.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
         } else {
-            require('view/backend/loginEmail.php');
+            echo $this->twig->render('loginEmail.twig');
+
         }
     }
 
@@ -60,13 +71,17 @@ class BackController extends Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
             $getDBData = new \App\Model\GetDBData();
             $AccessManager = new \App\Model\ManageAccess();
 
             $DBaccounts = $getDBData->getAccounts();
             $allAccess = $AccessManager->getAccess();
 
-            require('view/frontend/access.php');
+//            require('view/frontend/access.php');
+            echo $this->twig->render('access.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'allAccess' => $allAccess, 'DBaccounts' => $DBaccounts]);
+
         } else {
             require('view/backend/login.php');
         }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Helper;
+namespace App\Controller;
 
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Swift_Message;
 
-class SendMailer extends Swift_Mailer
+class SendMailer
 {
 
     public function sendMailerTest($email, $access_token)
@@ -32,6 +32,8 @@ class SendMailer extends Swift_Mailer
 
 // Send the message
         $result = $mailer->send($message);
+
+        return $result;
     }
 
 }

@@ -35,11 +35,22 @@ class Controller
     {
         $userManager = new UserManager();
         $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
+        $manageAccess = new ManageAccess();
+        $manageAccess->isActivated($_POST['email']);
 
         $flashbag = new FlashBag();
 
         if (!$userManager->isCorrect) {
             $this->Login();
+            $flashbag->add($userManager->message, 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            exit();
+        }
+
+        if (!$manageAccess->activated) {
+            $this->Login();
+            $userManager->message = 'Ce compte n\' a pas encore été activé';
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
@@ -55,17 +66,16 @@ class Controller
         $flashbag->add($userManager->message, 'success');
         $flashbag->flash();
         $flashbag->fetchMessages();
-
-//        $this->GlobalReport();
     }
 
     public function SignIn()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            require('view/frontend/dashboard.php');
+            $this->GlobalReport();
         } else {
-            require('view/backend/CreateAccount.php');
+            echo $this->twig->render('createAccount.twig');
+
         }
     }
 
@@ -73,10 +83,9 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            require('view/frontend/dashboard.php');
+            $this->GlobalReport();
         } else {
-            require('view/backend/loginEmail.php');
-//            echo $twig->render('loginEmail.twig');
+            echo $this->twig->render('loginEmail.twig');
         }
     }
 
@@ -104,6 +113,7 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
 
             $getDBData = new \App\Model\GetDBData();
             $adSets = $getDBData->getAccountAdSets($accountId);
@@ -114,8 +124,8 @@ class Controller
                 $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
                 $allAds[$iterAdSet['adset_id']] = $ads;
             }
+            echo $this->twig->render('detailedReport.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
 
-            require('view/frontend/detailedReport.php');
         }
     }
 
@@ -123,6 +133,8 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
             $getDBData = new \App\Model\GetDBData();
             $DBaccount = $getDBData->getAccount($accountId);
             $historySpend = json_decode($DBaccount['history_spend'], true);
@@ -153,8 +165,7 @@ class Controller
 //                var_dump($data);
 //            }
 
-//            require('view/frontend/reportAccount.php');
-            echo $this->twig->render('reportAccount.twig', ['DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
+            echo $this->twig->render('reportAccount.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
 
         }
 
@@ -300,13 +311,9 @@ class Controller
 
 
         //Send email with confirmation link
-
-//        require('src/Controller/Mailer.php');
         $sendMailer = new SendMailer();
         $sendMailer->sendMailerTest('serey.chhim@gmail.com', $access_token);
-//        sendMailerTest('serey.chhim@gmail.com', $access_token);
 
-//        require('view/frontend/confirmSignInProcess.php');
         echo $this->twig->render('confirmSignInProcess.twig', ['access_email' => $access_email]);
 
     }

@@ -188,7 +188,29 @@ canvas {
 .dropdown-item:hover, .dropdown-item:active {
     color: #fff;
     text-decoration: none;
-    background-color: #02c3bd;
+    /*background-color: #223265;*/
+    -moz-box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    box-shadow: inset 0px 1px 0px 0px #fce2c1;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25));
+    background: -moz-linear-gradient(center top, #ffc477 5%, #fb9e25 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
+    background-color: #ffc477;
+
+    text-indent: 0px;
+    border: 3px solid #eeb44f;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0px #cc9f52;
+}
+
+.dropdown-menu {
+    padding: 0;
+}
+
+.dropdown-menu.show {
+    left: -20px;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
@@ -235,6 +257,11 @@ textarea#comment {
     width: 100%;
     padding: 0;
     margin: 0;
+}
+
+
+.alert {
+    position: absolute;
 }
 
 #blogTitle {

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * FrontController class.
+ *
+ * @author Sérey Chhim
+ */
 namespace App\Controller;
 
 use App\Model\backend\Session;
@@ -21,11 +25,14 @@ class FrontController extends Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
             $getDBData = new \App\Model\GetDBData();
             $allAccounts = $getDBData->getAccessAccountsId($access_id);
             $DBaccounts = $getDBData->getAccountsFromList($allAccounts);
 
-            require('view/frontend/dashboard.php');
+            echo $this->twig->render('dashboard.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
+
         } else {
             echo $this->twig->render('loginEmail.twig');
         }

@@ -22,6 +22,7 @@ class UserSession extends Session
         $_SESSION['level_access'] = $levelAccess;
     }
 
+
     public function isLogged()
     {
         if (isset($_SESSION['username'])) {

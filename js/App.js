@@ -1,26 +1,23 @@
 class App {
 
-    constructor() {
-        // this.init();
+    constructor(url) {
+        this.url = url;
     }
 
     init() {
         this.CallButton = new CallButton();
-
-
     }
 
-    plotSpend(id, url) {
-        this.PlotSpend = new PlotSpend(id, url);
-
+    plotSpend(id) {
+        this.PlotSpend = new PlotSpend(id, this.url);
     }
 
-    plotLead(id, url) {
-        this.PlotLead = new PlotLead(id, url);
+    plotLead(id) {
+        this.PlotLead = new PlotLead(id, this.url);
     }
 
-    plotCostPerLead(id, url) {
-        this.PlotCostPerLead = new PlotCostPerLead(id, url);
+    plotCostPerLead(id) {
+        this.PlotCostPerLead = new PlotCostPerLead(id, this.url);
     }
 
 }
