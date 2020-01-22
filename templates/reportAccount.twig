@@ -92,6 +92,9 @@
                         <th>
                             <i class="far fa-calendar-alt"></i>
                             <span class="responsive_title">Dépense pub Facebook</span>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                Tooltip on top
+                            </button>
                         </th>
 
                         <th>
@@ -137,9 +140,8 @@
 
 {% block scripts %}
     {% if datesSpend and valuesSpend %}
-
         <script>
-            var url = "http://projet_5_test.test/admin.php?action=testAJAX&account_id={{ accountId }}"
+            var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
 
             var app = new App(url);
             app.init();

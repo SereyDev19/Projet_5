@@ -44,6 +44,14 @@ form, #confirm-message {
     padding-bottom: 10px;
 }
 
+form #slider {
+    position: relative;
+    overflow: hidden;
+    height: 450px;
+    width: 450px;
+    background-color: beige;
+}
+
 form #step1 {
     position: absolute;
     margin: auto;
@@ -64,22 +72,18 @@ form #step3 {
 
 }
 
+#NextStep {
+    position: absolute;
+    bottom: 10px;
+    left: 160px;
+}
+
 form {
     position: relative;
     height: 450px;
     width: 450px;
     z-index: 1;
-}
-
-#form {
-    position: absolute;
-    height: 450px;
-    width: 450px;
-    /*left: -30px;*/
-    /*top: -30px;*/
-    background-color: white;
     overflow: hidden;
-    z-index: 100;
 }
 
 form h1 {

@@ -29,6 +29,7 @@ class Controller
         $this->twig = new Twig_Environment($this->loader, [
             'cache' => false
         ]);
+        $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
 
     public function Verification()

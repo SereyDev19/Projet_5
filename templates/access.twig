@@ -1,56 +1,56 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-    <div id="dashboard" class="container">
-        <header class="row col-sm-12">
-            <div>
-                <img id="logo" src="../../images/LOGOreportmeWHITE.png">
-            </div>
-            <div class="page-header">
-                <h1>Rapport global</h1>
-            </div>
-            <div>
-                <div class="btn-group dropdown">
-                    <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        {{ user_name }}
-                    </button>
-                    <div class="dropdown-menu">
-                        {% if userSession.levelAccess !=0 %}
-                            <a class="dropdown-item" href="admin.php?action=manageAccess">
-                                Gérer les accès
-                            </a>
-                        {% endif %}
-                        <a class="dropdown-item" href="admin.php?action=globalreport">
-                            Tableau de bord
+    <header class="row col-sm-12">
+        <div>
+            <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+        </div>
+        <div class="page-header">
+            <h1>Gestion des accès</h1>
+        </div>
+        <div>
+            <div class="btn-group dropdown">
+                <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    {{ user_name }}
+                </button>
+                <div class="dropdown-menu">
+                    {% if userSession.levelAccess !=0 %}
+                        <a class="dropdown-item" href="admin.php?action=manageAccess">
+                            Gérer les accès
                         </a>
-                        <a class="dropdown-item" href="admin.php">
-                            Profil
-                        </a>
-                        <a class="dropdown-item" href="admin.php?action=logout">
-                            <i class="fas fa-power-off"></i>Déconnexion
-                        </a>
-                    </div>
+                    {% endif %}
+                    <a class="dropdown-item" href="admin.php?action=globalreport">
+                        Tableau de bord
+                    </a>
+                    <a class="dropdown-item" href="admin.php">
+                        Profil
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=logout">
+                        <i class="fas fa-power-off"></i>Déconnexion
+                    </a>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
+    <div id="dashboard" class="container">
         <div class="row col-sm-12">
             <a class="" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
         </div>
-{#        <div class="btn-group row col-sm-12">#}
-{#            <div class="btn-group dropdown">#}
-{#                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">#}
-{#                    <i class="fas fa-home"></i>Actions#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="admin.php?action=globalreport">#}
-{#                        Gérer les accès#}
-{#                    </a>#}
-{#                    <a class="dropdown-item" href="admin.php?action=globalreport">#}
-{#                        Voir les comptes#}
-{#                    </a>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
+        {#        <div class="btn-group row col-sm-12">#}
+        {#            <div class="btn-group dropdown">#}
+        {#                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">#}
+        {#                    <i class="fas fa-home"></i>Actions#}
+        {#                </button>#}
+        {#                <div class="dropdown-menu">#}
+        {#                    <a class="dropdown-item" href="admin.php?action=globalreport">#}
+        {#                        Gérer les accès#}
+        {#                    </a>#}
+        {#                    <a class="dropdown-item" href="admin.php?action=globalreport">#}
+        {#                        Voir les comptes#}
+        {#                    </a>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
         <div class="btn-group row col-sm-12 sort">
             <div class="btn-group dropdown col-sm-2 offset-sm-9">
                 <div class="dropdown-menu">

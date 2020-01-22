@@ -9,8 +9,7 @@ class LogForm {
         this.accessId = document.getElementById("access_id");
         this.email = document.getElementById("access_email");
 
-        this.step1Next = document.getElementById("step1Next");
-        this.step2Next = document.getElementById("step2Next");
+        this.NextStep = document.getElementById("NextStep");
 
         this.width1 = parseFloat(getComputedStyle(this.step1).width.split("px")[0]);
         this.width2 = parseFloat(getComputedStyle(this.step2).width.split("px")[0]);
@@ -19,6 +18,7 @@ class LogForm {
         this.Form = document.getElementsByTagName("form")[0];
         this.Formwidth = parseFloat(getComputedStyle(this.Form).width.split("px")[0]);
         this.logo = document.getElementById("logo");
+        this.step = 1;
 
         this.init();
         this.addListener();
@@ -31,35 +31,29 @@ class LogForm {
     }
 
     addListener() {
-        this.step1Next.addEventListener('click', function () {
+        this.NextStep.addEventListener('click', function () {
             if (!this.accessId.validity.valueMissing && !this.email.validity.valueMissing) {
-                console.log('le bouton 1')
-                this.displayForm('1');
+                this.displayForm();
             }
-        }.bind(this));
-        this.step2Next.addEventListener('click', function () {
-            console.log('le bouton 2')
-            this.displayForm('2');
         }.bind(this));
     }
 
 
-    displayForm(i) {
-        if (i != 2) {
-            // i =1
+    displayForm() {
+        if (this.step == 1) {
+            var div1 = this.step1;
+            var div2 = this.step2;
             var start = 0;
             var end = -450;
         } else {
-            // i =2
+            var div1 = this.step2;
+            var div2 = this.step3;
             var start = -450;
             var end = -900;
         }
 
-        var divname = 'step' + i;
-        console.log(divname)
-        var div = document.getElementById(divname);
-        console.log(div)
-        this.animation = div.animate([
+
+        this.animation = div1.animate([
             // keyframes
             {
                 transform: 'translateX(' + start + 'px)',
@@ -74,16 +68,10 @@ class LogForm {
         });
 
 
-        var j = parseInt(i) + 1;
-        console.log(j)
-        divname = 'step' + j;
-        div = document.getElementById(divname);
-        console.log(div)
-
         var start = 0;
         var end = -420;
 
-        this.animation = div.animate([
+        this.animation = div2.animate([
             // keyframes
             {
                 transform: 'translateX(' + start + 'px)'
@@ -96,6 +84,6 @@ class LogForm {
             fill: 'forwards',
             duration: 500
         });
-
+        this.step++;
     }
 }

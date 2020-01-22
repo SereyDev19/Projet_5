@@ -262,34 +262,17 @@
     </div>
 {% endblock %}
 
-
 {% block scripts %}
+    {% if datesSpend and valuesSpend %}
+        <script>
+            var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
 
-    if (isset($datesSpend) and isset($valuesSpend)): ; ?>
-    <script>
-        var app = new App();
-        // app.init();
-        var js_dates = [ < ? php echo
-        '"'.implode('","', $datesSpend).
-        '"' ?
-        >]
-        ;
-        var js_values = [ < ? php echo
-        '"'.implode('","', $valuesSpend).
-        '"' ?
-        >]
-        ;
-        app.trace('Spend', 'Dépenses', js_dates, js_values)
-        var js_dates = [ < ? php echo
-        '"'.implode('","', $dateslead).
-        '"' ?
-        >]
-        ;
-        var js_values = [ < ? php echo
-        '"'.implode('","', $valuesLead).
-        '"' ?
-        >]
-        ;
-        app.trace('Lead', 'Dépenses', js_dates, js_values)
-    </script>
+            var app = new App(url);
+            app.init();
+            app.plotSpend('plotSpend');
+            app.plotLead('plotLead');
+            app.plotCostPerLead('plotCostPerLead');
+        </script>
+    {% endif %}
+
 {% endblock %}
