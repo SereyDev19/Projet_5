@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\backend;
+namespace App\Model\Backend;
 //require_once("model/Manager.php");
 
 class UserManager extends Manager

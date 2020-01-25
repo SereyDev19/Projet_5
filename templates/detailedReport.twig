@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+            <img id="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Rapport détaillé de : {{ account[0].account_name }}</h1>
@@ -83,7 +83,7 @@
             <div class="panel panel-primary">
                 <h2>Rapport sur les trentes derniers jours</h2>
 
-                <table class="container table table-striped table-condensed">
+                <table class="adsets container table table-striped table-condensed">
                     <thead>
                     <tr>
                         <th>
@@ -123,7 +123,7 @@
                     </tr>
                     </thead>
                     {% for data in adSets %}
-                        <tr>
+                        <tr id="{{ data.adset_name }}">
                             <td>
                                 {{ data.adset_name }}
                             </td>
@@ -214,14 +214,14 @@
 
 
                     {% for iterAdSet in adSets %}
-                        {#                    {{ iterAdSet.adset_id }}#}
                         {% for ad in allAds[iterAdSet.adset_id] %}
-                            <tr>
+                            <tr class="{{ iterAdSet.adset_name }}">
                                 <td>
+                                    {{ iterAdSet.adset_name }}
                                     {{ ad.ad_name }}
                                 </td>
                                 <td>
-                                    {{ ad.ad_name }} €
+                                    {{ ad.spend30d }} €
                                 </td>
                                 <td>
                                     <?= $ad['cpm30d']; ?>
@@ -257,22 +257,22 @@
 
         </section>
     </div>
-    <footer class="row col-sm-12">
-    </footer>
     </div>
 {% endblock %}
 
 {% block scripts %}
-    {% if datesSpend and valuesSpend %}
+{#    {% if datesSpend and valuesSpend %}#}
         <script>
-            var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
+            var filterAds = new FilterAds();
 
-            var app = new App(url);
-            app.init();
-            app.plotSpend('plotSpend');
-            app.plotLead('plotLead');
-            app.plotCostPerLead('plotCostPerLead');
+                    {#var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"#}
+
+                    {#var app = new App(url);#}
+                    {#app.init();#}
+                    {#app.plotSpend('plotSpend');#}
+                    {#app.plotLead('plotLead');#}
+                    {#app.plotCostPerLead('plotCostPerLead');#}
         </script>
-    {% endif %}
+{#    {% endif %}#}
 
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="../../images/LOGOreportmeWHITE.png">
+            <img id="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Synthèse : {{ DBaccount.account_name }}</h1>
@@ -58,6 +58,11 @@
                     <i class="fas fa-sync-alt"></i>Mise à jour des données
                 </a>
             </button>
+            <button type="button" class="btn btn-info">
+                <a href="admin.php?action=updateAccountDataWithDates&amp;account_id={{ accountId }}">
+                    <i class="fas fa-sync-alt"></i>Mise à jour des données avec dates
+                </a>
+            </button>
         {% endif %}
 
         <div class="btn-group row col-sm-12 sort">
@@ -92,7 +97,8 @@
                         <th>
                             <i class="far fa-calendar-alt"></i>
                             <span class="responsive_title">Dépense pub Facebook</span>
-                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
+                                    title="Tooltip on top">
                                 Tooltip on top
                             </button>
                         </th>
@@ -141,7 +147,11 @@
 {% block scripts %}
     {% if datesSpend and valuesSpend %}
         <script>
-            var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
+            {% if SERVER_NAME == 'sc19dev.fr' %}
+            var url = "http://{{ SERVER_NAME }}/Projet_5_Test/admin.php?action=testAJAX&account_id={{ accountId }}"
+            {% else %}
+            var url = "http://{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
+            {% endif %}
 
             var app = new App(url);
             app.init();

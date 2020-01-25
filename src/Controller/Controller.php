@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Model\backend\Session;
-use App\Model\backend\UserSession;
-use App\Model\backend\UserManager;
-use App\Model\backend\FlashBag;
+use App\Model\Backend\Session;
+use App\Model\Backend\UserSession;
+use App\Model\Backend\Manager;
+use App\Model\Backend\UserManager;
+use App\Model\Backend\FlashBag;
 use App\Model\GetMonths;
 use App\Helper;
 use App\Services\SendMailer;
@@ -26,7 +27,7 @@ class Controller
         $this->level_Access = $userSession->levelAccess;
         $this->access_id = $userSession->userId;
 
-        $this->loader = new Twig_Loader_Filesystem('C:\laragon\www\Projet_5_Test\templates');
+        $this->loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');
         $this->twig = new Twig_Environment($this->loader, [
             'cache' => false
         ]);
@@ -36,6 +37,7 @@ class Controller
     public function Verification()
     {
         $userManager = new UserManager();
+
         $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
         $manageAccess = new ManageAccess();
         $manageAccess->isActivated($_POST['email']);
@@ -270,7 +272,7 @@ class Controller
 
         $IdExists = $userManager->verifyAccessId($access_id);
         $AccountCreated = $userManager->passwordDefined($access_id);
-        var_dump($userManager->verifyEmail($access_email));
+//        var_dump($userManager->verifyEmail($access_email));
         if ($userManager->verifyEmail($access_email)) {
             $this->SignIn();
 

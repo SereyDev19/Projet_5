@@ -1,9 +1,14 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
-use App\Router\Frontend;
+
+
+use App\Router\Frontend\Router;
+//use App\Router\Router;
+//require_once(__DIR__ . '/src/Router/Frontend/router.php');
 
 try {
-    $router = new \App\Router\frontend\Router();
+    $router = new Router();
+//    $router = new Router();
     $router->method();
     $router->run();
 } catch
