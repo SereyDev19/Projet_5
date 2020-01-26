@@ -18,8 +18,15 @@
             <h1>Connexion</h1>
 
             <label><b>E-mail</b></label>
-            <input type="text" placeholder="Entrer votre e-mail" name="email" required>
-
+            {% if  email %}
+                <input type="email" value="{{ email }}" name="email"
+                       pattern=" /^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/ "
+                       required>
+            {% else %}
+                <input type="email" placeholder="Entrer votre e-mail" name="email"
+                       pattern=" /^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/ "
+                       required>
+            {% endif %}
             <label><b>Mot de passe</b></label>
             <input type="password" placeholder="Entrer le mot de passe" name="password" required>
 

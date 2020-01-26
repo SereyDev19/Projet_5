@@ -53,7 +53,7 @@
         </div>
         {% if userSession.levelAccess !=0 %}
             <button type="button" class="btn btn-info">
-                <a href="admin.php?action=updateData&amp;account_id=<?= $accountId; ?>">
+                <a href="admin.php?action=updateData&amp;account_id={{ account[0].account_id }}">
                     <i class="fas fa-sync-alt"></i>Mise à jour des données
                 </a>
             </button>
@@ -258,21 +258,33 @@
         </section>
     </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
-{#    {% if datesSpend and valuesSpend %}#}
-        <script>
-            var filterAds = new FilterAds();
+    {#    {% if datesSpend and valuesSpend %}#}
+    <script>
+        var addRows = new AddRowAdset({{ ad.ad_name }});
 
-                    {#var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"#}
+        {% for iterAdSet in adSets %}
+        {% for ad in allAds[iterAdSet.adset_id] %}
+        addRows.add('{{ ad.ad_name }}');
+        console.log('{{ ad.ad_name }}')
 
-                    {#var app = new App(url);#}
-                    {#app.init();#}
-                    {#app.plotSpend('plotSpend');#}
-                    {#app.plotLead('plotLead');#}
-                    {#app.plotCostPerLead('plotCostPerLead');#}
-        </script>
-{#    {% endif %}#}
+        {% endfor %}
+        {% endfor %}
+
+
+        var filterAds = new FilterAds();
+
+        {#var url = "{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"#}
+
+        {#var app = new App(url);#}
+        {#app.init();#}
+        {#app.plotSpend('plotSpend');#}
+        {#app.plotLead('plotLead');#}
+        {#app.plotCostPerLead('plotCostPerLead');#}
+    </script>
+    {#    {% endif %}#}
 
 {% endblock %}

@@ -68,8 +68,9 @@ class ManageAccess extends Manager
 
     public function searchToken($token)
     {
-        $sql = 'SELECT * FROM access WHERE auth_token=?';
+        $sql = 'SELECT * FROM access where auth_token=?';
         $this->access = $this->getOne($sql, [$token]);
+
         return $this->access;
     }
 

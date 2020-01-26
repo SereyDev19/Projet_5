@@ -9,6 +9,7 @@ use App\Model\Backend\UserManager;
 use App\Model\Backend\FlashBag;
 use App\Model\GetMonths;
 use App\Helper;
+use App\Services\DataValidation;
 use App\Services\SendMailer;
 use App\Model\ManageAccess;
 use Twig_Loader_Filesystem;
@@ -37,15 +38,21 @@ class Controller
     public function Verification()
     {
         $userManager = new UserManager();
+        $datavalidation = new DataValidation();
+        $email = $datavalidation->Validation($_POST['email']);
+        $password = $datavalidation->Validation($_POST['password']);
+//        $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
+        $userExists = $userManager->verifyUser($email, $password);
 
-        $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
         $manageAccess = new ManageAccess();
-        $manageAccess->isActivated($_POST['email']);
+//        $manageAccess->isActivated($_POST['email']);
+        $manageAccess->isActivated($email);
+
 
         $flashbag = new FlashBag();
 
         if (!$userManager->isCorrect) {
-            $this->Login();
+            $this->Login([]);
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
@@ -53,7 +60,7 @@ class Controller
         }
 
         if (!$manageAccess->activated) {
-            $this->Login();
+            $this->Login([]);
             $userManager->message = 'Ce compte n\' a pas encore été activé';
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
@@ -83,13 +90,17 @@ class Controller
         }
     }
 
-    public function Login()
+    public function Login(array $param)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $this->GlobalReport();
         } else {
-            echo $this->twig->render('loginEmail.twig');
+            if ($param != null) {
+                echo $this->twig->render('loginEmail.twig', ['email' => $param[0]]);
+            } else {
+                echo $this->twig->render('loginEmail.twig');
+            }
         }
     }
 
@@ -246,20 +257,20 @@ class Controller
     public function RegisterNewAccess($params)
     {
         $userManager = new UserManager();
-
         $flashbag = new FlashBag();
+        $dataValidation = new DataValidation();
 
         $getDBData = new \App\Model\GetDBData();
         $DBaccounts = $getDBData->getAccounts();
         $AccessManager = new \App\Model\ManageAccess();
         $AccessManager->getAccess();
 
-        $access_id = $params['access_id'];
-        $access_email = $params['access_email'];
-        $access_name = $params['access_name'];
-        $access_firstname = $params['access_firstname'];
-        $access_password = $params['access_password'];
-        $confirm_password = $params['confirm_password'];
+        $access_id = $dataValidation->Validation($params['access_id']);
+        $access_email = $dataValidation->Validation($params['access_email']);
+        $access_name = $dataValidation->Validation($params['access_name']);
+        $access_firstname = $dataValidation->Validation($params['access_firstname']);
+        $access_password = $dataValidation->Validation($params['access_password']);
+        $confirm_password = $dataValidation->Validation($params['confirm_password']);
 
         //Check errors in typing password x2
         if ($userManager->errorDefiningPassword($access_password, $confirm_password)) {
@@ -316,7 +327,7 @@ class Controller
 
         //Send email with confirmation link
         $sendMailer = new SendMailer();
-        $sendMailer->sendMailerTest('serey.chhim@gmail.com', $access_token);
+        $sendMailer->sendMailer($access_email, $access_token, $access_name, $access_firstname);
 
         echo $this->twig->render('confirmSignInProcess.twig', ['access_email' => $access_email]);
 
@@ -344,7 +355,7 @@ class Controller
 
         $accessManager->confirmToken($token);
 
-        echo $this->twig->render('click2validate.twig', ['firstname' => $access['access_firstname']]);
+        echo $this->twig->render('click2validate.twig', ['firstname' => $access['access_firstname'], 'email' => $access['access_email']]);
     }
 
     public function APIGlobalReportDates($account_Id, $start, $end)

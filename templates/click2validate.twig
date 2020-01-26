@@ -12,7 +12,9 @@
                 <img id="logo" src="images/LOGOreportme.png">
             </div>
             <p>Merci pour votre inscription et bienvenue, {{ firstname }}!</p>
-
+            <div class="row col-sm-12">
+                <a class="connect" href="admin.php?action=ConnectWithEmail&amp;email={{ email }}">Connexion</a>
+            </div>
         </div>
     </div>
 {% endblock %}

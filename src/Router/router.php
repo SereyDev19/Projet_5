@@ -11,6 +11,7 @@ use phpDocumentor\Reflection\Types\Null_;
 use App\Controller\BackController;
 use App\Controller\Controller;
 use App\Controller\FrontController;
+use App\Services\DataValidation;
 
 class Router
 {
@@ -71,8 +72,11 @@ class Router
                 $this->BackController->adminDeleteAccess($params['access_id']);
                 $this->Controller->ManageAccess();
                 break;
-            case'click2validate':
+            case 'click2validate':
                 $this->Controller->click2validate($params['token']);
+                break;
+            case 'ConnectWithEmail';
+                $this->Controller->Login([$params['email']]);
                 break;
             case 'exportAccountData':
                 $this->Controller->newExportData($params['account_id']);
@@ -96,7 +100,6 @@ class Router
         switch ($action) {
             case 'signIn':
                 $this->Controller->RegisterNewAccess($params);
-//                $this->Controller->sendEmail('serey.chhim@gmail.com');
                 break;
             case 'logIn':
                 $this->Controller->Verification();
