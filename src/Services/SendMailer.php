@@ -9,7 +9,7 @@ use Swift_Message;
 class SendMailer
 {
 
-    public function sendMailer($email, $access_token, $access_name, $access_firstname)
+    private function sendMailer($email, $access_token, $access_name, $access_firstname)
     {
 
         // Create the Transport

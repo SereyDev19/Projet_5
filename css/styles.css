@@ -40,6 +40,27 @@ header {
     /*padding-left: 0;*/
 }
 
+#container.profile {
+    width: 600px;
+    margin: auto;
+}
+
+.oval {
+    width: 200px;
+    height: 320px;
+    background: #9a4;
+    -webkit-border-radius: 100px / 160px;
+    -moz-border-radius: 100px / 160px;
+    border-radius: 100px / 160px;
+}
+
+.myprofile {
+    background-color: #fff;
+    border: 1px solid #ececec;
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(121, 121, 121, .35);
+}
+
 #main-img {
     /*height: 500px;*/
     /*background-image: url("../images/analytics.png");*/
@@ -196,12 +217,10 @@ canvas {
     background: -moz-linear-gradient(center top, #ffc477 5%, #fb9e25 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25');
     background-color: #ffc477;
-
     text-indent: 0px;
     border: 3px solid #eeb44f;
     color: #ffffff;
     text-decoration: none;
-    text-align: center;
     text-shadow: 1px 1px 0px #cc9f52;
 }
 

@@ -313,6 +313,7 @@ section:first {
     background-color: #fff;
     border-color: #29a7c3;
     border: none;
+    padding: 0
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus,

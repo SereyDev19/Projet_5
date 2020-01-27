@@ -7,6 +7,7 @@ namespace App\Router;
 //require('controller/BackController.php');
 
 
+use App\Services\UploadFile;
 use phpDocumentor\Reflection\Types\Null_;
 use App\Controller\BackController;
 use App\Controller\Controller;
@@ -43,6 +44,9 @@ class Router
                 break;
             case 'logout':
                 $this->Controller->Logout();
+                break;
+            case 'profile':
+                $this->Controller->GetProfile();
                 break;
             case 'detailedReport':
                 $this->FrontController->DetailedReport($params['account_id']);
@@ -96,6 +100,7 @@ class Router
         $this->Controller = new Controller();
         $this->BackController = new BackController();
         $this->FrontController = new FrontController();
+//        $this->Upload = new UploadFile();
 
         switch ($action) {
             case 'signIn':
@@ -104,7 +109,11 @@ class Router
             case 'logIn':
                 $this->Controller->Verification();
                 $this->Controller->GlobalReport();
-
+                break;
+            case 'upload':
+//                $this->Upload->upload();
+//                $this->Controller->uploadProfilePicture();
+                $this->Controller->GetProfile();
                 break;
         }
     }
@@ -123,6 +132,8 @@ class Router
             $this->post = $_POST;
             if (in_array('Inscription', $this->post)) {
                 $this->action = 'signIn';
+            } elseif (in_array('UploadImage', $this->post)) {
+                $this->action = 'upload';
             } else {
                 $this->action = 'logIn';
             }

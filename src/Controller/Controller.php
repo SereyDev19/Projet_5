@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+// Model Namespaces
 use App\Model\Backend\Session;
 use App\Model\Backend\UserSession;
 use App\Model\Backend\Manager;
 use App\Model\Backend\UserManager;
 use App\Model\Backend\FlashBag;
 use App\Model\GetMonths;
-use App\Helper;
+use App\Model\ManageAccess;
+
+
+// Services Namespaces
 use App\Services\DataValidation;
 use App\Services\SendMailer;
-use App\Model\ManageAccess;
+use App\Services\UploadFile;
+use App\Helper;
+
+// Twig Namespaces
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
@@ -110,6 +117,34 @@ class Controller
         $session->stopSession();
         header("Location: index.php");
         exit;
+    }
+
+
+    public function GetProfile()
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+
+            //If GET['userid'] => uploading profile picture
+            if (isset($_GET['userid'])) {
+                $Upload = new UploadFile($_GET['userid']);
+                $flashbag = new FlashBag();
+
+                $Upload->upload();
+                if ($Upload->msgtype=='error'){
+                    $Upload->fileRename();
+                }
+                $flashbag->add($Upload->message, $Upload->msgtype);
+                $flashbag->flash();
+                $flashbag->fetchMessages();
+            }
+
+            $user_name = $_SESSION['username'];
+            $user_id = $_SESSION['user_id'];
+            $file = scandir('uploads/' . $user_id)[2];
+
+            echo $this->twig->render('profile.twig', ['user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
+        }
     }
 
     public function GlobalReport()
@@ -227,9 +262,9 @@ class Controller
 
             $filename = "export.csv";
             $delimiter = ";";
-            header('Content-Type: application/csv');
-//            header('Content-Disposition: attachment; filename="' . $filename . '";');
-            header('Content-Disposition: attachment;filename="' . $filename . '";');
+            header('Content - Type: application / csv');
+//            header('Content - Disposition: attachment; filename = "' . $filename . '";');
+            header('Content - Disposition: attachment;filename = "' . $filename . '";');
             # Disable caching - HTTP 1.1
             header("Cache-Control: no-cache, no-store, must-revalidate");
             # Disable caching - HTTP 1.0
