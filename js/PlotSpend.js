@@ -47,8 +47,11 @@ class PlotSpend {
 
                 this.Canvasid = 'Spend';
                 this.title = 'Dépenses';
+                var axes = ['Dates', 'Dépenses (€)']
+                console.log(axes[0])
+                console.log(axes[1])
 
-                this.graph.plot(this.Canvasid, this.title, js_dates, js_values);
+                this.graph.plot(this.Canvasid, this.title, js_dates, js_values, 'Dates', this.title + ' (€)');
 
             }.bind(this));
 

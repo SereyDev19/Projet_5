@@ -65,7 +65,3 @@ class GetMonths
         return $compare;
     }
 }
-
-//$time = mktime(0, 0, 0, 1, 1, 2020);
-//$time--; // Recule d'une seconde
-//echo date('d-m-Y', $time);

@@ -38,12 +38,13 @@ class PlotCostPerLead {
 
                 this.graph = new Graphe();
                 var js_dates = Object.keys(response.history_costperlead);
+                console.log(js_dates);
                 var js_values = Object.values(response.history_costperlead);
 
                 this.Canvasid = 'CostPerLead';
                 this.title = 'Cost per lead';
 
-                this.graph.plot(this.Canvasid, this.title, js_dates, js_values);
+                this.graph.plot(this.Canvasid, this.title, js_dates, js_values, 'Dates', this.title + ' (€)');
 
             }.bind(this));
 

@@ -2,7 +2,7 @@ class Graphe {
     constructor() {
     }
 
-    plot(id, title, labelsValues, dataValues) {
+    plot(id, title, labelsValues, dataValues, axisX, axisY) {
         console.log(id)
         this.ctx = document.getElementById(id).getContext('2d');
         this.chart = new Chart(this.ctx, {
@@ -35,6 +35,12 @@ class Graphe {
 
                 scales: {
                     yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: axisY,
+                            fontSize: 20,
+                            fontColor: "#fff"
+                        },
                         ticks: {
                             fontSize: 20,
                             fontColor: "#fff"
@@ -45,8 +51,15 @@ class Graphe {
                             zeroLineColor: "#fff",
                             zeroLineWidth: 0.1
                         }
+
                     }],
                     xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: axisX,
+                            fontColor: "#fff",
+                            fontSize: 20
+                        },
                         ticks: {
                             fontSize: 20,
                             fontColor: "#fff"

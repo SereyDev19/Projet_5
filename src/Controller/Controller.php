@@ -14,6 +14,7 @@ use App\Model\ManageAccess;
 
 // Services Namespaces
 use App\Services\DataValidation;
+use App\Services\Date;
 use App\Services\SendMailer;
 use App\Services\UploadFile;
 use App\Helper;
@@ -131,7 +132,7 @@ class Controller
                 $flashbag = new FlashBag();
 
                 $Upload->upload();
-                if ($Upload->msgtype=='error'){
+                if ($Upload->msgtype == 'error') {
                     $Upload->fileRename();
                 }
                 $flashbag->add($Upload->message, $Upload->msgtype);
@@ -405,6 +406,7 @@ class Controller
 //            $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
 //            $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
             $getMonths = new GetMonths();
+            $modDates = new Date();
 
             $diff = $getMonths->intervalDate($start, $end);
             $historyData = [];
@@ -413,12 +415,14 @@ class Controller
                 $compare = $getMonths->isSooner($bounds[1], $end);
 
                 if ($compare < 0) {
-                    $historyData[$bounds[0]] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $bounds[1]);
+                    $historyData[$modDates->MonthYear($bounds[0])] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $bounds[1]);
                 } else {
-                    $historyData[$bounds[0]] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $end);
+                    $historyData[$modDates->MonthYear($bounds[0])] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $bounds[0], $end);
                 }
             }
             $historyData = json_encode($historyData);
+            var_dump($historyData);
+
             $synData->UpdateJSONspend($account_Id, [$historyData]);
 
 
@@ -452,11 +456,15 @@ class Controller
                     $compare = $getMonths->isSooner($bounds[1], $end);
                     if ($goal == 'LEAD_GENERATION') {
                         if ($compare < 0) {
-                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
-                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+//                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
+                            $historyLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
+//                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $bounds[1])['lead']; // cost per lead
+                            $historyCostperLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $bounds[1])['lead']; // cost per lead
                         } else {
-                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
-                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+//                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
+                            $historyLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
+//                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $end)['lead']; // cost per lead
+                            $historyCostperLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $end)['lead']; // cost per lead
                         }
                     } else {
                         $historyLead[$bounds[0]] = -1;

@@ -47,7 +47,7 @@ class PlotLead {
                 this.Canvasid = 'Lead';
                 this.title = 'Lead';
 
-                this.graph.plot(this.Canvasid, this.title, js_dates, js_values);
+                this.graph.plot(this.Canvasid, this.title, js_dates, js_values, 'Dates', 'Nombre de leads');
 
             }.bind(this));
 
