@@ -50,6 +50,7 @@ class LogForm {
             var div2 = this.step3;
             var start = -450;
             var end = -900;
+            this.NextStep.remove();
         }
 
 

@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block content %}
 
@@ -6,7 +6,6 @@
         <div>
             <img id="logo" src="images/LOGOreportmeWHITE.png">
         </div>
-
         {{ SERVER_NAME }}
         <div id="connection">
             {% if user_id and user_name %}

@@ -9,6 +9,7 @@
 body {
     /*background: #044370;*/
     /*background-color: #6a93cb;*/
+    height: 800px;
     background-image: linear-gradient(315deg, #044370 0%, #223265 74%);
 }
 

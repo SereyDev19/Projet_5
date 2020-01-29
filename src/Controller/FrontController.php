@@ -31,10 +31,10 @@ class FrontController extends Controller
             $allAccounts = $getDBData->getAccessAccountsId($access_id);
             $DBaccounts = $getDBData->getAccountsFromList($allAccounts);
 
-            echo $this->twig->render('dashboard.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
+            echo $this->twig->render('dashboard.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
 
         } else {
-            echo $this->twig->render('loginEmail.twig');
+            echo $this->twig->render('loginEmail.html.twig');
         }
     }
 
@@ -47,6 +47,6 @@ class FrontController extends Controller
             $user_id = '';
             $user_name = '';
         }
-        echo $this->twig->render('homeView.twig', ['user_id' => $user_id, 'user_name' => $user_name]);
+        echo $this->twig->render('homeView.html.twig', ['user_id' => $user_id, 'user_name' => $user_name]);
     }
 }

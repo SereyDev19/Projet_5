@@ -60,9 +60,9 @@ class BackController extends Controller
             $getDBData = new \App\Model\GetDBData();
             $DBaccounts = $getDBData->getAccounts();
 
-            echo $this->twig->render('dashboard.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
+            echo $this->twig->render('dashboard.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
         } else {
-            echo $this->twig->render('loginEmail.twig');
+            echo $this->twig->render('loginEmail.html.twig');
 
         }
     }
@@ -80,7 +80,7 @@ class BackController extends Controller
             $allAccess = $AccessManager->getAccess();
 
 //            require('view/frontend/access.php');
-            echo $this->twig->render('access.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'allAccess' => $allAccess, 'DBaccounts' => $DBaccounts]);
+            echo $this->twig->render('access.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'allAccess' => $allAccess, 'DBaccounts' => $DBaccounts]);
 
         } else {
             require('view/backend/login.php');

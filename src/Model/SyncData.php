@@ -103,6 +103,9 @@ class SyncData extends Manager
         $sql = 'UPDATE accounts SET     history_spend = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
+        echo '</br>';
+        echo '</br>';
+        var_dump('on a enregistré : ', $values[0]);
     }
 
     public function UpdateJSONlead($accountId, $values)

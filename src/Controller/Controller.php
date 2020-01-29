@@ -36,12 +36,13 @@ class Controller
         $this->level_Access = $userSession->levelAccess;
         $this->access_id = $userSession->userId;
 
-        $this->loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');
+        $this->loader = new Twig_Loader_Filesystem(__DIR__ . '/../../public/templates');
         $this->twig = new Twig_Environment($this->loader, [
             'cache' => false
         ]);
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
+
 
     public function Verification()
     {
@@ -93,7 +94,7 @@ class Controller
         if ($userSession->isLogged()) {
             $this->GlobalReport();
         } else {
-            echo $this->twig->render('createAccount.twig');
+            echo $this->twig->render('createAccount.html.twig');
 
         }
     }
@@ -105,9 +106,9 @@ class Controller
             $this->GlobalReport();
         } else {
             if ($param != null) {
-                echo $this->twig->render('loginEmail.twig', ['email' => $param[0]]);
+                echo $this->twig->render('loginEmail.html.twig', ['email' => $param[0]]);
             } else {
-                echo $this->twig->render('loginEmail.twig');
+                echo $this->twig->render('loginEmail.html.twig');
             }
         }
     }
@@ -144,7 +145,7 @@ class Controller
             $user_id = $_SESSION['user_id'];
             $file = scandir('uploads/' . $user_id)[2];
 
-            echo $this->twig->render('profile.twig', ['user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
+            echo $this->twig->render('profile.html.twig', ['user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
         }
     }
 
@@ -175,7 +176,7 @@ class Controller
                 $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
                 $allAds[$iterAdSet['adset_id']] = $ads;
             }
-            echo $this->twig->render('detailedReport.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
+            echo $this->twig->render('detailedReport.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
 
         }
     }
@@ -216,7 +217,7 @@ class Controller
 //                var_dump($data);
 //            }
 
-            echo $this->twig->render('reportAccount.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
+            echo $this->twig->render('reportAccount.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
 
         }
 
@@ -365,7 +366,7 @@ class Controller
         $sendMailer = new SendMailer();
         $sendMailer->sendMailer($access_email, $access_token, $access_name, $access_firstname);
 
-        echo $this->twig->render('confirmSignInProcess.twig', ['access_email' => $access_email]);
+        echo $this->twig->render('confirmSignInProcess.html.twig', ['access_email' => $access_email]);
 
     }
 
@@ -391,7 +392,7 @@ class Controller
 
         $accessManager->confirmToken($token);
 
-        echo $this->twig->render('click2validate.twig', ['firstname' => $access['access_firstname'], 'email' => $access['access_email']]);
+        echo $this->twig->render('click2validate.html.twig', ['firstname' => $access['access_firstname'], 'email' => $access['access_email']]);
     }
 
     public function APIGlobalReportDates($account_Id, $start, $end)

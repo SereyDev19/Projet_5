@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block content %}
     <header class="row col-sm-12">
@@ -87,9 +87,11 @@
             <div class="panel panel-primary">
                 <h2>Rapport (30 derniers jours par défaut)</h2>
                 <p>Exporter</p>
-                <a class="" href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
+                <a data-toggle="tooltip" data-placement="top" title="Générer le rapport dans un fichier au format csv"
+                   class="" href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
                             class="fas fa-file-csv"></i></a>
-                <a href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
+                <a data-toggle="tooltip" data-placement="top" title="Générer le rapport dans un fichier au format pdf"
+                   href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
                             class="far fa-file-pdf"></i></a>
                 <a class="exportButton" href="admin.php?action=updateAccountDataWithDates&amp;
             account_id={{ accountId }}&amp;start=2019-01-1&amp;end=2020-01-12">Test
@@ -99,11 +101,8 @@
                     <tr>
                         <th>
                             <i class="far fa-calendar-alt"></i>
-                            <span class="responsive_title">Dépense pub Facebook</span>
-                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
-                                    title="Tooltip on top">
-                                Tooltip on top
-                            </button>
+                            <span data-toggle="tooltip" data-placement="top"
+                                  title="Dépenses pub sur les trente derniers jours" class="responsive_title">Dépense pub Facebook</span>
                         </th>
 
                         <th>
@@ -120,12 +119,15 @@
                     <tr>
                         <td>
                             <span id="plotSpend" class="exportButton">{{ DBaccount.spend30d }} €</span>
+                            <i class="fas fa-chart-bar"></i>
                         </td>
                         <td>
                             <span id="plotLead" class="exportButton">{{ DBaccount.leads30d }}</span>
+                            <i class="fas fa-chart-bar"></i>
                         </td>
                         <td>
                             <span id="plotCostPerLead" class="exportButton">{{ DBaccount.cost_per_lead30d }}€</span>
+                            <span id="plotCostPerLead" class="exportButton"><i class="fas fa-chart-bar"></i></span>
                         </td>
                     </tr>
 
@@ -142,8 +144,7 @@
             </div>
         </section>
     </div>
-    <footer class="row col-sm-12">
-    </footer>
+
     </div>
 {% endblock %}
 
