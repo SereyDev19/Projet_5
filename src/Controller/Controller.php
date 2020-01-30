@@ -3,20 +3,20 @@
 namespace App\Controller;
 
 // Model Namespaces
-use App\Model\Backend\Session;
-use App\Model\Backend\UserSession;
-use App\Model\Backend\Manager;
-use App\Model\Backend\UserManager;
-use App\Model\Backend\FlashBag;
-use App\Model\GetMonths;
-use App\Model\ManageAccess;
 
+use App\Model\UserManager;
+use App\Model\ManageAccess;
 
 // Services Namespaces
 use App\Services\DataValidation;
 use App\Services\Date;
+use App\Services\Session;
+use App\Services\UserSession;
 use App\Services\SendMailer;
 use App\Services\UploadFile;
+use App\Services\FlashBag;
+use App\Services\GetMonths;
+
 use App\Helper;
 
 // Twig Namespaces
@@ -30,6 +30,7 @@ class Controller
 
     public function __construct()
     {
+
         $userSession = new UserSession();
         $userSession->isLogged();
 
@@ -50,11 +51,9 @@ class Controller
         $datavalidation = new DataValidation();
         $email = $datavalidation->Validation($_POST['email']);
         $password = $datavalidation->Validation($_POST['password']);
-//        $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
         $userExists = $userManager->verifyUser($email, $password);
 
         $manageAccess = new ManageAccess();
-//        $manageAccess->isActivated($_POST['email']);
         $manageAccess->isActivated($email);
 
 

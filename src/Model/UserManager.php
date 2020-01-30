@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Model\Backend;
-//require_once("model/Manager.php");
+namespace App\Model;
 
-class UserManager extends Manager
+use App\Config\Config;
+class UserManager extends Config
 {
     public $message = '';
     public $isCorrect = false;
@@ -14,6 +14,7 @@ class UserManager extends Manager
     public $username = '';
     public $user_id = '';
     public $access_level = '';
+
 
     public function verifyAccessId($accessId)
     {

@@ -1,28 +1,16 @@
 <?php
 
-namespace App\Model\Backend;
+namespace App\Config;
 
-class Manager
+
+class Config
 {
     protected $db = '';
     protected $APP_HOST = '';
 
-// PROJET 5
-    Const DB_HOST = 'db5000279850.hosting-data.io';
-    Const DB_NAME = 'dbs273161';
-    Const DB_USERNAME = 'dbu387161';
-    Const DB_PWD = 'Bddreportme1987!';
-
-// PROJET 4
-//    Const DB_HOST = 'db5000221607.hosting-data.io';
-//    Const DB_NAME = 'dbs216354';
-//    Const DB_USERNAME = 'dbu437341';
-//    Const DB_PWD = 'Bddprojet4SC19dev!';
-
     public function __construct()
     {
         $this->APP_HOST = $_SERVER['SERVER_NAME'];
-
         switch ($this->APP_HOST) {
             case 'projet_5_test.test':
                 $this->DB_HOST = 'localhost';
@@ -43,11 +31,9 @@ class Manager
     protected function dbConnect()
     {
         try {
-//            $db = new \PDO('mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME . ';charset=utf8', self::DB_USERNAME, self::DB_PWD);
             $db = new \PDO('mysql:host=' . $this->DB_HOST . ';dbname=' . $this->DB_NAME . ';charset=utf8', $this->DB_USERNAME, $this->DB_PWD);
-//            $db = new \PDO($dsn, $user, $pass);
             $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+//            $db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
             return $db;
         } catch (PDOException $e) {
             die("Database connection failed: " . $e->getMessage());

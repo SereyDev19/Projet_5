@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
-class GetDBData extends Manager
+use App\Config\Config;
+
+class GetDBData extends Config
 {
 
     public $accounts = [];
@@ -22,7 +24,7 @@ class GetDBData extends Manager
     {
         $sql = 'SELECT account_id FROM access where access_id = ?';
         $this->accountsId = $this->getOne($sql, [$forAccessId]);
-        unset($this->accountsId['account_id']);
+//        unset($this->accountsId['account_id']);
         return $this->accountsId;
     }
 
@@ -39,6 +41,7 @@ class GetDBData extends Manager
         foreach ($accountIdList as $accountId) {
             $sql = 'SELECT * FROM accounts WHERE account_id = ?';
             array_push($this->accounts, $this->getAll($sql, [$accountId])[0]);
+
         }
         return $this->accounts;
     }

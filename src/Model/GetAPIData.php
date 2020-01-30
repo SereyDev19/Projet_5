@@ -2,7 +2,8 @@
 
 namespace App\Model;
 
-class GetAPIData extends Manager
+use App\Config\Config;
+class GetAPIData extends Config
 {
     protected $fb = '';
 

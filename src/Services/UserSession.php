@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Model\Backend;
-use App\Model\Backend\Session;
+namespace App\Services;
+
 
 //require_once("model/backend/Session.php");
 

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Model\Backend;
-//require_once("model/backend/Session.php");
+namespace App\Services;
 
 class FlashBag extends Session
 {

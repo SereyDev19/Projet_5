@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Model;
+use App\Config\Config;
 
-class SyncData extends Manager
+class SyncData extends Config
 {
     public $accountList = [];
     public $adSetList = [];

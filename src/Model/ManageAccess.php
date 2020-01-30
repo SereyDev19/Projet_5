@@ -2,9 +2,8 @@
 
 namespace App\Model;
 
-//require_once("model/Manager.php");
-
-class ManageAccess extends Manager
+use App\Config\Config;
+class ManageAccess extends Config
 {
 
     public $accounts = [];

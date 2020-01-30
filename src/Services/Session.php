@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Backend;
+namespace App\Services;
 
 class Session
 {

@@ -4,11 +4,12 @@
  *
  * @author Sérey Chhim
  */
+
 namespace App\Controller;
 
-use App\Model\Backend\Session;
-use App\Model\Backend\UserSession;
-use App\Model\Backend\UserManager;
+use App\Services\Session;
+use App\Services\UserSession;
+use App\Services\UserManager;
 
 use Twig_Loader_Filesystem;
 use Twig_Environment;
@@ -47,6 +48,8 @@ class FrontController extends Controller
             $user_id = '';
             $user_name = '';
         }
+
+
         echo $this->twig->render('homeView.html.twig', ['user_id' => $user_id, 'user_name' => $user_name]);
     }
 }

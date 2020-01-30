@@ -7,9 +7,9 @@
 
 namespace App\Controller;
 
-use App\Model\Backend\Session;
-use App\Model\Backend\UserSession;
-use App\Model\Backend\UserManager;
+use App\Services\Session;
+use App\Services\UserSession;
+use App\Services\UserManager;
 use App\Model;
 
 use Twig_Loader_Filesystem;
