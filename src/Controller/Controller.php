@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 // Model Namespaces
-
+use App\Config\Config;
+use App\Config\PaginatedQuery;
 use App\Model\UserManager;
 use App\Model\ManageAccess;
+use App\Model\GetDBData;
 
 // Services Namespaces
 use App\Services\DataValidation;
@@ -16,18 +18,31 @@ use App\Services\SendMailer;
 use App\Services\UploadFile;
 use App\Services\FlashBag;
 use App\Services\GetMonths;
+use App\Services\PagerFantaExtension;
 
 use App\Helper;
 
 // Twig Namespaces
+
 use Twig_Loader_Filesystem;
 use Twig_Environment;
+
+// Pagerfanta namespaces
+use Pagerfanta\View\TwitterBootstrapView;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\View\TwitterBootstrap4View;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\View\DefaultView;
 
 class Controller
 {
     public $level_Access = 0;
     public $access_id = '';
 
+    /**
+     * Controller constructor.
+     */
     public function __construct()
     {
 
@@ -41,19 +56,79 @@ class Controller
         $this->twig = new Twig_Environment($this->loader, [
             'cache' => false
         ]);
+        $this->twig->addExtension(new PagerFantaExtension());
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
 
+    /**
+     * Paginate the results
+     */
+    public function displayPages()
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+//            $view = new DefaultView();
+            $config = new Config($_ENV);
+            $pagerfanta = $config->findPaginated(12);
 
+//            $view = new TwitterBootstrapView();
+//            echo $this->twig->render('testFanta.html.twig',  ['accounts' => $pagerfanta]);
+
+            $view = new DefaultView();
+            $options = array('proximity' => 3);
+            echo $view->render($pagerfanta, __DIR__ . '/toto', $options);
+
+        }
+    }
+
+    /**
+     * @param null $page
+     * Another test to paginate the results
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function indexAction($page = null)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
+            $getDBData = new GetDBData($_ENV);
+            $allAccounts = $getDBData->getAccessAccountsId(12345678);
+            $DBaccounts = $getDBData->getAccountsFromList($allAccounts);
+
+//            $get = request()->getQueryParams();
+            $view = new TwitterBootstrap4View();
+            $adapter = new ArrayAdapter($DBaccounts);
+            $currentPage = isset($get['page']) ? $get['page'] : 1;
+            $pagerfanta = new Pagerfanta($adapter);
+            $itemsPerPage = 2;
+            $pagerfanta->setMaxPerPage($itemsPerPage);
+            $pagerfanta->setCurrentPage($currentPage);
+            $route = function ($page) {
+                $path = request()->getUri()->getPath();
+                return $path . '?page=' . $page;
+            };
+//            return [$pagerfanta, $view->render($pagerfanta, $route)];
+            $route = 'http://projet_5_test.test/public/admin.php?page=1';
+            var_dump($pagerfanta);
+            echo $this->twig->render('testFanta.html.twig', ['accounts' => $pagerfanta]);
+        }
+    }
+
+    /**
+     * Validates the login credentials
+     */
     public function Verification()
     {
-        $userManager = new UserManager();
+        $userManager = new UserManager($_ENV);
         $datavalidation = new DataValidation();
         $email = $datavalidation->Validation($_POST['email']);
         $password = $datavalidation->Validation($_POST['password']);
         $userExists = $userManager->verifyUser($email, $password);
 
-        $manageAccess = new ManageAccess();
+        $manageAccess = new ManageAccess($_ENV);
         $manageAccess->isActivated($email);
 
 
@@ -87,6 +162,12 @@ class Controller
         $flashbag->fetchMessages();
     }
 
+    /**
+     * Sign in action
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function SignIn()
     {
         $userSession = new UserSession();
@@ -98,6 +179,13 @@ class Controller
         }
     }
 
+    /**
+     * @param array $param
+     * Login action
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function Login(array $param)
     {
         $userSession = new UserSession();
@@ -112,6 +200,9 @@ class Controller
         }
     }
 
+    /**
+     * Logout action
+     */
     public function Logout()
     {
         $session = new Session();
@@ -120,7 +211,12 @@ class Controller
         exit;
     }
 
-
+    /**
+     * Get the user profile
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function GetProfile()
     {
         $userSession = new UserSession();
@@ -148,6 +244,9 @@ class Controller
         }
     }
 
+    /**
+     * Global report
+     */
     public function GlobalReport()
     {
         if ($this->level_Access == 0) {
@@ -160,13 +259,20 @@ class Controller
         }
     }
 
+    /**
+     * @param $accountId
+     * Detailed report with all the statistical data
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     function DetailedReport($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
 
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $adSets = $getDBData->getAccountAdSets($accountId);
             $account = $getDBData->getAccounts($accountId);
 
@@ -180,13 +286,20 @@ class Controller
         }
     }
 
+    /**
+     * @param $accountId
+     * Global reporting for the account $accountId
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function ReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
 
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $DBaccount = $getDBData->getAccount($accountId);
             $historySpend = json_decode($DBaccount['history_spend'], true);
             $historylead = json_decode($DBaccount['history_lead'], true);
@@ -222,11 +335,15 @@ class Controller
 
     }
 
+    /**
+     * @param $accountId
+     * Launches an Ajax procedure to get the data from database
+     */
     public function testAJAX($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $DBaccount = $getDBData->getAccount($accountId);
 
             $historySpend = json_decode($DBaccount['history_spend'], true);
@@ -240,6 +357,9 @@ class Controller
         }
     }
 
+    /**
+     * Manage the different accesses
+     */
     public function ManageAccess()
     {
         if ($this->level_Access == 0) {
@@ -250,28 +370,30 @@ class Controller
         }
     }
 
+    /**
+     * @param $account_Id
+     * Export CSV data from an $account_Id
+     */
     public function newExportData($account_Id)
     {
         $userSession = new UserSession();
 
         if ($userSession->isLogged()) {
-
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $DBaccounts = $getDBData->getAccount($account_Id);
             $list = array(array('Nom', 'Depenses 30 derniers jours', 'Leads 30 derniers jours', 'Cout par lead 30 derniers jours'),
                 array($DBaccounts['account_name'], $DBaccounts['spend30d'], $DBaccounts['leads30d'], $DBaccounts['cost_per_lead30d']));
 
             $filename = "export.csv";
             $delimiter = ";";
-            header('Content - Type: application / csv');
-//            header('Content - Disposition: attachment; filename = "' . $filename . '";');
-            header('Content - Disposition: attachment;filename = "' . $filename . '";');
-            # Disable caching - HTTP 1.1
-            header("Cache-Control: no-cache, no-store, must-revalidate");
-            # Disable caching - HTTP 1.0
-            header("Pragma: no-cache");
-            # Disable caching - Proxies
-            header("Expires: 0");
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: text/csv; charset=UTF-16LE');
+            header('Content-Disposition: attachment; filename=' . $filename);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
 
             // open the "output" stream
             // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
@@ -290,15 +412,22 @@ class Controller
         }
     }
 
+    /**
+     * @param $params
+     * Validates (or not) the signing up action for a new user
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function RegisterNewAccess($params)
     {
-        $userManager = new UserManager();
+        $userManager = new UserManager($_ENV);
         $flashbag = new FlashBag();
         $dataValidation = new DataValidation();
 
-        $getDBData = new \App\Model\GetDBData();
+        $getDBData = new \App\Model\GetDBData($_ENV);
         $DBaccounts = $getDBData->getAccounts();
-        $AccessManager = new \App\Model\ManageAccess();
+        $AccessManager = new \App\Model\ManageAccess($_ENV);
         $AccessManager->getAccess();
 
         $access_id = $dataValidation->Validation($params['access_id']);
@@ -319,7 +448,6 @@ class Controller
 
         $IdExists = $userManager->verifyAccessId($access_id);
         $AccountCreated = $userManager->passwordDefined($access_id);
-//        var_dump($userManager->verifyEmail($access_email));
         if ($userManager->verifyEmail($access_email)) {
             $this->SignIn();
 
@@ -362,16 +490,23 @@ class Controller
 
 
         //Send email with confirmation link
-        $sendMailer = new SendMailer();
+        $sendMailer = new SendMailer($_ENV);
         $sendMailer->sendMailer($access_email, $access_token, $access_name, $access_firstname);
 
         echo $this->twig->render('confirmSignInProcess.html.twig', ['access_email' => $access_email]);
 
     }
 
+    /**
+     * @param $token
+     * Validates the activation token sent by email to the new user
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function click2validate($token)
     {
-        $accessManager = new ManageAccess();
+        $accessManager = new ManageAccess($_ENV);
         $access = $accessManager->searchToken($token);
         $flashbag = new FlashBag();
 
@@ -394,17 +529,20 @@ class Controller
         echo $this->twig->render('click2validate.html.twig', ['firstname' => $access['access_firstname'], 'email' => $access['access_email']]);
     }
 
+    /**
+     * @param $account_Id
+     * @param $start
+     * @param $end
+     * Get the main statistical data from the Facebook API between two dates
+     */
     public function APIGlobalReportDates($account_Id, $start, $end)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-//            die();
-            $getAPIData = new \App\Model\GetAPIData();
-            $synData = new \App\Model\SyncData();
-            $getDBaccounts = new \App\Model\GetDBData();
-            //Get data from FB API
-//            $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
-//            $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
+            $synData = new \App\Model\SyncData($_ENV);
+            $getDBaccounts = new \App\Model\GetDBData($_ENV);
+
             $getMonths = new GetMonths();
             $modDates = new Date();
 
@@ -421,18 +559,17 @@ class Controller
                 }
             }
             $historyData = json_encode($historyData);
-            var_dump($historyData);
 
             $synData->UpdateJSONspend($account_Id, [$historyData]);
 
 
 //            foreach ($getAccountsId as $iterAccount) {
-            $getAPIData = new \App\Model\GetAPIData();
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
 //                $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
             $getAPIData->getFromFields($account_Id, ['spend']);
             if ($getAPIData->hasData) {
                 // Make a TRY
-                $adSet = new \App\Model\AdSetManager();
+                $adSet = new \App\Model\AdSetManager($_ENV);
                 $adSetList = $adSet->getAdSets($account_Id);
                 $goal = '';
                 foreach ($adSetList as $iterAdSet) {
@@ -503,19 +640,22 @@ class Controller
         }
     }
 
+    /**
+     * Get the main statistical data from the Facebook API during the past 30 days
+     */
     public function APIGlobalReport()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getAPIData = new \App\Model\GetAPIData();
-            $synData = new \App\Model\SyncData();
-            $getDBaccounts = new \App\Model\GetDBData();
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
+            $synData = new \App\Model\SyncData($_ENV);
+            $getDBaccounts = new \App\Model\GetDBData($_ENV);
             //Get data from FB API
             $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
             $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
 
             foreach ($getAccountsId as $iterAccount) {
-                $getAPIData = new \App\Model\GetAPIData();
+                $getAPIData = new \App\Model\GetAPIData($_ENV);
                 $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
                 // DEBUT DU TEST
 //                $test = $getAPIData->getFromFieldsDate($iterAccount, ['spend'], '2019-06-01', '2019-10-01');
@@ -527,7 +667,7 @@ class Controller
 
                 if ($getAPIData->hasData) {
                     // Make a TRY
-                    $adSet = new \App\Model\AdSetManager();
+                    $adSet = new \App\Model\AdSetManager($_ENV);
                     $adSetList = $adSet->getAdSets($iterAccount);
                     $goal = '';
                     foreach ($adSetList as $iterAdSet) {
@@ -560,11 +700,15 @@ class Controller
         }
     }
 
+    /**
+     * @param $accountId
+     * Remove?
+     */
     public function APIReportAccount($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getAPIData = new \App\Model\GetAPIData();
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
 
             $res = $getAPIData->getFromFields($accountId, ['spend']);
             $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -572,17 +716,21 @@ class Controller
         }
     }
 
+    /**
+     * @param $accountId
+     * Get the detailed statistical data from the Facebook API during the past 30 days
+     */
     public function APIdetailedReport($accountId)
     {
 
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
 
-            $getAPIData = new \App\Model\GetAPIData();
-            $adSet = new \App\Model\AdSetManager();
-            $ad = new \App\Model\AdManager();
-            $bddAdSet = new \App\Model\SyncData();
-            $bddAd = new \App\Model\SyncData();
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
+            $adSet = new \App\Model\AdSetManager($_ENV);
+            $ad = new \App\Model\AdManager($_ENV);
+            $bddAdSet = new \App\Model\SyncData($_ENV);
+            $bddAd = new \App\Model\SyncData($_ENV);
 
             $res = $getAPIData->getFromFields($accountId, ['spend']);
             $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
@@ -595,7 +743,7 @@ class Controller
             $registerAdSet = $bddAdSet->getBddAdSets($accountId);
             foreach ($adSetList as $iterAdSet) {
 
-                $adSet = new \App\Model\AdSetManager();
+                $adSet = new \App\Model\AdSetManager($_ENV);
                 $adSetData = $adSet->DataFromFields($iterAdSet, ['spend', 'cpm', 'clicks', 'cpc']);
 
                 if ($adSet->hasData) {
@@ -617,7 +765,7 @@ class Controller
                     $adsList = $ad->getAdsfromAdList($iterAdSet);
 
                     foreach ($adsList as $iterAd) {
-                        $ad = new \App\Model\AdManager();
+                        $ad = new \App\Model\AdManager($_ENV);
                         // $Goal is the same as the ad's adlist
                         $name = $ad->getName($iterAd);
                         $adData = $ad->DataFromFields($iterAd, ['spend', 'cpm', 'clicks', 'cpc']);

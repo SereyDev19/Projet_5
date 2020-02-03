@@ -4,7 +4,8 @@
     "facebook/php-ads-sdk": "2.8.*",
     "swiftmailer/swiftmailer": "^6.0",
     "twig/twig": "~1.0",
-    "vlucas/phpdotenv": "^4.1"
+    "vlucas/phpdotenv": "^4.1",
+    "pagerfanta/pagerfanta": "^2.1"
   },
   "autoload": {
     "psr-4": {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Services;
 
 class GetMonths
 {
@@ -39,6 +39,10 @@ class GetMonths
         return $ret;
     }
 
+    /**
+     * @param $date
+     * @return array
+     */
     public function DateBounds($date)
     {
         $time = mktime(0, 0, 0, date_parse($date)['month'], 1, date_parse($date)['year']);
@@ -51,6 +55,11 @@ class GetMonths
         return [$lowerBound, $upperBound];
     }
 
+    /**
+     * @param $date1
+     * @param $date2
+     * @return int
+     */
     public function isSooner($date1, $date2)
     {
 //        var_dump('on compare ', $date1, ' avec ', $date2);

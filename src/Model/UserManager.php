@@ -15,7 +15,10 @@ class UserManager extends Config
     public $user_id = '';
     public $access_level = '';
 
-
+    /**
+     * @param $accessId
+     * @return bool
+     */
     public function verifyAccessId($accessId)
     {
         if ($accessId !== "") {
@@ -38,6 +41,10 @@ class UserManager extends Config
         }
     }
 
+    /**
+     * @param $email
+     * @return bool
+     */
     public function verifyEmail($email)
     {
         $db = $this->db;
@@ -54,6 +61,11 @@ class UserManager extends Config
         return $this->isEmail;
     }
 
+    /**
+     * @param $email
+     * @param $password
+     * @return bool
+     */
     public function verifyUser($email, $password)
     {
         if ($email !== "" && $password !== "") {
@@ -86,6 +98,10 @@ class UserManager extends Config
         }
     }
 
+    /**
+     * @param $access_id
+     * @return bool
+     */
     public function passwordDefined($access_id)
     {
         $db = $this->db;
@@ -105,6 +121,11 @@ class UserManager extends Config
         return $this->alreadyDefined;
     }
 
+    /**
+     * @param $password
+     * @param $confirmpassword
+     * @return bool
+     */
     public function errorDefiningPassword($password, $confirmpassword)
     {
 

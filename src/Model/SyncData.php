@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+
 use App\Config\Config;
 
 class SyncData extends Config
@@ -12,6 +13,10 @@ class SyncData extends Config
     public $registerAdSet = false;
     public $registerAd = false;
 
+    /**
+     * @return array
+     * All the accounts in the database
+     */
     public function getBddAccounts()
     {
         $sql = 'SELECT account_id FROM accounts';
@@ -23,6 +28,11 @@ class SyncData extends Config
 
     }
 
+    /**
+     * @param $accountId
+     * @return array
+     * All the ad sets in the database
+     */
     public function getBddAdSets($accountId)
     {
         $sql = 'SELECT adset_id	 FROM adsets WHERE account_id=?';
@@ -33,6 +43,11 @@ class SyncData extends Config
         return $this->adSetList;
     }
 
+    /**
+     * @param $accountId
+     * @return array
+     * All the ads in the database
+     */
     public function getBddAds($accountId)
     {
         $sql = 'SELECT ad_id FROM ads WHERE account_id = ?';
@@ -43,6 +58,12 @@ class SyncData extends Config
         return $this->adList;
     }
 
+    /**
+     * @param $accountId
+     * @param $allaccounts
+     * Checks if the ad account exists in the database
+     * @return bool
+     */
     public function isregisteredAccount($accountId, $allaccounts)
     {
         if (is_int(array_search($accountId, $allaccounts))) {
@@ -53,6 +74,12 @@ class SyncData extends Config
         return $this->registerAccount;
     }
 
+    /**
+     * @param $adsetId
+     * @param $alladsets
+     * Checks if the ad set exists in the database
+     * @return bool
+     */
     public function isregisteredAdSet($adsetId, $alladsets)
     {
         if (is_int(array_search($adsetId, $alladsets))) {
@@ -63,6 +90,12 @@ class SyncData extends Config
         return $this->registerAdSet;
     }
 
+    /**
+     * @param $adId
+     * @param $allads
+     * Checks if the ad exists in the database
+     * @return bool
+     */
     public function isregisteredAd($adId, $allads)
     {
         if (is_int(array_search($adId, $allads))) {
@@ -73,9 +106,13 @@ class SyncData extends Config
         return $this->registerAd;
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Action : synchronize the account (create OR update)
+     */
     public function syncAccount($accountId, $values)
     {
-        var_dump('synchronisation des données de comptes');
         if ($this->registerAccount == false) {
 //            var_dump('creation nouvel ensemble de pub');
             $this->CreateAccount($accountId, $values);
@@ -85,6 +122,11 @@ class SyncData extends Config
         }
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Update the account data
+     */
     public function UpdateAccount($accountId, $values)
     {
         $firstArr = [$accountId];
@@ -97,6 +139,11 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Update the account spent
+     */
     public function UpdateJSONspend($accountId, $values)
     {
         $firstArr = [$accountId];
@@ -104,11 +151,13 @@ class SyncData extends Config
         $sql = 'UPDATE accounts SET     history_spend = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
-        echo '</br>';
-        echo '</br>';
-        var_dump('on a enregistré : ', $values[0]);
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Update the account leads
+     */
     public function UpdateJSONlead($accountId, $values)
     {
         $firstArr = [$accountId];
@@ -118,6 +167,11 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Update the cost per lead
+     */
     public function UpdateJSONcostperlead($accountId, $values)
     {
         $firstArr = [$accountId];
@@ -127,6 +181,11 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $values
+     * Create a new account in the database
+     */
     public function CreateAccount($accountId, $values)
     {
         $firstArr = [$accountId];
@@ -137,6 +196,12 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $adsetId
+     * @param $values
+     * Synchronizes the ad set (Create OR update)
+     */
     public function syncAdSet($accountId, $adsetId, $values)
     {
         if ($this->registerAdSet == false) {
@@ -148,6 +213,11 @@ class SyncData extends Config
         }
     }
 
+    /**
+     * @param $adsetId
+     * @param $values
+     * Update the ad set main data
+     */
     public function UpdateAdSet($adsetId, $values)
     {
         $firstArr = [$adsetId];
@@ -165,6 +235,12 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $adsetId
+     * @param $values
+     * Create a new ad set in the database
+     */
     public function CreateAdSet($accountId, $adsetId, $values)
     {
         $firstArr = [$accountId, $adsetId];
@@ -176,6 +252,13 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $adsetId
+     * @param $adId
+     * @param $values
+     * Synchronizes the ad main data
+     */
     public function syncAd($accountId, $adsetId, $adId, $values)
     {
         if ($this->registerAd == false) {
@@ -186,6 +269,12 @@ class SyncData extends Config
             $this->UpdateAd($adId, $values);
         }
     }
+
+    /**
+     * @param $adId
+     * @param $values
+     * Update the ad data
+     */
 
     public function UpdateAd($adId, $values)
     {
@@ -204,6 +293,13 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    /**
+     * @param $accountId
+     * @param $adsetId
+     * @param $adId
+     * @param $values
+     * Create a new ad in the database
+     */
     public function CreateAd($accountId, $adsetId, $adId, $values)
     {
         $firstArr = [$accountId, $adsetId, $adId];

@@ -11,6 +11,10 @@ class Date
 
     Const DT_format = "%d %b %Y";
 
+    /**
+     * @param $oldDate
+     * @return string
+     */
     public function dateFR($oldDate)
     {
         $this->dateUS = $oldDate;
@@ -19,6 +23,12 @@ class Date
         return $this->dateFR;
     }
 
+    /**
+     * @param $oldDate
+     * @return string
+     * @throws \Exception
+     * Give the month and the year in Letters from a given date
+     */
     public function MonthYear($oldDate)
     {
         $date = new DateTime($oldDate);

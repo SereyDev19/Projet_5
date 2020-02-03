@@ -16,9 +16,9 @@
             <h1>Nouveau compte</h1>
 
             <div class="step" id="step1">
-                <label><b>Identifiant</b></label>
+                <label for="access_id"><b>Identifiant</b></label>
                 <input id="access_id" type="number" placeholder="Identifiant" name="access_id" required>
-                <label><b>E-mail</b></label>
+                <label for="access_email"><b>E-mail</b></label>
                 <input id="access_email" type="email" placeholder="E-mail" name="access_email" required>
             </div>
 
@@ -26,17 +26,17 @@
 
 
             <div class="step" id="step2">
-                <label><b>Nom</b></label>
-                <input type="text" placeholder="Nom" name="access_name" required>
-                <label><b>Prénom</b></label>
-                <input type="text" placeholder="Prénom" name="access_firstname" required>
+                <label for="name"><b>Nom</b></label>
+                <input type="text" placeholder="Nom" name="access_name" id="name" required>
+                <label for="firstname"><b>Prénom</b></label>
+                <input type="text" placeholder="Prénom" name="access_firstname" id="firstname" required>
             </div>
 
             <div class="step" id="step3">
-                <label><b>Mot de passe</b></label>
-                <input type="password" placeholder="Définir le mot de passe" name="access_password" required>
-                <label><b>Confirmer le mot de passe</b></label>
-                <input type="password" placeholder="Confirmer le mot de passe" name="confirm_password" required>
+                <label for="password"><b>Mot de passe</b></label>
+                <input type="password" placeholder="Définir le mot de passe" name="access_password" id="password" required>
+                <label for="confirm_password"><b>Confirmer le mot de passe</b></label>
+                <input type="password" placeholder="Confirmer le mot de passe" name="confirm_password" id="confirm_password" required>
 
                 <input type="submit" id='submit' name='signIn' value='Inscription'>
             </div>

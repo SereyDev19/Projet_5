@@ -10,7 +10,10 @@ class FlashBag extends Session
     protected $userId = '';
     public $cssId = 'alert alert-danger';
 
-
+    /**
+     * @param $message
+     * @param string $type
+     */
     public function add($message, $type = 'error')
     {
         $_SESSION['flash'] = array(
@@ -19,6 +22,9 @@ class FlashBag extends Session
         );
     }
 
+    /**
+     *
+     */
     public function flash()
     {
         if (isset($_SESSION['flash'])) {
@@ -37,6 +43,9 @@ class FlashBag extends Session
         }
     }
 
+    /**
+     *
+     */
     public function fetchMessages()
     {
         unset($_SESSION['flash']);

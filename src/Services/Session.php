@@ -4,6 +4,9 @@ namespace App\Services;
 
 class Session
 {
+    /**
+     * Session constructor.
+     */
     public function __construct()
     {
         if (session_status() != 2) {
@@ -11,6 +14,9 @@ class Session
         }
     }
 
+    /**
+     *
+     */
     public function stopSession()
     {
         session_destroy();

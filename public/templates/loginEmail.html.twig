@@ -17,9 +17,9 @@
             </div>
             <h1>Connexion</h1>
 
-            <label><b>E-mail</b></label>
+            <label for="email"><b>E-mail</b></label>
             {% if  email %}
-                <input type="email" value="{{ email }}" name="email"
+                <input type="email" value="{{ email }}" name="email" id="email"
                        pattern=" /^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/ "
                        required>
             {% else %}
@@ -27,8 +27,8 @@
                        pattern=" /^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/ "
                        required>
             {% endif %}
-            <label><b>Mot de passe</b></label>
-            <input type="password" placeholder="Entrer le mot de passe" name="password" required>
+            <label for="password"><b>Mot de passe</b></label>
+            <input type="password" placeholder="Entrer le mot de passe" name="password" id="password" required>
 
             <input type="submit" id='submit' name='logIn' value='Connexion'>
 

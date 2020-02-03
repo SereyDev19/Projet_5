@@ -8,6 +8,10 @@ class UploadFile
     public $message = '';
     public $msgtype = 'error';
 
+    /**
+     * UploadFile constructor.
+     * @param $userId
+     */
     public function __construct($userId)
     {
         $this->userId = $userId;
@@ -32,6 +36,9 @@ class UploadFile
         }
     }
 
+    /**
+     * @param $dir
+     */
     public function cleanDir($dir)
     {
         foreach (scandir($dir) as $file) {
@@ -42,13 +49,19 @@ class UploadFile
         };
     }
 
-
+    /**
+     * @param $oldFile
+     * @return false|string
+     */
     public function fileRename($oldFile)
     {
         $newfile = substr($oldFile, 0, 4);
         return $newfile;
     }
 
+    /**
+     *
+     */
     public function upload()
     {
         // $user = $_GET['userid'];

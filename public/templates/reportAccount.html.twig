@@ -152,9 +152,9 @@
     {% if datesSpend and valuesSpend %}
         <script>
             {% if SERVER_NAME == 'sc19dev.fr' %}
-            var url = "http://{{ SERVER_NAME }}/Projet_5_Test/admin.php?action=testAJAX&account_id={{ accountId }}"
+            var url = "http://{{ SERVER_NAME }}/Projet_5_Test/public/admin.php?action=testAJAX&account_id={{ accountId }}"
             {% else %}
-            var url = "http://{{ SERVER_NAME }}/admin.php?action=testAJAX&account_id={{ accountId }}"
+            var url = "http://{{ SERVER_NAME }}/public/admin.php?action=testAJAX&account_id={{ accountId }}"
             {% endif %}
 
             var app = new App(url);

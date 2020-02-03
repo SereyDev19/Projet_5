@@ -8,8 +8,23 @@ use Swift_Message;
 
 class SendMailer
 {
+    /**
+     * SendMailer constructor.
+     * @param $env
+     */
+    public function __construct($env)
+    {
+        $this->env = $env;
+    }
 
-    private function sendMailer($email, $access_token, $access_name, $access_firstname)
+    /**
+     * @param $email
+     * @param $access_token
+     * @param $access_name
+     * @param $access_firstname
+     * @return int
+     */
+    public function sendMailer($email, $access_token, $access_name, $access_firstname)
     {
 
         // Create the Transport
@@ -17,13 +32,13 @@ class SendMailer
             ->setUsername('caa22725bc661f')
             ->setPassword('a2f2923eb65310');
         // Create the content
-        $content = '<a href="http://projet_5_test.test/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
+        $content = '<a href="http://projet_5_test.test/public/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
 
         if ($_SERVER['SERVER_NAME'] == 'sc19dev.fr') {
             $transport = (new Swift_SmtpTransport('smtp.ionos.fr', 587, 'tls'))
-                ->setUsername('support@sc19dev.fr')
-                ->setPassword('FTDNP9sXf3mZqs8H!');
-            $content = '<a href="http://sc19dev.fr/Projet_5_Test/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
+                ->setUsername($this->env['mail_user'])
+                ->setPassword($this->env['mail_pwd']);
+            $content = '<a href="http://sc19dev.fr/Projet_5_Test/public/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
 
         }
 // Create the Mailer using your created Transport
@@ -31,7 +46,7 @@ class SendMailer
 
 // Create a message
         $message = (new Swift_Message('Confirm your inscription'))
-            ->setFrom(['support@sc19dev.fr' => 'ReportMe Regisration'])
+            ->setFrom([$this->env['mail_user'] => 'ReportMe Regisration'])
             ->setTo([$email => $access_name . ' ' . $access_firstname])
             ->setBody($content);
 

@@ -25,8 +25,6 @@ class Router
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
-
-
     }
 
     public function get($action, array $params)
@@ -100,7 +98,6 @@ class Router
         $this->Controller = new Controller();
         $this->BackController = new BackController();
         $this->FrontController = new FrontController();
-//        $this->Upload = new UploadFile();
 
         switch ($action) {
             case 'signIn':
@@ -108,6 +105,11 @@ class Router
                 break;
             case 'logIn':
                 $this->Controller->Verification();
+                // test Pagerfanta:
+                $this->Controller->indexAction();
+                die();
+                $this->Controller->displayPages();
+                die();
                 $this->Controller->GlobalReport();
                 break;
             case 'upload':

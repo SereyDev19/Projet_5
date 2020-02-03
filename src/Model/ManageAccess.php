@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Config\Config;
+
 class ManageAccess extends Config
 {
 
@@ -14,6 +15,12 @@ class ManageAccess extends Config
     public $IdUsed = false;
     public $activated = false;
 
+    /**
+     * @param $account_id
+     * @param $access_id
+     * Add an access with a new access id into the database for an account
+     * @return bool|\PDOStatement
+     */
     public function addAccess($account_id, $access_id)
     {
         $sql = 'INSERT INTO access(access_id, account_id) 
@@ -24,6 +31,11 @@ class ManageAccess extends Config
         return $affectedLines;
     }
 
+    /**
+     * @param $access_id
+     * @return bool
+     * Checks if the access id is already used
+     */
     public function IdAlreadyUsed($access_id)
     {
         $sql = 'SELECT * FROM access WHERE access_id = ?';
@@ -35,6 +47,11 @@ class ManageAccess extends Config
         return $this->IdUsed;
     }
 
+    /**
+     * @param $access_email
+     * @return bool
+     * Checks if an email already exists in the database
+     */
     public function isActivated($access_email)
     {
         $sql = 'SELECT activated FROM access WHERE access_email = ?';
@@ -45,7 +62,11 @@ class ManageAccess extends Config
         return $this->activated;
     }
 
-
+    /**
+     * @param $access_id
+     * @return bool|\PDOStatement
+     * Delete an access
+     */
     public function deleteAccess($access_id)
     {
         $sql = 'DELETE FROM access WHERE access_id = ?';
@@ -55,6 +76,16 @@ class ManageAccess extends Config
         return $affectedLines;
     }
 
+    /**
+     * @param $access_id
+     * @param $access_email
+     * @param $access_name
+     * @param $access_firstname
+     * @param $access_password
+     * @param $auth_token
+     * @return bool|\PDOStatement
+     * Register the access with all the other data that the user has sent through the sign in form
+     */
     public function registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password, $auth_token)
     {
         $access_password = $str = password_hash($access_password, PASSWORD_BCRYPT);
@@ -65,6 +96,11 @@ class ManageAccess extends Config
         return $req;
     }
 
+    /**
+     * @param $token
+     * @return array|mixed
+     * Looks for a token in the database
+     */
     public function searchToken($token)
     {
         $sql = 'SELECT * FROM access where auth_token=?';
@@ -73,7 +109,11 @@ class ManageAccess extends Config
         return $this->access;
     }
 
-
+    /**
+     * @param $token
+     * @return array|bool|\PDOStatement
+     * Switch the activated status to 1 if the registration is all clear up
+     */
     public function confirmToken($token)
     {
         $sql = 'UPDATE access SET activated = 1 WHERE auth_token=?';
@@ -81,6 +121,10 @@ class ManageAccess extends Config
         return $this->access;
     }
 
+    /**
+     * @return array
+     * All the access in the database
+     */
     public function getAccess()
     {
         $sql = 'SELECT * FROM access';
@@ -91,6 +135,10 @@ class ManageAccess extends Config
         return $this->accounts;
     }
 
+    /**
+     * @param $accountId
+     * @return array
+     */
     public function getAccountAdSets($accountId)
     {
         $sql = 'SELECT * FROM adsets WHERE account_id=?';
@@ -98,6 +146,10 @@ class ManageAccess extends Config
         return $this->adSets;
     }
 
+    /**
+     * @param $adSetId
+     * @return array
+     */
     public function getAdSetsAds($adSetId)
     {
         $sql = 'SELECT * FROM ads WHERE adset_id=?';

@@ -17,14 +17,20 @@ use Twig_Environment;
 
 class BackController extends Controller
 {
+    /**
+     * BackController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * Validates the login credentials
+     */
     public function adminVerification()
     {
-        $userManager = new UserManager();
+        $userManager = new UserManager($_ENV);
         $userExists = $userManager->verifyUser($_POST['email'], $_POST['password']);
 
         $flashbag = new FlashBag();
@@ -51,13 +57,16 @@ class BackController extends Controller
         $this->adminGlobalReport();
     }
 
+    /**
+     * Global report for the permitted account(s)
+     */
     public function adminGlobalReport()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
 
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $DBaccounts = $getDBData->getAccounts();
 
             echo $this->twig->render('dashboard.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
@@ -67,14 +76,17 @@ class BackController extends Controller
         }
     }
 
+    /**
+     * Manage the differents access for the admin manager
+     */
     public function adminManageAccess()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
 
-            $getDBData = new \App\Model\GetDBData();
-            $AccessManager = new \App\Model\ManageAccess();
+            $getDBData = new \App\Model\GetDBData($_ENV);
+            $AccessManager = new \App\Model\ManageAccess($_ENV);
 
             $DBaccounts = $getDBData->getAccounts();
             $allAccess = $AccessManager->getAccess();
@@ -87,13 +99,18 @@ class BackController extends Controller
         }
     }
 
+    /**
+     * @param $account_id
+     * Add a new access (admin action)
+     * @throws \Exception
+     */
     public function adminAddAccess($account_id)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getDBData = new \App\Model\GetDBData();
+            $getDBData = new \App\Model\GetDBData($_ENV);
             $DBaccounts = $getDBData->getAccounts();
-            $AccessManager = new \App\Model\ManageAccess();
+            $AccessManager = new \App\Model\ManageAccess($_ENV);
             $var = random_int(1e6, 1e9 - 1);
             while (!$AccessManager->IdAlreadyUsed($var)) {
                 $var = random_int(1e6, 1e9 - 1);
@@ -108,12 +125,16 @@ class BackController extends Controller
         }
     }
 
+    /**
+     * @param $access_id
+     * Remove an access (admin action)
+     */
     public function adminDeleteAccess($access_id)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-            $getDBData = new \App\Model\GetDBData();
-            $AccessManager = new \App\Model\ManageAccess();
+            $getDBData = new \App\Model\GetDBData($_ENV);
+            $AccessManager = new \App\Model\ManageAccess($_ENV);
             $AccessManager->deleteAccess($access_id);
         }
     }

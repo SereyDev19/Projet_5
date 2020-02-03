@@ -4,7 +4,6 @@ namespace App\Model;
 
 use phpDocumentor\Reflection\Types\Integer;
 
-//require_once("model/GetAPIData.php");
 
 class AdSetManager extends GetAPIData
 {
@@ -16,13 +15,27 @@ class AdSetManager extends GetAPIData
     public $fieldRes = [];
     public $hasData = false;
 
+    /**
+     * AdSetManager constructor.
+     * @param $env
+     */
+    public function __construct($env)
+    {
+        parent::__construct($env);
+    }
 
+    /**
+     * @param $account_id
+     * @return array
+     * Give the ad sets of an account
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function getAdSets($account_id)
     {
         try {
             $response = $this->fb->get(
                 '/act_' . $account_id . '/adsets',
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
 
@@ -43,12 +56,18 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @return mixed
+     * Give the name of an ad set
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function getName($adSetId)
     {
         try {
             $response = $this->fb->get(
                 '/' . $adSetId . '?fields=name',
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
 
@@ -63,12 +82,18 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @return string
+     * Give the optimization goal of an ad set
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function optimGoal($adSetId)
     {
         try {
             $response = $this->fb->get(
                 '/' . $adSetId . '?fields=optimization_goal',
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
             $this->optimization_goal = $getDecodeBody['optimization_goal'];
@@ -83,6 +108,13 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @param $fields
+     * @return array
+     * Give the statistical data during the 30 past days
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function DataFromFields($adSetId, $fields)
     {
         $this->setFields($fields);
@@ -90,7 +122,7 @@ class AdSetManager extends GetAPIData
         try {
             $response = $this->fb->get(
                 '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
 
@@ -105,8 +137,6 @@ class AdSetManager extends GetAPIData
                 $this->adsetData[$adSetId] = $this->fieldRes;
                 return $this->adsetData;
             }
-
-
         } catch (FacebookExceptionsFacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
@@ -116,6 +146,13 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @param $fields
+     * @return array
+     * Give the statistical data for the actions during the 30 past days
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function getDataActions($adSetId, $fields)
     {
         $this->setFields($fields);
@@ -123,7 +160,7 @@ class AdSetManager extends GetAPIData
         try {
             $response = $this->fb->get(
                 '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
             $data = $getDecodeBody['data'][0]['actions'];
@@ -144,6 +181,13 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @param $fields
+     * @return array
+     * Cost during the past 30 days
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function getCost($adSetId, $fields)
     {
         $this->setFields($fields);
@@ -151,7 +195,7 @@ class AdSetManager extends GetAPIData
         try {
             $response = $this->fb->get(
                 '/' . $adSetId . '/insights?fields=' . $this->fieldsConc,
-                self::accessToken
+                $this->env['accessToken']
             );
             $getDecodeBody = $response->getDecodedBody();
             $data = $getDecodeBody['data'][0]['cost_per_action_type'];
@@ -173,6 +217,12 @@ class AdSetManager extends GetAPIData
         }
     }
 
+    /**
+     * @param $adSetId
+     * @return array
+     * Give a result for the 30 past day (depends on the optimization goal)
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function getResult($adSetId)
     {
 
