@@ -14,6 +14,7 @@ class UploadFile
      */
     public function __construct($userId)
     {
+
         $this->userId = $userId;
         $this->workingDir = "uploads/" . $this->userId . "/";
 

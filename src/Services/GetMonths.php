@@ -8,7 +8,7 @@ class GetMonths
      * Gets list of months between two dates
      * $start date format Y-m-d
      * $end date format Y-m-d
-     * @return array
+     * @return array of the months between two dates
      */
     public function intervalDate($start, $end)
     {

@@ -142,13 +142,27 @@ class SyncData extends Config
     /**
      * @param $accountId
      * @param $values
-     * Update the account spent
+     * Update the account spent month by month between two date
      */
     public function UpdateJSONspend($accountId, $values)
     {
         $firstArr = [$accountId];
         $values = array_merge($values, $firstArr);
         $sql = 'UPDATE accounts SET     history_spend = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    /**
+     * @param $accountId
+     * @param $values
+     * Update the account spent day by day between two dates
+     */
+    public function UpdateJSONspendDay($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_spend_d = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
     }
@@ -170,6 +184,19 @@ class SyncData extends Config
     /**
      * @param $accountId
      * @param $values
+     */
+    public function UpdateJSONleadDay($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_lead_d = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    /**
+     * @param $accountId
+     * @param $values
      * Update the cost per lead
      */
     public function UpdateJSONcostperlead($accountId, $values)
@@ -177,6 +204,19 @@ class SyncData extends Config
         $firstArr = [$accountId];
         $values = array_merge($values, $firstArr);
         $sql = 'UPDATE accounts SET     history_costperlead = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    /**
+     * @param $accountId
+     * @param $values
+     */
+    public function UpdateJSONcostperleadDay($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_costperlead_d = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
     }

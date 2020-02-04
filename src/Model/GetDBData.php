@@ -59,8 +59,8 @@ class GetDBData extends Config
         $this->accounts = [];
         foreach ($accountIdList as $accountId) {
             $sql = 'SELECT * FROM accounts WHERE account_id = ?';
-//            array_push($this->accounts, $this->getAll($sql, [$accountId])[0]);
-            array_push($this->accounts, $this->getAll($sql, [$accountId]));
+            array_push($this->accounts, $this->getAll($sql, [$accountId])[0]);
+//            array_push($this->accounts, $this->getAll($sql, [$accountId]));
 
         }
         return $this->accounts;

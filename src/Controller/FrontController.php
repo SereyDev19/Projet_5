@@ -44,7 +44,6 @@ class FrontController extends Controller
             $getDBData = new GetDBData($_ENV);
             $allAccounts = $getDBData->getAccessAccountsId($access_id);
             $DBaccounts = $getDBData->getAccountsFromList($allAccounts);
-
             echo $this->twig->render('dashboard.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccounts' => $DBaccounts]);
 
         } else {

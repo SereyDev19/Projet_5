@@ -14,11 +14,23 @@ class Router
     public $action = '';
     public $params = [];
 
+    /**
+     * Router constructor.
+     */
+
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
 
     }
+
+    /**
+     * @param $action
+     * @param array $params
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
 
     public function get($action, array $params)
     {
@@ -47,6 +59,13 @@ class Router
         }
     }
 
+    /**
+     * @param $action
+     * @param array $params
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function post($action, array $params)
     {
         $this->Controller = new Controller();
@@ -63,6 +82,10 @@ class Router
                 break;
         }
     }
+
+    /**
+     *
+     */
 
     public function method()
     {
@@ -86,6 +109,12 @@ class Router
         }
 
     }
+
+    /**
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
 
     public function run()
     {

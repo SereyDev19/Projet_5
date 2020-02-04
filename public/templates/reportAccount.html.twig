@@ -59,7 +59,7 @@
                 </a>
             </button>
             <button type="button" class="btn btn-info">
-                <a href="admin.php?action=updateAccountDataWithDates&amp;account_id={{ accountId }}">
+                <a href="admin.php?action=updateAccountDataByMonth&amp;account_id={{ accountId }}">
                     <i class="fas fa-sync-alt"></i>Mise à jour des données avec dates
                 </a>
             </button>
@@ -93,9 +93,13 @@
                 <a data-toggle="tooltip" data-placement="top" title="Générer le rapport dans un fichier au format pdf"
                    href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
                             class="far fa-file-pdf"></i></a>
-                <a class="exportButton" href="admin.php?action=updateAccountDataWithDates&amp;
+                <a class="exportButton" href="admin.php?action=updateAccountDataByMonth&amp;
             account_id={{ accountId }}&amp;start=2019-01-1&amp;end=2020-01-12">Test
-                    dates</a>
+                    dates Mois</a>
+
+                <a class="exportButton" href="admin.php?action=updateAccountDataByDay&amp;
+            account_id={{ accountId }}&amp;start=2019-01-1&amp;end=2019-01-2">Test
+                    dates jours</a>
                 <table class="container table table-striped table-condensed">
                     <thead>
                     <tr>

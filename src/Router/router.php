@@ -22,11 +22,21 @@ class Router
     public $action = '';
     public $params = [];
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
     }
 
+    /**
+     * @param $action
+     * @param array $params
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function get($action, array $params)
     {
         $this->Controller = new Controller();
@@ -56,8 +66,12 @@ class Router
             case 'globalreport':
                 $this->Controller->GlobalReport();
                 break;
-            case 'updateAccountDataWithDates':
+            case 'updateAccountDataByMonth':
                 $this->Controller->APIGlobalReportDates($params['account_id'], $params['start'], $params['end']);
+                $this->Controller->ReportAccount($params['account_id']);
+                break;
+            case 'updateAccountDataByDay':
+                $this->Controller->APIGlobalReportDatesDay($params['account_id'], $params['start'], $params['end']);
                 $this->Controller->ReportAccount($params['account_id']);
                 break;
             case 'updateAccountData':
@@ -84,6 +98,9 @@ class Router
                 $this->Controller->newExportData($params['account_id']);
                 $this->Controller->ReportAccount($params['account_id']);
                 break;
+            case 'exportAccountDetailedData':
+                $this->Controller->newExportDetailedData($params['account_id']);
+                break;
             case 'testAJAX':
                 $this->Controller->testAJAX($params['account_id']);
                 break;
@@ -93,6 +110,13 @@ class Router
         }
     }
 
+    /**
+     * @param $action
+     * @param array $params
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function post($action, array $params)
     {
         $this->Controller = new Controller();
@@ -106,20 +130,21 @@ class Router
             case 'logIn':
                 $this->Controller->Verification();
                 // test Pagerfanta:
-                $this->Controller->indexAction();
-                die();
-                $this->Controller->displayPages();
-                die();
+//                $this->Controller->indexAction();
+//                die();
+//                $this->Controller->displayPages();
+//                die();
                 $this->Controller->GlobalReport();
                 break;
             case 'upload':
-//                $this->Upload->upload();
-//                $this->Controller->uploadProfilePicture();
                 $this->Controller->GetProfile();
                 break;
         }
     }
 
+    /**
+     *
+     */
     public function method()
     {
         if ($this->request == 'GET') {
@@ -144,6 +169,12 @@ class Router
         }
 
     }
+
+    /**
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
 
     public function run()
     {

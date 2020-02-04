@@ -60,15 +60,15 @@
                 <tr>
                     <th>
                         <i class="fas fa-wallet"></i>
-                        <span class="responsive_title">Compte client</span>
+                        <span class="responsive_title">Nom compte client</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-wallet"></i>
+                        <span class="responsive_title">Numéro compte client</span>
                     </th>
                     <th>
                         <i class="fas fa-chart-area"></i>
                         <span class="responsive_title">Plateforme(s)</span>
-                    </th>
-                    <th>
-                        <i class="far fa-comment-alt"></i>
-                        <span class="responsive_title">Autres</span>
                     </th>
                 </thead>
                 <?php
@@ -77,15 +77,15 @@
                 <td>
                     <a href="admin.php?action=reportAccount&amp;account_id={{ account.account_id }}">
                         {{ account.account_name }}
-                        {{ account.account_id }}
-
                     </a>
-
+                </td>
+                <td>
+                    <a href="admin.php?action=reportAccount&amp;account_id={{ account.account_id }}">
+                        {{ account.account_id }}
+                    </a>
                 </td>
                 <td>
                     <i class="fab fa-facebook-square"></i>
-                </td>
-                <td>
                 </td>
                 </tr>
                 {% endfor %}

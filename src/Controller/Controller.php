@@ -12,6 +12,7 @@ use App\Model\GetDBData;
 // Services Namespaces
 use App\Services\DataValidation;
 use App\Services\Date;
+use App\Services\GetDays;
 use App\Services\Session;
 use App\Services\UserSession;
 use App\Services\SendMailer;
@@ -112,8 +113,8 @@ class Controller
             };
 //            return [$pagerfanta, $view->render($pagerfanta, $route)];
             $route = 'http://projet_5_test.test/public/admin.php?page=1';
-            var_dump($pagerfanta);
-            echo $this->twig->render('testFanta.html.twig', ['accounts' => $pagerfanta]);
+//            var_dump($pagerfanta);
+//            echo $this->twig->render('testFanta.html.twig', ['accounts' => $pagerfanta]);
         }
     }
 
@@ -221,13 +222,14 @@ class Controller
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
-
             //If GET['userid'] => uploading profile picture
+            // Else : just display the profile page
             if (isset($_GET['userid'])) {
                 $Upload = new UploadFile($_GET['userid']);
                 $flashbag = new FlashBag();
 
                 $Upload->upload();
+
                 if ($Upload->msgtype == 'error') {
                     $Upload->fileRename();
                 }
@@ -238,7 +240,7 @@ class Controller
 
             $user_name = $_SESSION['username'];
             $user_id = $_SESSION['user_id'];
-            $file = scandir('uploads/' . $user_id)[2];
+            $file = scandir(__DIR__ . '/../../public/uploads/' . $user_id)[2];
 
             echo $this->twig->render('profile.html.twig', ['user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
         }
@@ -250,7 +252,6 @@ class Controller
     public function GlobalReport()
     {
         if ($this->level_Access == 0) {
-
             $FrontController = new FrontController();
             $FrontController->FrontGlobalReport($this->access_id);
         } else {
@@ -281,7 +282,7 @@ class Controller
                 $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
                 $allAds[$iterAdSet['adset_id']] = $ads;
             }
-            echo $this->twig->render('detailedReport.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
+            echo $this->twig->render('detailedReport.html.twig', ['userSession' => $userSession, 'accountId' => $accountId, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
 
         }
     }
@@ -305,34 +306,30 @@ class Controller
             $historylead = json_decode($DBaccount['history_lead'], true);
             $historycostperlead = json_decode($DBaccount['history_costperlead'], true);
 
-            $datesSpend = array_keys($historySpend);
-            $dateslead = array_keys($historylead);
-            $datescostperlead = array_keys($historycostperlead);
-
             $valuesSpend = [];
             $valuesLead = [];
             $valuesCostperlead = [];
-            foreach ($historySpend as $data) {
-                array_push($valuesSpend, $data['spend']);
-            }
-            foreach ($historylead as $data) {
-                array_push($valuesLead, $data);
-            }
-            foreach ($historycostperlead as $data) {
-                array_push($valuesCostperlead, $data);
-            }
-//            var_dump($dates);
-//            var_dump($values);
-//            $history = $DBaccount['history_spend'];
-//            var_dump($history);
-//            foreach ($history as $data){
-//                var_dump($data);
-//            }
+            $datesSpend = [];
+            $datescostperlead = [];
+            $dateslead = [];
 
+            if (!$historySpend == null and !$historylead == null and !$historycostperlead == null) {
+                $datesSpend = array_keys($historySpend);
+                $dateslead = array_keys($historylead);
+                $datescostperlead = array_keys($historycostperlead);
+
+                foreach ($historySpend as $data) {
+                    array_push($valuesSpend, $data['spend']);
+                }
+                foreach ($historylead as $data) {
+                    array_push($valuesLead, $data);
+                }
+                foreach ($historycostperlead as $data) {
+                    array_push($valuesCostperlead, $data);
+                }
+            }
             echo $this->twig->render('reportAccount.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
-
         }
-
     }
 
     /**
@@ -400,15 +397,83 @@ class Controller
             $f = fopen('php://output', 'w');
 //            $f = fopen($filename, 'w');
             ob_start();
-
             foreach ($list as $line) {
                 fputcsv($f, $line, $delimiter);
             }
             $string = ob_get_clean();
             exit($string);
-
             fclose($f);
+        }
+    }
 
+    /**
+     * @param $account_Id
+     * Export CSV all the detailed data from an $account_Id
+     */
+    public function newExportDetailedData($account_Id)
+    {
+        $userSession = new UserSession();
+
+        if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
+            $getDBData = new \App\Model\GetDBData($_ENV);
+            $adSets = $getDBData->getAccountAdSets($account_Id);
+            $account = $getDBData->getAccounts($account_Id);
+
+            $allAds = [];
+            $listads = [];
+            $listadsets = [];
+            $titles = array('Nom de l\'ensemble de publicités', 'Dépenses pub', 'CPM', 'Nombre de clics', 'Coût par clic', 'Résultats', ' Coût par résultat', ' Taux d\'achat');
+            array_push($listadsets, $titles);
+            array_push($listads, $titles);
+            $i = 0;
+            $j = 0;
+            foreach ($adSets as $iterAdSet) {
+                $line[$i] = array($iterAdSet['adset_name'], $iterAdSet['spend30d'], $iterAdSet['cpm30d'], $iterAdSet['clicks30d'], $iterAdSet['cost_per_click30d'], $iterAdSet['leads30d'], $iterAdSet['cost_per_lead30d'], $iterAdSet['sell_rate30d']);
+                array_push($listadsets, $line[$j]);
+                $i += 1;
+                //all ads for each adset
+                $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
+                $allAds[$iterAdSet['adset_id']] = $ads;
+            }
+
+            foreach ($allAds as $ads) {
+                foreach ($ads as $ad) {
+                    $line[$j] = array($ad['ad_name'], $ad['spend30d'], $ad['cpm30d'], $ad['clicks30d'], $ad['cost_per_click30d'], $ad['leads30d'], $ad['cost_per_lead30d'], $ad['sell_rate30d']);
+                    array_push($listads, $line[$j]);
+                    $j += 1;
+                }
+            }
+
+
+            $filename = "export.csv";
+            $delimiter = ";";
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: text/csv; charset=UTF-16LE');
+            header('Content-Disposition: attachment; filename=' . $filename);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+
+            // open the "output" stream
+            // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
+            $f = fopen('php://output', 'w');
+//            $f = fopen($filename, 'w');
+            ob_start();
+            foreach ($listadsets as $line) {
+                fputcsv($f, $line, $delimiter);
+            }
+            fputcsv($f, array(), $delimiter);
+
+            foreach ($listads as $line) {
+                fputcsv($f, $line, $delimiter);
+            }
+            $string = ob_get_clean();
+            exit($string);
+            fclose($f);
         }
     }
 
@@ -637,6 +702,95 @@ class Controller
             //Get data from BD MYSQL
             $DBaccounts = $getDBaccounts->getAccounts();
         } else {
+        }
+    }
+
+    public function APIGlobalReportDatesDay($account_Id, $start, $end)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
+            $synData = new \App\Model\SyncData($_ENV);
+            $getDBaccounts = new \App\Model\GetDBData($_ENV);
+
+            $getDays = new GetDays();
+            $modDates = new Date();
+
+            $dates = $getDays->getDatesBetween($start, $end);
+            $historyData = [];
+            var_dump($dates);
+            foreach ($dates as $currentDate) {
+                $boundInf = $currentDate;
+                $boundSup = $currentDate;
+
+                $historyData[$currentDate] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $boundInf, $boundSup);
+            }
+
+            $historyData = json_encode($historyData);
+
+            $synData->UpdateJSONspendDay($account_Id, [$historyData]);
+
+            $getAPIData = new \App\Model\GetAPIData($_ENV);
+            $getAPIData->getFromFields($account_Id, ['spend']);
+            if ($getAPIData->hasData) {
+                // Make a TRY
+                $adSet = new \App\Model\AdSetManager($_ENV);
+                $adSetList = $adSet->getAdSets($account_Id);
+                $goal = '';
+                foreach ($adSetList as $iterAdSet) {
+                    if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
+                        $goal = 'LEAD_GENERATION';
+                    }
+                }
+//                if ($goal == 'LEAD_GENERATION') {
+//                    $lead = $getAPIData->getDataActionsDates($account_Id, ['actions'], $start, $end)['lead']; // lead
+//                    $cost_lead = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
+//                } else {
+//                    $lead = -1;
+//                    $cost_lead = -1;
+//                }
+
+
+                $historyLead = [];
+                $historyCostperLead = [];
+                foreach ($dates as $currentDate) {
+                    $boundInf = $currentDate;
+                    $boundSup = $currentDate;
+                    if ($goal == 'LEAD_GENERATION') {
+                        $historyLead[$currentDate] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $boundInf, $boundSup)['lead'];
+                        $historyCostperLead[$currentDate] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $boundInf, $boundSup)['lead']; // cost per lead
+
+                    } else {
+                        $historyLead[$boundInf] = -1;
+                        $historyCostperLead[$boundInf] = -1;
+                    }
+
+                }
+                $historyLead = json_encode($historyLead);
+                $historyCostperLead = json_encode($historyCostperLead);
+                $synData->UpdateJSONleadDay($account_Id, [$historyLead]);
+                $synData->UpdateJSONcostperleadDay($account_Id, [$historyCostperLead]);
+//                var_dump('historylead', $historyLead);
+//                echo '<br />';
+//                echo '<br />';
+//                echo '<br />';
+//                var_dump('historycostperlead', $historyCostperLead);
+            }
+
+//
+//                $name = $getAPIData->getName($account_Id);
+//                $synData->isregisteredAccount($account_Id, $getAccountsId);
+//
+//                $synData->syncAccount($account_Id, [
+//                    $name,
+//                    $accountData['spend'], //SPEND
+//                    $lead,
+//                    $cost_lead
+//                ]);
+
+//            }
+            //Get data from BD MYSQL
+            $DBaccounts = $getDBaccounts->getAccounts();
         }
     }
 

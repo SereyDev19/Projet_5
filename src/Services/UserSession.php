@@ -3,8 +3,6 @@
 namespace App\Services;
 
 
-//require_once("model/backend/Session.php");
-
 class UserSession extends Session
 {
     protected $USER = '';
@@ -51,7 +49,7 @@ class UserSession extends Session
     }
 
     /**
-     * 
+     *
      */
     public function getCurrentSessionInfo()
     {
