@@ -52,9 +52,14 @@ class Router
             case 'globalreport':
                 $this->Controller->GlobalReport();
                 break;
+            case 'glossary':
+                $this->Controller->letterPagination();
+                break;
             case '':
 //                $this->Controller->GlobalReport();
                 $this->FrontController->home();
+                // Test PagerFanta
+//                $this->Controller->indexAction();
                 break;
         }
     }

@@ -104,6 +104,9 @@ class Router
             case 'testAJAX':
                 $this->Controller->testAJAX($params['account_id']);
                 break;
+            case 'glossary':
+                $this->Controller->letterPagination();
+                break;
             case '':
                 $this->Controller->GlobalReport();
                 break;
@@ -129,11 +132,6 @@ class Router
                 break;
             case 'logIn':
                 $this->Controller->Verification();
-                // test Pagerfanta:
-//                $this->Controller->indexAction();
-//                die();
-//                $this->Controller->displayPages();
-//                die();
                 $this->Controller->GlobalReport();
                 break;
             case 'upload':

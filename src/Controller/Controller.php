@@ -19,7 +19,6 @@ use App\Services\SendMailer;
 use App\Services\UploadFile;
 use App\Services\FlashBag;
 use App\Services\GetMonths;
-use App\Services\PagerFantaExtension;
 
 use App\Helper;
 
@@ -28,13 +27,7 @@ use App\Helper;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
-// Pagerfanta namespaces
-use Pagerfanta\View\TwitterBootstrapView;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\View\TwitterBootstrap4View;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\View\DefaultView;
+
 
 class Controller
 {
@@ -57,64 +50,43 @@ class Controller
         $this->twig = new Twig_Environment($this->loader, [
             'cache' => false
         ]);
-        $this->twig->addExtension(new PagerFantaExtension());
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
 
-    /**
-     * Paginate the results
-     */
-    public function displayPages()
-    {
-        $userSession = new UserSession();
-        if ($userSession->isLogged()) {
-//            $view = new DefaultView();
-            $config = new Config($_ENV);
-            $pagerfanta = $config->findPaginated(12);
-
-//            $view = new TwitterBootstrapView();
-//            echo $this->twig->render('testFanta.html.twig',  ['accounts' => $pagerfanta]);
-
-            $view = new DefaultView();
-            $options = array('proximity' => 3);
-            echo $view->render($pagerfanta, __DIR__ . '/toto', $options);
-
-        }
-    }
-
-    /**
-     * @param null $page
-     * Another test to paginate the results
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     */
-    public function indexAction($page = null)
+    public function letterPagination()
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
 
+            $user_name = $_SESSION['username'];
             $getDBData = new GetDBData($_ENV);
-            $allAccounts = $getDBData->getAccessAccountsId(12345678);
-            $DBaccounts = $getDBData->getAccountsFromList($allAccounts);
 
-//            $get = request()->getQueryParams();
-            $view = new TwitterBootstrap4View();
-            $adapter = new ArrayAdapter($DBaccounts);
-            $currentPage = isset($get['page']) ? $get['page'] : 1;
-            $pagerfanta = new Pagerfanta($adapter);
-            $itemsPerPage = 2;
-            $pagerfanta->setMaxPerPage($itemsPerPage);
-            $pagerfanta->setCurrentPage($currentPage);
-            $route = function ($page) {
-                $path = request()->getUri()->getPath();
-                return $path . '?page=' . $page;
-            };
-//            return [$pagerfanta, $view->render($pagerfanta, $route)];
-            $route = 'http://projet_5_test.test/public/admin.php?page=1';
-//            var_dump($pagerfanta);
-//            echo $this->twig->render('testFanta.html.twig', ['accounts' => $pagerfanta]);
+            $limit = 3; // 5 results per page
+            $allLetters = $getDBData->getLetters();
+            $alphabet = [];
+            foreach(range('A','Z') as $i) {
+                array_push($alphabet,$i);
+            }
+
+            foreach ($allLetters as $letter) {
+                $total_results[$letter] = $getDBData->getNumber($letter);
+                $total_pages[$letter] = ceil($total_results[$letter] / $limit);
+            }
+
+            if (!isset($_GET['letter'])) {
+                $letter = 'A';
+            } else {
+                $letter = $_GET['letter'];
+            }
+            if (!isset($_GET['page'])) {
+                $page = '1';
+            } else {
+                $page = $_GET['page'];
+            }
+            $starting_limit = ($page - 1) * $limit;
+            $limiteddata = $getDBData->getLimitAccounts($letter, $starting_limit, $limit);
+            echo $this->twig->render('glossary.html.twig', ['user_name' => $user_name, 'page' => $page, 'DBData' => $limiteddata, 'totalpage' => $total_pages[$letter],'alphabet'=>$alphabet, 'allLetters' => $allLetters, 'currentLetter' => $letter]);
         }
     }
 
@@ -628,9 +600,7 @@ class Controller
             $synData->UpdateJSONspend($account_Id, [$historyData]);
 
 
-//            foreach ($getAccountsId as $iterAccount) {
             $getAPIData = new \App\Model\GetAPIData($_ENV);
-//                $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
             $getAPIData->getFromFields($account_Id, ['spend']);
             if ($getAPIData->hasData) {
                 // Make a TRY
@@ -642,14 +612,6 @@ class Controller
                         $goal = 'LEAD_GENERATION';
                     }
                 }
-//                if ($goal == 'LEAD_GENERATION') {
-//                    $lead = $getAPIData->getDataActionsDates($account_Id, ['actions'], $start, $end)['lead']; // lead
-//                    $cost_lead = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
-//                } else {
-//                    $lead = -1;
-//                    $cost_lead = -1;
-//                }
-
 
                 $historyLead = [];
                 $historyCostperLead = [];
@@ -658,53 +620,39 @@ class Controller
                     $compare = $getMonths->isSooner($bounds[1], $end);
                     if ($goal == 'LEAD_GENERATION') {
                         if ($compare < 0) {
-//                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
-                            $historyLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $bounds[1])['lead'];
-//                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $bounds[1])['lead']; // cost per lead
-                            $historyCostperLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $bounds[1])['lead']; // cost per lead
+                            $boundInf = $bounds[0];
+                            $boundSup = $bounds[1];
                         } else {
-//                            $historyLead[$bounds[0]] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
-                            $historyLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $bounds[0], $end)['lead'];
-//                            $historyCostperLead[$bounds[0]] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $end)['lead']; // cost per lead
-                            $historyCostperLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $bounds[0], $end)['lead']; // cost per lead
+                            $boundInf = $bounds[0];
+                            $boundSup = $end;
                         }
+                        $historyLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $boundInf, $boundSup)['lead'];
+                        $historyCostperLead[$modDates->MonthYear($bounds[0])] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $boundInf, $boundSup)['lead']; // cost per lead
+
                     } else {
                         $historyLead[$bounds[0]] = -1;
                         $historyCostperLead[$bounds[0]] = -1;
                     }
-
                 }
-//                var_dump('MAJ des leads');
                 $historyLead = json_encode($historyLead);
                 $historyCostperLead = json_encode($historyCostperLead);
                 $synData->UpdateJSONlead($account_Id, [$historyLead]);
                 $synData->UpdateJSONcostperlead($account_Id, [$historyCostperLead]);
-//                var_dump('historylead', $historyLead);
-//                echo '<br />';
-//                echo '<br />';
-//                echo '<br />';
-//                var_dump('historycostperlead', $historyCostperLead);
             }
-
-
-//
-//                $name = $getAPIData->getName($account_Id);
-//                $synData->isregisteredAccount($account_Id, $getAccountsId);
-//
-//                $synData->syncAccount($account_Id, [
-//                    $name,
-//                    $accountData['spend'], //SPEND
-//                    $lead,
-//                    $cost_lead
-//                ]);
-
-//            }
             //Get data from BD MYSQL
             $DBaccounts = $getDBaccounts->getAccounts();
         } else {
+            echo $this->twig->render('loginEmail.html.twig');
         }
     }
 
+    /**
+     * @param $account_Id
+     * @param $start
+     * @param $end
+     * Give data from the facebook API day by day between two dates
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
     public function APIGlobalReportDatesDay($account_Id, $start, $end)
     {
         $userSession = new UserSession();
@@ -718,7 +666,6 @@ class Controller
 
             $dates = $getDays->getDatesBetween($start, $end);
             $historyData = [];
-            var_dump($dates);
             foreach ($dates as $currentDate) {
                 $boundInf = $currentDate;
                 $boundSup = $currentDate;
@@ -742,14 +689,6 @@ class Controller
                         $goal = 'LEAD_GENERATION';
                     }
                 }
-//                if ($goal == 'LEAD_GENERATION') {
-//                    $lead = $getAPIData->getDataActionsDates($account_Id, ['actions'], $start, $end)['lead']; // lead
-//                    $cost_lead = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $start, $end)['lead']; // cost per lead
-//                } else {
-//                    $lead = -1;
-//                    $cost_lead = -1;
-//                }
-
 
                 $historyLead = [];
                 $historyCostperLead = [];
@@ -770,25 +709,7 @@ class Controller
                 $historyCostperLead = json_encode($historyCostperLead);
                 $synData->UpdateJSONleadDay($account_Id, [$historyLead]);
                 $synData->UpdateJSONcostperleadDay($account_Id, [$historyCostperLead]);
-//                var_dump('historylead', $historyLead);
-//                echo '<br />';
-//                echo '<br />';
-//                echo '<br />';
-//                var_dump('historycostperlead', $historyCostperLead);
             }
-
-//
-//                $name = $getAPIData->getName($account_Id);
-//                $synData->isregisteredAccount($account_Id, $getAccountsId);
-//
-//                $synData->syncAccount($account_Id, [
-//                    $name,
-//                    $accountData['spend'], //SPEND
-//                    $lead,
-//                    $cost_lead
-//                ]);
-
-//            }
             //Get data from BD MYSQL
             $DBaccounts = $getDBaccounts->getAccounts();
         }
@@ -811,13 +732,6 @@ class Controller
             foreach ($getAccountsId as $iterAccount) {
                 $getAPIData = new \App\Model\GetAPIData($_ENV);
                 $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
-                // DEBUT DU TEST
-//                $test = $getAPIData->getFromFieldsDate($iterAccount, ['spend'], '2019-06-01', '2019-10-01');
-//
-//                var_dump($test);
-//
-//                die();
-                // FIN DU TEST
 
                 if ($getAPIData->hasData) {
                     // Make a TRY
@@ -847,7 +761,6 @@ class Controller
                     ]);
                 }
             }
-
             //Get data from BD MYSQL
             $DBaccounts = $getDBaccounts->getAccounts();
         } else {

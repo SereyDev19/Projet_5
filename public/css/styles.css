@@ -238,6 +238,28 @@ canvas {
     border-color: #02c3bd;
 }
 
+.linksPage {
+    padding-right: 1px;
+    padding-left: 1px;
+}
+
+.entries {
+    color: #223265;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.glossary {
+    background-color: rgba(34, 50, 101, 0.05);
+    padding: 10px;
+    border-radius: 14px;
+
+}
+
+.definition {
+    text-align: justify;
+}
+
 /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
 .flip-card {
     background-color: transparent;

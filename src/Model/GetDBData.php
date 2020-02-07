@@ -25,6 +25,46 @@ class GetDBData extends Config
     }
 
     /**
+     *
+     */
+    public function getLetters()
+    {
+        $this->letters = [];
+        $sql = 'SELECT first_letter FROM glossary';
+        $this->accounts = $this->getAll($sql, []);
+        foreach ($this->accounts as $item) {
+            array_push($this->letters, $item['first_letter']);
+
+        }
+        return array_unique($this->letters);
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getNumber($letter)
+    {
+        $this->accounts = [];
+        $sql = 'SELECT COUNT(*) FROM glossary WHERE first_letter=?';
+        $this->accounts = $this->getColumn($sql, [$letter]);
+        return $this->accounts;
+    }
+
+    /**
+     * @param $starting_limit
+     * @param $limit
+     * @return array
+     */
+    public function getLimitAccounts($letter, $starting_limit, $limit)
+    {
+
+        $sql = 'SELECT * FROM glossary WHERE first_letter = ? ORDER BY id DESC LIMIT ' . $starting_limit . ', ' . $limit;
+        $this->results = $this->getAll($sql, [$letter]);
+
+        return $this->results;
+    }
+
+    /**
      * @param $forAccessId
      * @return array|mixed
      * Give the accounts id that the user (id) is allowed to access to
@@ -73,7 +113,7 @@ class GetDBData extends Config
      */
     public function getAccountAdSets($accountId)
     {
-        $sql = 'SELECT * FROM adsets WHERE account_id=?';
+        $sql = 'SELECT * FROM adsets WHERE account_id =?';
         $this->adSets = $this->getAll($sql, [$accountId]);
         return $this->adSets;
     }
@@ -85,7 +125,7 @@ class GetDBData extends Config
      */
     public function getAdSetsAds($adSetId)
     {
-        $sql = 'SELECT * FROM ads WHERE adset_id=?';
+        $sql = 'SELECT * FROM ads WHERE adset_id =?';
         $this->ads = $this->getAll($sql, [$adSetId]);
         return $this->ads;
     }
