@@ -29,13 +29,18 @@
                         Glossaire
                     </a>
                     <a class="dropdown-item" href="admin.php?action=logout">
-                        <i class="fas fa-power-off"></i>Déconnexion
+                        <i class="fas fa-power-off"></i> Déconnexion
                     </a>
                 </div>
             </div>
         </div>
     </header>
     <div class="container">
+        <form action="admin.php?action=searchWord" method="POST">
+            Rechercher un mot : <input type="text" name="word">
+            <input type="SUBMIT" id="searchWord" name="searchWord" value="Chercher">
+        </form>
+
         <div class="d-flex justify-content-center row col-sm-12">
             {% for letter in alphabet %}
                 {% if letter in allLetters %}
@@ -57,6 +62,12 @@
             </div>
         </div>
         <div class="glossary">
+            {% if results %}
+                {% for entries in results %}
+                    <p class="entries">{{ entries.word }}</p>
+                    <p class="definition">{{ entries.definition }}</p>
+                {% endfor %}
+            {% endif %}
             {% for entries in DBData %}
                 {#        {% if entries.first_letter == page %}#}
                 <p class="entries">{{ entries.word }}</p>

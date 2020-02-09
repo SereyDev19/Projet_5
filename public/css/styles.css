@@ -338,9 +338,22 @@ textarea#comment {
 }
 
 /*footer {*/
-/*    height: 300px;*/
-/*    background-color: black;*/
+/*    background: rgb(210, 210, 210);*/
+/*    position: absolute;*/
+/*    bottom: 0;*/
+/*    width: 100%;*/
+/*    padding-top: 50px;*/
+/*    height: 50px;*/
 /*}*/
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background: rgb(210, 210, 210);
+    text-align: center;
+}
 
 #GreenFilter {
     /*background-color: rgba(0, 185, 174, 0.15);*/

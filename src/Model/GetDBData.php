@@ -50,6 +50,13 @@ class GetDBData extends Config
         return $this->accounts;
     }
 
+    public function searchWord($word)
+    {
+        $sql = 'SELECT * FROM glossary WHERE word=?';
+        $this->words = $this->getAll($sql, [$word]);
+        return $this->words;
+    }
+
     /**
      * @param $starting_limit
      * @param $limit
@@ -58,7 +65,7 @@ class GetDBData extends Config
     public function getLimitAccounts($letter, $starting_limit, $limit)
     {
 
-        $sql = 'SELECT * FROM glossary WHERE first_letter = ? ORDER BY id DESC LIMIT ' . $starting_limit . ', ' . $limit;
+        $sql = 'SELECT * FROM glossary WHERE first_letter = ? ORDER BY word ASC LIMIT ' . $starting_limit . ', ' . $limit;
         $this->results = $this->getAll($sql, [$letter]);
 
         return $this->results;

@@ -28,7 +28,6 @@ use Twig_Loader_Filesystem;
 use Twig_Environment;
 
 
-
 class Controller
 {
     public $level_Access = 0;
@@ -53,20 +52,39 @@ class Controller
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
 
-    public function letterPagination()
+    public function searchWord($word)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
+            $getDBData = new GetDBData($_ENV);
+            $results = $getDBData->searchWord($word);
 
+            echo $this->twig->render('glossary.html.twig', ['userSession' => $userSession,
+                'user_name' => $user_name,
+                'results' => $results]);
+
+        }
+    }
+
+    /**
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     *  Paginates the results by letter and by page (3 results per page)
+     */
+    public function letterPagination()
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
             $user_name = $_SESSION['username'];
             $getDBData = new GetDBData($_ENV);
 
             $limit = 3; // 5 results per page
             $allLetters = $getDBData->getLetters();
             $alphabet = [];
-            foreach(range('A','Z') as $i) {
-                array_push($alphabet,$i);
+            foreach (range('A', 'Z') as $i) {
+                array_push($alphabet, $i);
             }
 
             foreach ($allLetters as $letter) {
@@ -86,7 +104,7 @@ class Controller
             }
             $starting_limit = ($page - 1) * $limit;
             $limiteddata = $getDBData->getLimitAccounts($letter, $starting_limit, $limit);
-            echo $this->twig->render('glossary.html.twig', ['user_name' => $user_name, 'page' => $page, 'DBData' => $limiteddata, 'totalpage' => $total_pages[$letter],'alphabet'=>$alphabet, 'allLetters' => $allLetters, 'currentLetter' => $letter]);
+            echo $this->twig->render('glossary.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'page' => $page, 'DBData' => $limiteddata, 'totalpage' => $total_pages[$letter], 'alphabet' => $alphabet, 'allLetters' => $allLetters, 'currentLetter' => $letter]);
         }
     }
 
@@ -214,7 +232,7 @@ class Controller
             $user_id = $_SESSION['user_id'];
             $file = scandir(__DIR__ . '/../../public/uploads/' . $user_id)[2];
 
-            echo $this->twig->render('profile.html.twig', ['user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
+            echo $this->twig->render('profile.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'user_id' => $user_id, 'file' => $file]);
         }
     }
 

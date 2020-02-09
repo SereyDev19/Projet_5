@@ -137,6 +137,9 @@ class Router
             case 'upload':
                 $this->Controller->GetProfile();
                 break;
+            case 'searchWord':
+                $this->Controller->searchWord($params['word']);
+                break;
         }
     }
 
@@ -159,6 +162,8 @@ class Router
                 $this->action = 'signIn';
             } elseif (in_array('UploadImage', $this->post)) {
                 $this->action = 'upload';
+            } elseif (in_array('Chercher', $this->post)) {
+                $this->action = 'searchWord';
             } else {
                 $this->action = 'logIn';
             }
