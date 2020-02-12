@@ -242,6 +242,10 @@ canvas {
     padding-left: 1px;
 }
 
+.linksPage:hover {
+    font-size: 1.2rem;
+}
+
 .entries {
     color: #223265;
     font-weight: bold;
@@ -261,7 +265,11 @@ canvas {
     background-color: rgba(34, 50, 101, 0.05);
     padding: 10px;
     border-radius: 14px;
+}
 
+.currentLetter {
+    font-weight: bolder;
+    color: #ea5a63;
 }
 
 .definition {
@@ -683,8 +691,20 @@ section.fullDashboard {
     margin-top: 0;
 }
 
+#plotSpend {
+    color: #ea5a63;
+}
+
+#plotLead {
+    color: #18a85c;
+}
+
+#plotCostPerLead {
+    color: #f4abb6;
+}
+
 .fullDashboard {
-    height: 800px;
+    /*height: 800px;*/
     /*background-color: #00b9ae;*/
     /*border: 1px solid black;*/
 }
@@ -694,7 +714,8 @@ section.fullDashboard {
 }
 
 .dashboardSection {
-    border: 1px solid #223265;
+    /*border: 1px solid #223265;*/
+    box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.75)
 }
 
 .adsetname {
@@ -711,6 +732,10 @@ section.fullDashboard {
     cursor: pointer;
     background-color: #223265;
     border-color: #223265;
+}
+
+.sectionAd {
+    /*border-top: 1px dashed #223265 ;*/
 }
 
 .result {
@@ -896,11 +921,16 @@ h2 {
 
 @media (max-width: 650px) {
     #plotarea {
-        widht: 350px;
+        width: 450px;
     }
 }
 
 @media (max-width: 520px) {
+    #logo {
+        width: 50px;
+        height: 50px;
+    }
+
     #blogTitle {
         font-size: 2.8rem;
         left: 4%;
@@ -923,5 +953,4 @@ h2 {
     #navigationbar {
         display: none;
     }
-
 }

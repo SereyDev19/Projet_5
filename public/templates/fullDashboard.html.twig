@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="images/LOGOreportmeWHITE.png">
+            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Synthèse : {{ DBaccount.account_name }}</h1>
@@ -26,9 +26,6 @@
                     <a class="dropdown-item" href="admin.php?action=profile">
                         Profil
                     </a>
-                    <a class="dropdown-item" href="admin.php?action=glossary">
-                        Glossaire
-                    </a>
                     <a class="dropdown-item" href="admin.php?action=logout">
                         <i class="fas fa-power-off"></i> Déconnexion
                     </a>
@@ -38,7 +35,7 @@
         </div>
     </header>
 
-    <div id="dashboard" class="col-lg-12 col-xl-12 mb-3 container">
+    <div id="dashboard" class="col-lg-12 col-xl-12 mb-5 container">
 
         <div class="row col-sm-12">
             <a class="" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
@@ -76,43 +73,26 @@
                 </div>
                 <div class="d-flex ">
                     <div class="dashboardSection mr-1 col-xl-6">
-                        <h2>Ensemble de publicités</h2>
+                        <h2>Ensemble de publicités <a class=""
+                                                      href="admin.php?action=exportAccountDetailedData&amp;account_id={{ accountId }}"><i
+                                        class="fas fa-file-csv"></i></a></h2>
                         <div class="d-flex flex-wrap justify-content-around mb-3">
                             {% for data in adSets %}
-                                <div class="adsetname" id="{{ data.adset_name }}">{{ data.adset_name }}</div>
+                                <div class="adsetname"
+                                     id="{{ data.adset_name |replace({' ': ''}) }}">{{ data.adset_name }}</div>
+                                {#                                <div class="adsetname" id="">{{ data.adset_name }}</div>#}
                             {% endfor %}
 
                         </div>
                         <div id="sectionAdsets" class="adset_details">
-                            {% for data in adSets %}
-                                <div class="data" id="{{ data.adset_name }}">
-                                    <div id="optimization_goal" class="detailedresult mb-2">
-                                    </div>
-                                    <div class="resultsgroup d-flex justify-content-around mb-2">
-                                        <div id="cpm30d" class="detailedresult">
-                                        </div>
-                                        <div id="clicks30d" class="detailedresult">
-                                        </div>
-                                        <div id="leads30d" class="detailedresult">
-                                        </div>
-                                    </div>
-                                    <div class="costsgroup d-flex justify-content-around mb-2">
-                                        <div id="spend30d" class="detailedresult">
-                                        </div>
-                                        <div id="cost_per_click30d" class="detailedresult">
-                                        </div>
-                                        <div id="cost_per_lead30d" class="detailedresult">
-                                        </div>
-                                    </div>
 
 
-                                </div>
-                            {% endfor %}
                         </div>
 
                     </div>
                     <div id="sectionAds" class="dashboardSection ml-1 col-xl-6">
-                        <h2>Publicités</h2>
+                        <h2>Publicités <a href="admin.php?action=exportAccountDetailedData&amp;account_id={{ accountId }}"><i
+                                        class="fas fa-file-csv"></i></a></h2>
 
                     </div>
                 </div>
@@ -141,7 +121,7 @@
             app.plotCostPerLead('plotCostPerLead');
 
             {% for data in adSets %}
-            var adset_name = '{{ data.adset_name }}'
+            var adset_name = '{{ data.adset_name|replace({' ': ''}) }}'
             app.queryAdsets(adset_name, url_adsets);
             {% endfor %}
         </script>

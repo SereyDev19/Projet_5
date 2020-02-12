@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="images/LOGOreportmeWHITE.png">
+            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Glossaire</h1>
@@ -44,20 +44,34 @@
         <div class="d-flex justify-content-center row col-sm-12">
             {% for letter in alphabet %}
                 {% if letter in allLetters %}
-                    <a href="admin.php?action=glossary&amp;letter={{ letter }}" class="linksPage">{{ letter }}
-                    </a>
+                    {% if letter == currentLetter %}
+                        <a href="admin.php?action=glossary&amp;letter={{ letter }}"
+                           class="linksPage currentLetter">{{ letter }}
+                        </a>
+                    {% else %}
+                        <a href="admin.php?action=glossary&amp;letter={{ letter }}"
+                           class="linksPage">{{ letter }}
+                        </a>
+                    {% endif %}
                 {% else %}
-                    <a class="linksPage">{{ letter }}</a>
+                    {{ letter }}
                 {% endif %}
             {% endfor %}
         </div>
 
         <div class="d-flex justify-content-center row col-sm-12">
+            <div>Page(s) :</div>
             <div>
-                {% for page in 1..totalpage %}
-                    <a href="admin.php?action=glossary&amp;page={{ page }}&amp;letter={{ currentLetter }}"
-                       class="linksPage">{{ page }}
+                {% for pageIter in 1..totalpage %}
+                    {% if pageIter == page %}
+                        <a href="admin.php?action=glossary&amp;page={{ pageIter }}&amp;letter={{ currentLetter }}"
+                           class="linksPage currentLetter">{{ pageIter }}
+                        </a>
+                    {% else %}                        <a
+                            href="admin.php?action=glossary&amp;page={{ pageIter }}&amp;letter={{ currentLetter }}"
+                            class="linksPage">{{ pageIter }}
                     </a>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

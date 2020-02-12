@@ -3,23 +3,23 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="images/LOGOreportmeWHITE.png">
+            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         {{ SERVER_NAME }}
         <div id="connection">
             {% if user_id and user_name %}
                 <div>
-                    <button class="connect"><a href="admin.php">(Connecté)</a></button>
+                    <div class="connect"><a href="admin.php">(Connecté)</a></div>
                 </div>
                 <div>
-                    <button class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></button>
+                    <div class="connect"><a id="deconnexion" href="admin.php?action=logout">Déconnexion</a></div>
                 </div>
             {% else %}
                 <div>
-                    <button class="connect"><a href="admin.php">Connexion</a></button>
+                    <div class="connect"><a href="admin.php">Connexion</a></div>
                 </div>
                 <div>
-                    <button class="connect signIn"><a href="admin.php?action=signIn">S'enregistrer</a></button>
+                    <div class="connect signIn"><a href="admin.php?action=signIn">S'enregistrer</a></div>
                 </div>
             {% endif %}
 

@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="images/LOGOreportmeWHITE.png">
+            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Mes comptes</h1>
@@ -24,9 +24,6 @@
                     </a>
                     <a class="dropdown-item" href="admin.php?action=profile">
                         Profil
-                    </a>
-                    <a class="dropdown-item" href="admin.php?action=glossary">
-                        Glossaire
                     </a>
                     <a class="dropdown-item" href="admin.php?action=logout">
                         <i class="fas fa-power-off"></i> Déconnexion
@@ -57,7 +54,8 @@
                 </div>
             </div>
         </div>
-        <section class="col-xl-12">
+
+        <section class="col-xl-12"><h3>Liste des comptes disponibles</h3>
             <table class="container table table-striped table-condensed">
                 <thead>
                 <tr>
@@ -74,7 +72,6 @@
                         <span class="responsive_title">Plateforme(s)</span>
                     </th>
                 </thead>
-                <?php
             {% for account in DBaccounts %}
                 <tr>
                 <td>
@@ -92,11 +89,8 @@
                 </td>
                 </tr>
                 {% endfor %}
-
-                <?php endforeach; ?>
             </table>
         </section>
     </div>
 
-    </div>
 {% endblock %}

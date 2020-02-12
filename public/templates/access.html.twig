@@ -3,7 +3,7 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" src="images/LOGOreportmeWHITE.png">
+            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
         </div>
         <div class="page-header">
             <h1>Gestion des accès</h1>
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <section class="col-xl-12">
+        <section class="col-xl-12"><h3>Gérer les accès</h3>
             {% for account in DBaccounts %}
                 <a href="admin.php?action=reportAccount&amp;account_id={{ account.account_id }}">
                     {{ account['account_name'] }}
@@ -88,43 +88,53 @@
                         </th>
                     </thead>
 
-                    <?php
-                {% for iterAccess in allAccess %}
-                    {% if iterAccess['account_id'] == account['account_id'] %}
-                        <tr>
-                    <td>
-                        <?= $iterAccess['access_id']; ?>
-                        {{ iterAccess.access_id }}
-                    </td>
-                    <td>
-                        {% if iterAccess['access_email'] != '' %}
-                            {{ iterAccess.access_email }}
-                        {% endif %}
-                    </td>
+                    {% for iterAccess in allAccess %}
+                        {% if iterAccess['account_id'] == account['account_id'] %}
+                            <tr>
+                                <td>
+                                    {{ iterAccess.access_id }}
+                                </td>
+                                <td>
+                                    {% if iterAccess['access_email'] != '' %}
+                                        {{ iterAccess.access_email }}
+                                    {% endif %}
+                                </td>
 
-                    <td>
-                        {% if iterAccess['access_name'] != '' %}
-                            {{ iterAccess.access_name }}
-                        {% endif %}
-                    </td>
+                                <td>
+                                    {% if iterAccess['access_name'] != '' %}
+                                        {{ iterAccess.access_name }}
+                                    {% endif %}
+                                </td>
 
-                    <td>
-                        {% if iterAccess['access_firstname'] != '' %}
-                            {{ iterAccess.access_firstname }}
-                        {% endif %}
-                    </td>
+                                <td>
+                                    {% if iterAccess['access_firstname'] != '' %}
+                                        {{ iterAccess.access_firstname }}
+                                    {% endif %}
+                                </td>
 
-                    <td>
-                        <a href="admin.php?action=deleteAccess&amp;access_id={{ iterAccess.access_id }}">Supprimer</a>
-                    </td>
-                    </tr>
-                    {% endif %}
+                                <td>
+                                    <a href="admin.php?action=deleteAccess&amp;access_id={{ iterAccess.access_id }}">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     <tr>
                         <td>
                             <a href="admin.php?action=addAccess&amp;account_id={{ account.account_id }}">
-                                <button>Ajouter un accès</button>
+                                <div>Ajouter un accès</div>
                             </a>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                 </table>
