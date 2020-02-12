@@ -52,7 +52,7 @@ class GetDBData extends Config
 
     public function searchWord($word)
     {
-        $sql = 'SELECT * FROM glossary WHERE word=?';
+        $sql = 'SELECT * FROM glossary WHERE word LIKE ?';
         $this->words = $this->getAll($sql, [$word]);
         return $this->words;
     }

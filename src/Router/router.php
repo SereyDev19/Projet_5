@@ -45,7 +45,9 @@ class Router
 
         switch ($action) {
             case 'reportAccount':
-                $this->Controller->ReportAccount($params['account_id']);
+                $this->Controller->fullDashboard($params['account_id']);
+
+//                $this->Controller->ReportAccount($params['account_id']);
                 break;
             case 'signIn':
                 $this->Controller->SignIn();
@@ -57,7 +59,9 @@ class Router
                 $this->Controller->GetProfile();
                 break;
             case 'detailedReport':
-                $this->FrontController->DetailedReport($params['account_id']);
+                $this->Controller->fullDashboard($params['account_id']);
+
+                //                $this->FrontController->DetailedReport($params['account_id']);
                 break;
             case 'updateData':
                 $this->Controller->APIdetailedReport($params['account_id']);
@@ -101,11 +105,20 @@ class Router
             case 'exportAccountDetailedData':
                 $this->Controller->newExportDetailedData($params['account_id']);
                 break;
-            case 'testAJAX':
-                $this->Controller->testAJAX($params['account_id']);
+            case 'exportPDF':
+                $this->Controller->newExportPDF();
+                break;
+            case 'AJAXtrace':
+                $this->Controller->JSONHistoryReport($params['account_id']);
+                break;
+            case 'AJAXadsets':
+                $this->Controller->JSONDetailedReport($params['account_id']);
                 break;
             case 'glossary':
                 $this->Controller->letterPagination();
+                break;
+            case 'definition':
+                $this->Controller->definition($params['word']);
                 break;
             case '':
                 $this->Controller->GlobalReport();

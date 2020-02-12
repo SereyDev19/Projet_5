@@ -21,7 +21,7 @@ use App\Services\FlashBag;
 use App\Services\GetMonths;
 
 use App\Helper;
-
+use Mpdf\Mpdf;
 // Twig Namespaces
 
 use Twig_Loader_Filesystem;
@@ -52,6 +52,20 @@ class Controller
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
     }
 
+    public function definition($word)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+            $getDBData = new GetDBData($_ENV);
+            $result = $getDBData->searchWord($word)[0];
+
+            echo $this->twig->render('definition.html.twig', ['userSession' => $userSession,
+                'user_name' => $user_name,
+                'result' => $result]);
+        }
+    }
+
     public function searchWord($word)
     {
         $userSession = new UserSession();
@@ -60,7 +74,7 @@ class Controller
             $getDBData = new GetDBData($_ENV);
             $results = $getDBData->searchWord($word);
 
-            echo $this->twig->render('glossary.html.twig', ['userSession' => $userSession,
+            echo $this->twig->render('searchWord.html.twig', ['userSession' => $userSession,
                 'user_name' => $user_name,
                 'results' => $results]);
 
@@ -272,8 +286,49 @@ class Controller
                 $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
                 $allAds[$iterAdSet['adset_id']] = $ads;
             }
-            echo $this->twig->render('detailedReport.html.twig', ['userSession' => $userSession, 'accountId' => $accountId, 'user_name' => $user_name, 'account' => $account, 'adSets' => $adSets, 'allAds' => $allAds]);
 
+//            echo $this->twig->render('detailedReport.html.twig',
+//                ['userSession' => $userSession,
+//                    'accountId' => $accountId,
+//                    'user_name' => $user_name,
+//                    'account' => $account,
+//                    'adSets' => $adSets,
+//                    'allAds' => $allAds]);
+            return ['userSession' => $userSession,
+                'accountId' => $accountId,
+                'user_name' => $user_name,
+                'account' => $account,
+                'adSets' => $adSets,
+                'allAds' => $allAds];
+        }
+    }
+
+    public function fullDashboard($accountId)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+            $globalData = $this->ReportAccount($accountId);
+            $detailedData = $this->DetailedReport($accountId);
+            echo $this->twig->render('fullDashboard.html.twig',
+                // Global DATA
+                ['userSession' => $userSession,
+                    'user_name' => $user_name,
+                    'DBaccount' => $globalData['DBaccount'],
+                    'accountId' => $globalData['accountId'],
+                    'valuesSpend' => $globalData['valuesSpend'],
+                    'datesSpend' => $globalData['datesSpend'],
+                    // Detailed DATA
+                    'account' => $detailedData['account'],
+                    'adSets' => $detailedData['adSets'],
+                    'allAds' => $detailedData['allAds']]);
+
+            //echo $this->twig->render('reportAccount.html.twig', ['userSession' => $userSession,
+            // 'user_name' => $user_name,
+            // 'DBaccount' => $DBaccount,
+            // 'accountId' => $accountId,
+            // 'valuesSpend' => $valuesSpend,
+            // 'datesSpend' => $datesSpend]);
         }
     }
 
@@ -318,7 +373,13 @@ class Controller
                     array_push($valuesCostperlead, $data);
                 }
             }
-            echo $this->twig->render('reportAccount.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
+            return ['userSession' => $userSession,
+                'user_name' => $user_name,
+                'DBaccount' => $DBaccount,
+                'accountId' => $accountId,
+                'valuesSpend' => $valuesSpend,
+                'datesSpend' => $datesSpend];
+//            echo $this->twig->render('reportAccount.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'DBaccount' => $DBaccount, 'accountId' => $accountId, 'valuesSpend' => $valuesSpend, 'datesSpend' => $datesSpend]);
         }
     }
 
@@ -326,7 +387,7 @@ class Controller
      * @param $accountId
      * Launches an Ajax procedure to get the data from database
      */
-    public function testAJAX($accountId)
+    public function JSONHistoryReport($accountId)
     {
         $userSession = new UserSession();
         if ($userSession->isLogged()) {
@@ -345,6 +406,37 @@ class Controller
     }
 
     /**
+     * @param $accountId
+     * Return all data for adsets and ads for an account as a JSON format
+     */
+    function JSONDetailedReport($accountId)
+    {
+        $userSession = new UserSession();
+        if ($userSession->isLogged()) {
+            $user_name = $_SESSION['username'];
+
+            $getDBData = new \App\Model\GetDBData($_ENV);
+            $adSets = $getDBData->getAccountAdSets($accountId);
+            $account = $getDBData->getAccounts($accountId);
+
+            $allAds = [];
+            foreach ($adSets as $iterAdSet) {
+                $ads = $getDBData->getAdSetsAds($iterAdSet['adset_id']);
+                $allAds[$iterAdSet['adset_id']] = $ads;
+            }
+
+            $res = ['userSession' => $userSession,
+                'accountId' => $accountId,
+                'user_name' => $user_name,
+                'account' => $account,
+                'adSets' => $adSets,
+                'allAds' => $allAds];
+
+            echo json_encode($res);
+        }
+    }
+
+    /**
      * Manage the different accesses
      */
     public function ManageAccess()
@@ -355,6 +447,15 @@ class Controller
             $BackController = new BackController();
             $BackController->adminManageAccess();
         }
+    }
+
+    public function newExportPDF()
+    {
+        $mpdf = new Mpdf();
+        $code_html = file_get_contents('https://www.google.com/');
+//        var_dump($code_html);
+        $mpdf->WriteHTML($code_html);
+        $mpdf->Output();
     }
 
     /**

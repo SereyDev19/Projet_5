@@ -1,0 +1,60 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <header class="row col-sm-12">
+        <div>
+            <img id="logo" src="images/LOGOreportmeWHITE.png">
+        </div>
+        <div class="page-header">
+            <h1>Glossaire</h1>
+        </div>
+        <div>
+            <div class="btn-group dropdown">
+                <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    {{ user_name }}
+                </button>
+                <div class="dropdown-menu">
+                    {% if userSession.levelAccess !=0 %}
+                        <a class="dropdown-item" href="admin.php?action=manageAccess">
+                            Gérer les accès
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="admin.php?action=globalreport">
+                        Tableau de bord
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=profile">
+                        Profil
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=glossary">
+                        Glossaire
+                    </a>
+                    <a class="dropdown-item" href="admin.php?action=logout">
+                        <i class="fas fa-power-off"></i> Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <form action="admin.php?action=searchWord" method="POST">
+            Rechercher un mot : <input type="text" name="word">
+            <input type="SUBMIT" id="searchWord" name="searchWord" value="Chercher">
+        </form>
+        <div id="glossary" class="row col-sm-4">
+            <a class="d-flex justify-content-center" href="admin.php?action=glossary">Glossaire</a>
+        </div>
+        <div class="d-flex justify-content-center row col-sm-12">
+        </div>
+        <div class="glossary">
+            {% if results %}
+                {% for entries in results %}
+                    <p class="entries">{{ entries.word }}</p>
+                    <p class="definition">{{ entries.definition }}</p>
+                {% endfor %}
+            {% else %}
+                <p class="d-flex justify-content-center">Pas de résultats à votre recherche...</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

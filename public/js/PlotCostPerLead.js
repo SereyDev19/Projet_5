@@ -1,8 +1,9 @@
 class PlotCostPerLead {
     constructor(id, url) {
         this.button = document.getElementById(id);
+        console.log(this.button)
         this.url = url;
-        console.log(this.url);
+        // console.log(this.url);
 
         this.init();
     }
@@ -22,13 +23,10 @@ class PlotCostPerLead {
                         item.remove();
                     }
                 }
-                this.h2 = document.createElement("h2");
-
-                this.h2.innerHTML = "Zone graphique";
+                // this.h2 = document.createElement("h2");
+                // this.h2.innerHTML = "Zone graphique";
                 this.plotarea = document.getElementById("plotarea");
-
-
-                this.plotarea.insertAdjacentElement("afterbegin", this.h2);
+                // this.plotarea.insertAdjacentElement("afterbegin", this.h2);
 
 
                 this.canvas = document.createElement("canvas");
@@ -38,7 +36,7 @@ class PlotCostPerLead {
 
                 this.graph = new Graphe();
                 var js_dates = Object.keys(response.history_costperlead);
-                console.log(js_dates);
+                // console.log(js_dates);
                 var js_values = Object.values(response.history_costperlead);
 
                 this.Canvasid = 'CostPerLead';
@@ -47,8 +45,6 @@ class PlotCostPerLead {
                 this.graph.plot(this.Canvasid, this.title, js_dates, js_values, 'Dates', this.title + ' (€)');
 
             }.bind(this));
-
-
         })
     }
 }

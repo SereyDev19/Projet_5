@@ -75,13 +75,9 @@
         <section class="col-xl-6">
             <div class="panel panel-primary">
                 <h2>Rapport (30 derniers jours par défaut)</h2>
-                <p>Exporter</p>
                 <a data-toggle="tooltip" data-placement="top" title="Générer le rapport dans un fichier au format csv"
                    class="" href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
                             class="fas fa-file-csv"></i></a>
-                <a data-toggle="tooltip" data-placement="top" title="Générer le rapport dans un fichier au format pdf"
-                   href="admin.php?action=exportAccountData&amp;account_id={{ accountId }}"><i
-                            class="far fa-file-pdf"></i></a>
                 <a class="exportButton" href="admin.php?action=updateAccountDataByMonth&amp;
             account_id={{ accountId }}&amp;start=2019-01-1&amp;end=2020-01-12">Test
                     dates Mois</a>
@@ -100,11 +96,12 @@
 
                         <th>
                             <i class="far fa-newspaper"></i>
-                            <span class="responsive_title">Nombre de leads ou de ventes Facebook</span>
+                            <span class="responsive_title">Nombre de <a
+                                        href="admin.php?action=definition&amp;word=Lead">leads</a> ou de ventes Facebook</span>
                         </th>
                         <th>
                             <i class="far fa-comment-alt"></i>
-                            <span class="responsive_title">Coût par lead ou retour sur dépense pub Facebook</span>
+                            <span class="responsive_title">Coût par <a href="admin.php?action=definition&amp;word=Lead">lead</a> ou retour sur dépense pub Facebook</span>
                         </th>
 
                     </tr>
@@ -129,7 +126,7 @@
             </div>
 
         </section>
-        <div class="col-md-2" >
+        <div class="col-md-2">
             <a class="dropdown-item" href="admin.php?action=detailedReport&amp;account_id={{ accountId }}">
                 Rapport détaillé
             </a>

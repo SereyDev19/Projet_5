@@ -26,9 +26,9 @@ class AjaxRequest {
 
     ajax(url) {
         return new Promise(function (resolve, reject) {
-            console.log(url)
+            // console.log(url)
             this.ajaxGet(url).then(function (response) {
-                console.log("Requête Ajax lancée");
+                // console.log("Requête Ajax lancée");
                 this.data = JSON.parse(response);
                 resolve(this.data);
                 // console.log(this.data);

@@ -11,12 +11,17 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'setasign\\Fpdi\\' => 14,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -31,8 +36,13 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'PhpOption\\' => 10,
             'Pagerfanta\\' => 11,
+        ),
+        'M' => 
+        array (
+            'Mpdf\\' => 5,
         ),
         'F' => 
         array (
@@ -47,6 +57,7 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Common\\Lexer\\' => 22,
+            'DeepCopy\\' => 9,
         ),
         'A' => 
         array (
@@ -55,6 +66,10 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
     );
 
     public static $prefixDirsPsr4 = array (
+        'setasign\\Fpdi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -79,6 +94,10 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
@@ -86,6 +105,10 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         'Pagerfanta\\' => 
         array (
             0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/src/Pagerfanta',
+        ),
+        'Mpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
         ),
         'Facebook\\' => 
         array (
@@ -106,6 +129,10 @@ class ComposerStaticInit6afeaf0ce6c4fb4a8fadb726969d741d
         'Doctrine\\Common\\Lexer\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+        ),
+        'DeepCopy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
         'App\\' => 
         array (

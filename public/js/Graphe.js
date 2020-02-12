@@ -3,7 +3,7 @@ class Graphe {
     }
 
     plot(id, title, labelsValues, dataValues, axisX, axisY) {
-        console.log(id)
+        // console.log(id)
         this.ctx = document.getElementById(id).getContext('2d');
         this.chart = new Chart(this.ctx, {
             // The type of chart we want to create
