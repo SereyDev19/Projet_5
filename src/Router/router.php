@@ -46,8 +46,7 @@ class Router
         switch ($action) {
             case 'reportAccount':
                 $this->Controller->fullDashboard($params['account_id']);
-
-//                $this->Controller->ReportAccount($params['account_id']);
+                //$this->Controller->ReportAccount($params['account_id']);
                 break;
             case 'signIn':
                 $this->Controller->SignIn();
@@ -60,12 +59,10 @@ class Router
                 break;
             case 'detailedReport':
                 $this->Controller->fullDashboard($params['account_id']);
-
-                //                $this->FrontController->DetailedReport($params['account_id']);
                 break;
-            case 'updateData':
-                $this->Controller->APIdetailedReport($params['account_id']);
-                $this->FrontController->DetailedReport($params['account_id']);
+            case 'updateAllData':
+                //Cron Job
+                $this->Controller->updateAllData();
                 break;
             case 'globalreport':
                 $this->Controller->GlobalReport();

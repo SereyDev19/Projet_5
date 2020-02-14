@@ -44,6 +44,25 @@ class PlotCostPerLead {
 
                 this.graph.plot(this.Canvasid, this.title, js_dates, js_values, 'Dates', this.title + ' (€)');
 
+                this.canvas.animate([
+                    // keyframes
+                    {
+                        transform: 'translateX(0px)'
+                        //transform: 'translate3D(10px , 10px , 10px)'
+                    },
+                    {
+                        transform: 'rotateY(180deg)'
+                        //transform: 'translate3D(100px,100px,100px)'
+                    },
+                    {
+                        transform: 'rotateY(360deg)'
+                        //transform: 'translate3D(100px,100px,100px)'
+                    }
+                ], {
+                    // timing options
+                    fill: 'forwards',
+                    duration: 500
+                });
             }.bind(this));
         })
     }

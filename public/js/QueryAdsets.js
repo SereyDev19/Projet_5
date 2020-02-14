@@ -14,14 +14,6 @@ class QueryAdsets {
                 this.ajaxrequest = new AjaxRequest();
                 this.ajaxrequest.ajax(url).then(function (response) {
                     this.data = response;
-                    //CSS for all the buttons
-                    var buttons = document.getElementsByClassName("adsetname")
-                    for (var button of buttons) {
-                        // console.log(buttons[button])
-                        // button.style.backgroundColor = "#f8ad22"
-                        // button.style.border = "#fff"
-                    }
-
 
                     for (var adset of response.adSets) {
                         var name = adset.adset_name.split(' ').join('')

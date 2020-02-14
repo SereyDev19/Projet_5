@@ -172,6 +172,14 @@ canvas {
     box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
+.chart-container {
+    /*animation: slide-left 1.4s ease;*/
+}
+
+.connect a {
+    color: #223265;
+}
+
 .connect:hover {
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477));
     background: -moz-linear-gradient(center top, #fb9e25 5%, #ffc477 100%);
@@ -767,10 +775,55 @@ p.title {
     text-align: center;
 }
 
-.detailedresult {
+#sectionAdsets .detailedresult {
     font-weight: bold;
     font-size: 1.4rem;
+    animation: slide-up 0.8s ease;
 }
+
+#sectionAds .sectionAd:nth-of-type(2n+1) {
+    animation: slide-right 0.8s ease;
+}
+
+#sectionAds .sectionAd:nth-of-type(2n) {
+    animation: slide-left 0.8s ease;
+}
+
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        /*transform: translateY(20px);*/
+    }
+    100% {
+        opacity: 1;
+        /*transform: translateY(0);*/
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        opacity: 0;
+        transform: translateX(1000px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-left {
+    0% {
+        opacity: 0;
+        transform: translateX(-1000px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 
 /*.content-post #nextpost::before {*/
 /*    content: "\f101";*/
@@ -919,16 +972,54 @@ h2 {
     }
 }
 
+@media (max-width: 766px) {
+
+
+    #sectionAds {
+        margin-top: 10px;
+    }
+}
+
+
 @media (max-width: 650px) {
     #plotarea {
-        width: 450px;
+        width: 100%;
+    }
+
+    #divusername {
+        width: 30px;
+        height: 30px;
+    }
+
+    #username {
+        width: 30px;
+        height: 30px;
+    }
+
+    #username::after {
+        content: "\f007";
+        font-family: "Font Awesome 5 Free";
+        font-size: 0.8rem;
+        text-indent: 0;
+        display: block;
+        line-height: initial;
+        border: none;
+    }
+
+    .tableaccesses tr th:nth-of-type(2),
+    .tableaccesses tr th:nth-of-type(3),
+    .tableaccesses tr th:nth-of-type(4),
+    .tableaccesses tr td:nth-of-type(2),
+    .tableaccesses tr td:nth-of-type(3),
+    .tableaccesses tr td:nth-of-type(4) {
+        display: none;
     }
 }
 
 @media (max-width: 520px) {
     #logo {
-        width: 50px;
-        height: 50px;
+        width: 75px;
+        height: 75px;
     }
 
     #blogTitle {
@@ -942,12 +1033,16 @@ h2 {
         top: 10%;
     }
 
+    #plotarea {
+        width: 100%;
+    }
+
     h1 {
-        font-size: 2.2rem;
+        font-size: 1.2rem;
     }
 
     h2 {
-        font-size: 1.8rem;
+        font-size: 1.0rem;
     }
 
     #navigationbar {

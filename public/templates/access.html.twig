@@ -9,8 +9,8 @@
             <h1>Gestion des accès</h1>
         </div>
         <div>
-            <div class="btn-group dropdown">
-                <button type="button" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <div class="btn-group dropleft">
+                <button type="button" id="username" class="user btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     {{ user_name }}
                 </button>
                 <div class="dropdown-menu">
@@ -64,27 +64,28 @@
                     {{ account['account_name'] }}
                     ({{ account['account_id'] }})
                 </a>
-                <table class="container table table-striped table-condensed">
+                <table class="tableaccesses container table table-striped table-condensed">
                     <thead>
                     <tr>
                         <th>
-                            <i class="fas fa-chart-area"></i>
-                            <span class="responsive_title">Accès pour les identifiants</span>
+                            <i class="far fa-user"></i>
+                            <span class="responsive_title">Identifiant</span>
                         </th>
                         <th>
-                            <i class="far fa-comment-alt"></i>
+                            <i class="fas fa-at"></i>
                             <span class="responsive_title">E-mail</span>
                         </th>
                         <th>
-                            <i class="far fa-comment-alt"></i>
+                            <i class="far fa-id-badge"></i>
                             <span class="responsive_title">Nom</span>
                         </th>
                         <th>
-                            <i class="far fa-comment-alt"></i>
+                            <i class="far fa-id-badge"></i>
                             <span class="responsive_title">Prénom</span>
                         </th>
                         <th>
-                            Action
+                            <i class="fas fa-edit"></i>
+                            <span class="responsive_title">Action</span>
                         </th>
                     </thead>
 
@@ -93,6 +94,11 @@
                             <tr>
                                 <td>
                                     {{ iterAccess.access_id }}
+                                    {% if iterAccess.access_email %}
+                                        <span data-toggle="tooltip" data-placement="bottom"
+                                              title="{{ iterAccess.access_email }} {{ iterAccess.access_name }} {{ iterAccess.access_firstname }}"><i
+                                                    class="fas fa-info-circle"></i></span>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     {% if iterAccess['access_email'] != '' %}

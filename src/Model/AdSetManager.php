@@ -227,6 +227,7 @@ class AdSetManager extends GetAPIData
     {
 
         $this->optimGoal($adSetId);
+        var_dump('optimization goal', $this->optimization_goal);
         if ($this->optimization_goal == 'LEAD_GENERATION') {
             $action = 'lead';
             $result = $this->getDataActions($adSetId, ['actions'])[$action];

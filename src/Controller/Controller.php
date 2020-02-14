@@ -8,6 +8,7 @@ use App\Config\PaginatedQuery;
 use App\Model\UserManager;
 use App\Model\ManageAccess;
 use App\Model\GetDBData;
+use App\Model\GetAPIData;
 
 // Services Namespaces
 use App\Services\DataValidation;
@@ -26,6 +27,8 @@ use Mpdf\Mpdf;
 
 use Twig_Loader_Filesystem;
 use Twig_Environment;
+use Twig_Extension;
+use Twig_Extensions_Extension_Text;
 
 
 class Controller
@@ -50,6 +53,7 @@ class Controller
             'cache' => false
         ]);
         $this->twig->addGlobal('SERVER_NAME', $_SERVER['SERVER_NAME']);
+        $this->twig->addExtension(new Twig_Extensions_Extension_Text());
     }
 
     public function definition($word)
@@ -118,7 +122,14 @@ class Controller
             }
             $starting_limit = ($page - 1) * $limit;
             $limiteddata = $getDBData->getLimitAccounts($letter, $starting_limit, $limit);
-            echo $this->twig->render('glossary.html.twig', ['userSession' => $userSession, 'user_name' => $user_name, 'page' => $page, 'DBData' => $limiteddata, 'totalpage' => $total_pages[$letter], 'alphabet' => $alphabet, 'allLetters' => $allLetters, 'currentLetter' => $letter]);
+            echo $this->twig->render('glossary.html.twig', ['userSession' => $userSession,
+                'user_name' => $user_name,
+                'page' => $page,
+                'DBData' => $limiteddata,
+                'totalpage' => $total_pages[$letter],
+                'alphabet' => $alphabet,
+                'allLetters' => $allLetters,
+                'currentLetter' => $letter]);
         }
     }
 
@@ -839,51 +850,52 @@ class Controller
      */
     public function APIGlobalReport()
     {
-        $userSession = new UserSession();
-        if ($userSession->isLogged()) {
+//        $userSession = new UserSession();
+//        if ($userSession->isLogged()) {
+        $getAPIData = new \App\Model\GetAPIData($_ENV);
+        $synData = new \App\Model\SyncData($_ENV);
+        $getDBaccounts = new \App\Model\GetDBData($_ENV);
+        //Get data from FB API
+        $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
+        $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
+
+        foreach ($getAccountsId as $iterAccount) {
             $getAPIData = new \App\Model\GetAPIData($_ENV);
-            $synData = new \App\Model\SyncData($_ENV);
-            $getDBaccounts = new \App\Model\GetDBData($_ENV);
-            //Get data from FB API
-            $getAccounts = $getAPIData->getAccounts(10158484356634381); //my DEV ID
-            $getAccountsId = $getAPIData->getAccountsId(10158484356634381);
+            $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
 
-            foreach ($getAccountsId as $iterAccount) {
-                $getAPIData = new \App\Model\GetAPIData($_ENV);
-                $accountData = $getAPIData->getFromFields($iterAccount, ['spend']);
-
-                if ($getAPIData->hasData) {
-                    // Make a TRY
-                    $adSet = new \App\Model\AdSetManager($_ENV);
-                    $adSetList = $adSet->getAdSets($iterAccount);
-                    $goal = '';
-                    foreach ($adSetList as $iterAdSet) {
-                        if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
-                            $goal = 'LEAD_GENERATION';
-                        }
+            if ($getAPIData->hasData) {
+                // Make a TRY
+                $adSet = new \App\Model\AdSetManager($_ENV);
+                $adSetList = $adSet->getAdSets($iterAccount);
+                $goal = '';
+                foreach ($adSetList as $iterAdSet) {
+                    if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
+                        $goal = 'LEAD_GENERATION';
                     }
-                    if ($goal == 'LEAD_GENERATION') {
-                        $lead = $getAPIData->getDataActions($iterAccount, ['actions'])['lead']; // lead
-                        $cost_lead = $getAPIData->getCost($iterAccount, ['cost_per_action_type'])['lead']; // cost per lead
-                    } else {
-                        $lead = -1;
-                        $cost_lead = -1;
-                    }
-                    $name = $getAPIData->getName($iterAccount);
-                    $synData->isregisteredAccount($iterAccount, $getAccountsId);
-
-                    $synData->syncAccount($iterAccount, [
-                        $name,
-                        $accountData['spend'], //SPEND
-                        $lead,
-                        $cost_lead
-                    ]);
                 }
+                if ($goal == 'LEAD_GENERATION') {
+                    $lead = $getAPIData->getDataActions($iterAccount, ['actions'])['lead']; // lead
+                    $cost_lead = $getAPIData->getCost($iterAccount, ['cost_per_action_type'])['lead']; // cost per lead
+                } else {
+                    $lead = -1;
+                    $cost_lead = -1;
+                }
+                $name = $getAPIData->getName($iterAccount);
+                $synData->isregisteredAccount($iterAccount, $getAccountsId);
+
+                $synData->syncAccount($iterAccount, [
+                    $name,
+                    $accountData['spend'], //SPEND
+                    $lead,
+                    $cost_lead
+                ]);
             }
-            //Get data from BD MYSQL
-            $DBaccounts = $getDBaccounts->getAccounts();
-        } else {
         }
+        var_dump('APIGlobalReport OK');
+//            //Get data from BD MYSQL
+//            $DBaccounts = $getDBaccounts->getAccounts();
+//        } else {
+//        }
     }
 
     /**
@@ -909,69 +921,102 @@ class Controller
     public function APIdetailedReport($accountId)
     {
 
-        $userSession = new UserSession();
-        if ($userSession->isLogged()) {
+//        $userSession = new UserSession();
+//        if ($userSession->isLogged()) {
 
-            $getAPIData = new \App\Model\GetAPIData($_ENV);
+        $getAPIData = new \App\Model\GetAPIData($_ENV);
+        $adSet = new \App\Model\AdSetManager($_ENV);
+        $ad = new \App\Model\AdManager($_ENV);
+        $bddAdSet = new \App\Model\SyncData($_ENV);
+        $bddAd = new \App\Model\SyncData($_ENV);
+
+        $res = $getAPIData->getFromFields($accountId, ['spend']);
+        $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
+        $cost_lead = $getAPIData->getCost($accountId, ['cost_per_action_type']); // cost per lead
+        $adSetList = $adSet->getAdSets($accountId);
+
+        $registerAd = $bddAd->getBddAds($accountId);
+
+
+        $registerAdSet = $bddAdSet->getBddAdSets($accountId);
+        foreach ($adSetList as $iterAdSet) {
+
             $adSet = new \App\Model\AdSetManager($_ENV);
-            $ad = new \App\Model\AdManager($_ENV);
-            $bddAdSet = new \App\Model\SyncData($_ENV);
-            $bddAd = new \App\Model\SyncData($_ENV);
+            $adSetData = $adSet->DataFromFields($iterAdSet, ['spend', 'cpm', 'clicks', 'cpc']);
 
-            $res = $getAPIData->getFromFields($accountId, ['spend']);
-            $lead = $getAPIData->getDataActions($accountId, ['actions']); // lead
-            $cost_lead = $getAPIData->getCost($accountId, ['cost_per_action_type']); // cost per lead
-            $adSetList = $adSet->getAdSets($accountId);
+            if ($adSet->hasData) {
+                $goal = $adSet->optimGoal($iterAdSet);
+                $name = $adSet->getName($iterAdSet);
+                $bddAdSet->isregisteredAdSet($iterAdSet, $registerAdSet);
+                $result = $adSet->getResult($iterAdSet);
 
-            $registerAd = $bddAd->getBddAds($accountId);
+                $bddAdSet->syncAdSet($accountId, $iterAdSet, [$goal, $name,
+                    $adSetData[$iterAdSet]['spend'],
+                    $adSetData[$iterAdSet]['cpm'],
+                    $adSetData[$iterAdSet]['clicks'],
+                    $adSetData[$iterAdSet]['cpc'],
+                    $result[1],
+                    $result[2],
+                    1 //for the moment
+                ]);
 
+                $adsList = $ad->getAdsfromAdList($iterAdSet);
 
-            $registerAdSet = $bddAdSet->getBddAdSets($accountId);
-            foreach ($adSetList as $iterAdSet) {
+                foreach ($adsList as $iterAd) {
+                    $ad = new \App\Model\AdManager($_ENV);
+                    // $Goal is the same as the ad's adlist
+                    $name = $ad->getName($iterAd);
+                    $adData = $ad->DataFromFields($iterAd, ['spend', 'cpm', 'clicks', 'cpc']);
+                    if ($ad->hasData) {
+                        $bddAd->isregisteredAd($iterAd, $registerAd);
+                        $result = $ad->getAdResult($iterAd, $iterAdSet);
 
-                $adSet = new \App\Model\AdSetManager($_ENV);
-                $adSetData = $adSet->DataFromFields($iterAdSet, ['spend', 'cpm', 'clicks', 'cpc']);
-
-                if ($adSet->hasData) {
-                    $goal = $adSet->optimGoal($iterAdSet);
-                    $name = $adSet->getName($iterAdSet);
-                    $bddAdSet->isregisteredAdSet($iterAdSet, $registerAdSet);
-                    $result = $adSet->getResult($iterAdSet);
-
-                    $bddAdSet->syncAdSet($accountId, $iterAdSet, [$goal, $name,
-                        $adSetData[$iterAdSet]['spend'],
-                        $adSetData[$iterAdSet]['cpm'],
-                        $adSetData[$iterAdSet]['clicks'],
-                        $adSetData[$iterAdSet]['cpc'],
-                        $result[1],
-                        $result[2],
-                        1 //for the moment
-                    ]);
-
-                    $adsList = $ad->getAdsfromAdList($iterAdSet);
-
-                    foreach ($adsList as $iterAd) {
-                        $ad = new \App\Model\AdManager($_ENV);
-                        // $Goal is the same as the ad's adlist
-                        $name = $ad->getName($iterAd);
-                        $adData = $ad->DataFromFields($iterAd, ['spend', 'cpm', 'clicks', 'cpc']);
-                        if ($ad->hasData) {
-                            $bddAd->isregisteredAd($iterAd, $registerAd);
-                            $result = $ad->getAdResult($iterAd, $iterAdSet);
-
-                            $bddAd->syncAd($accountId, $iterAdSet, $iterAd, [$goal, $name,
-                                $adData[$iterAd]['spend'],
-                                $adData[$iterAd]['cpm'],
-                                $adData[$iterAd]['clicks'],
-                                $adData[$iterAd]['cpc'],
-                                $result[1],
-                                $result[2],
-                                1 //for the moment
-                            ]);
-                        }
+                        $bddAd->syncAd($accountId, $iterAdSet, $iterAd, [$goal, $name,
+                            $adData[$iterAd]['spend'],
+                            $adData[$iterAd]['cpm'],
+                            $adData[$iterAd]['clicks'],
+                            $adData[$iterAd]['cpc'],
+                            $result[1],
+                            $result[2],
+                            1 //for the moment
+                        ]);
                     }
                 }
             }
         }
+//        }
     }
+
+    /**
+     * Cron Job
+     * update all data for all accounts
+     */
+    public function updateAllData()
+    {
+        $getAPIData = new GetAPIData($_ENV);
+        //Get data from FB API
+        $getAccountsId = $getAPIData->getAccountsId($getAPIData->env);
+
+        // Get Data from the 30 previous days (default)
+        $this->APIGlobalReport();
+
+        // Get Data between two dates  -- Test works fine
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $start = '2019-01-1';
+                $end = '2020-01-12';
+                $this->APIGlobalReportDates($iterAccount, $start, $end);
+            }
+        }
+
+        // Get detailed data  -- Test works fine
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $this->APIdetailedReport($iterAccount);
+            }
+        }
+
+
+    }
+
 }
