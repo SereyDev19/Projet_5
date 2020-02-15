@@ -8,7 +8,6 @@ class Plot {
         this.button.addEventListener('click', function () {
             this.ajaxrequest = new AjaxRequest();
             this.ajaxrequest.ajax(url).then(function (response) {
-                console.log('Donnees recues');
                 this.graph = new Graphe();
                 var js_dates = Object.keys(response.history_spend);
                 var values = Object.values(response.history_spend);

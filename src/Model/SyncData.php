@@ -167,6 +167,15 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+    public function UpdateJSONspendDay14($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_spend_14d = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
     /**
      * @param $accountId
      * @param $values
@@ -181,6 +190,7 @@ class SyncData extends Config
         $req = $this->executeStatement($sql, $values);
     }
 
+
     /**
      * @param $accountId
      * @param $values
@@ -190,6 +200,15 @@ class SyncData extends Config
         $firstArr = [$accountId];
         $values = array_merge($values, $firstArr);
         $sql = 'UPDATE accounts SET     history_lead_d = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    public function UpdateJSONleadDay14($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_lead_14d = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
     }
@@ -217,6 +236,15 @@ class SyncData extends Config
         $firstArr = [$accountId];
         $values = array_merge($values, $firstArr);
         $sql = 'UPDATE accounts SET     history_costperlead_d = ?
+                                        WHERE account_id= ?';
+        $req = $this->executeStatement($sql, $values);
+    }
+
+    public function UpdateJSONcostperleadDay14($accountId, $values)
+    {
+        $firstArr = [$accountId];
+        $values = array_merge($values, $firstArr);
+        $sql = 'UPDATE accounts SET     history_costperlead_14d = ?
                                         WHERE account_id= ?';
         $req = $this->executeStatement($sql, $values);
     }

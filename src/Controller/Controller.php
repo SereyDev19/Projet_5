@@ -27,7 +27,6 @@ use Mpdf\Mpdf;
 
 use Twig_Loader_Filesystem;
 use Twig_Environment;
-use Twig_Extension;
 use Twig_Extensions_Extension_Text;
 
 
@@ -409,9 +408,23 @@ class Controller
             $historylead = json_decode($DBaccount['history_lead'], true);
             $historycostperlead = json_decode($DBaccount['history_costperlead'], true);
 
+            $historySpend7d = json_decode($DBaccount['history_spend_d'], true);
+            $historylead7d = json_decode($DBaccount['history_lead_d'], true);
+            $historycostperlead7d = json_decode($DBaccount['history_costperlead_d'], true);
+
+            $historySpend14d = json_decode($DBaccount['history_spend_14d'], true);
+            $historylead14d = json_decode($DBaccount['history_lead_14d'], true);
+            $historycostperlead14d = json_decode($DBaccount['history_costperlead_14d'], true);
+
             $allData['history_spend'] = $historySpend;
             $allData['history_lead'] = $historylead;
             $allData['history_costperlead'] = $historycostperlead;
+            $allData['historySpend7d'] = $historySpend7d;
+            $allData['historylead7d'] = $historylead7d;
+            $allData['historycostperlead7d'] = $historycostperlead7d;
+            $allData['historySpend14d'] = $historySpend14d;
+            $allData['historylead14d'] = $historylead14d;
+            $allData['historycostperlead14d'] = $historycostperlead14d;
             echo json_encode($allData);
         }
     }
@@ -783,66 +796,80 @@ class Controller
      * Give data from the facebook API day by day between two dates
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function APIGlobalReportDatesDay($account_Id, $start, $end)
+    public function APIGlobalReportDatesDay($account_Id, $start, $end, $days)
     {
-        $userSession = new UserSession();
-        if ($userSession->isLogged()) {
-            $getAPIData = new \App\Model\GetAPIData($_ENV);
-            $synData = new \App\Model\SyncData($_ENV);
-            $getDBaccounts = new \App\Model\GetDBData($_ENV);
+//        $userSession = new UserSession();
+//        if ($userSession->isLogged()) {
+        $getAPIData = new \App\Model\GetAPIData($_ENV);
+        $synData = new \App\Model\SyncData($_ENV);
+        $getDBaccounts = new \App\Model\GetDBData($_ENV);
 
-            $getDays = new GetDays();
-            $modDates = new Date();
+        $getDays = new GetDays();
+        $modDates = new Date();
 
-            $dates = $getDays->getDatesBetween($start, $end);
-            $historyData = [];
+        $dates = $getDays->getDatesBetween($start, $end);
+        $historyData = [];
+        foreach ($dates as $currentDate) {
+            $boundInf = $currentDate;
+            $boundSup = $currentDate;
+
+            $historyData[$currentDate] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $boundInf, $boundSup);
+        }
+
+        $historyData = json_encode($historyData);
+        if ($days == '7') {
+            $synData->UpdateJSONspendDay($account_Id, [$historyData]);
+        } elseif ($days == '14') {
+            $synData->UpdateJSONspendDay14($account_Id, [$historyData]);
+        } else {
+            $synData->UpdateJSONspendDay($account_Id, [$historyData]);
+        }
+
+        $getAPIData = new \App\Model\GetAPIData($_ENV);
+        $getAPIData->getFromFields($account_Id, ['spend']);
+        if ($getAPIData->hasData) {
+            // Make a TRY
+            $adSet = new \App\Model\AdSetManager($_ENV);
+            $adSetList = $adSet->getAdSets($account_Id);
+            $goal = '';
+            foreach ($adSetList as $iterAdSet) {
+                if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
+                    $goal = 'LEAD_GENERATION';
+                }
+            }
+
+            $historyLead = [];
+            $historyCostperLead = [];
             foreach ($dates as $currentDate) {
                 $boundInf = $currentDate;
                 $boundSup = $currentDate;
+                if ($goal == 'LEAD_GENERATION') {
+                    $historyLead[$currentDate] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $boundInf, $boundSup)['lead'];
+                    $historyCostperLead[$currentDate] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $boundInf, $boundSup)['lead']; // cost per lead
 
-                $historyData[$currentDate] = $getAPIData->getFromFieldsDate($account_Id, ['spend'], $boundInf, $boundSup);
+                } else {
+                    $historyLead[$boundInf] = -1;
+                    $historyCostperLead[$boundInf] = -1;
+                }
+
             }
-
-            $historyData = json_encode($historyData);
-
-            $synData->UpdateJSONspendDay($account_Id, [$historyData]);
-
-            $getAPIData = new \App\Model\GetAPIData($_ENV);
-            $getAPIData->getFromFields($account_Id, ['spend']);
-            if ($getAPIData->hasData) {
-                // Make a TRY
-                $adSet = new \App\Model\AdSetManager($_ENV);
-                $adSetList = $adSet->getAdSets($account_Id);
-                $goal = '';
-                foreach ($adSetList as $iterAdSet) {
-                    if ($adSet->optimGoal($iterAdSet) == 'LEAD_GENERATION') {
-                        $goal = 'LEAD_GENERATION';
-                    }
-                }
-
-                $historyLead = [];
-                $historyCostperLead = [];
-                foreach ($dates as $currentDate) {
-                    $boundInf = $currentDate;
-                    $boundSup = $currentDate;
-                    if ($goal == 'LEAD_GENERATION') {
-                        $historyLead[$currentDate] = $getAPIData->getDataActionsDates($account_Id, ['actions'], $boundInf, $boundSup)['lead'];
-                        $historyCostperLead[$currentDate] = $getAPIData->getCostDates($account_Id, ['cost_per_action_type'], $boundInf, $boundSup)['lead']; // cost per lead
-
-                    } else {
-                        $historyLead[$boundInf] = -1;
-                        $historyCostperLead[$boundInf] = -1;
-                    }
-
-                }
-                $historyLead = json_encode($historyLead);
-                $historyCostperLead = json_encode($historyCostperLead);
+            $historyLead = json_encode($historyLead);
+            $historyCostperLead = json_encode($historyCostperLead);
+            if ($days == '7') {
+                $synData->UpdateJSONleadDay($account_Id, [$historyLead]);
+                $synData->UpdateJSONcostperleadDay($account_Id, [$historyCostperLead]);
+            } elseif ($days == '14') {
+                $synData->UpdateJSONleadDay14($account_Id, [$historyLead]);
+                $synData->UpdateJSONcostperleadDay14($account_Id, [$historyCostperLead]);
+            } else {
                 $synData->UpdateJSONleadDay($account_Id, [$historyLead]);
                 $synData->UpdateJSONcostperleadDay($account_Id, [$historyCostperLead]);
             }
-            //Get data from BD MYSQL
-            $DBaccounts = $getDBaccounts->getAccounts();
+
         }
+//            //Get data from BD MYSQL
+//            $DBaccounts = $getDBaccounts->getAccounts();
+//        }
     }
 
     /**
@@ -995,26 +1022,44 @@ class Controller
     {
         $getAPIData = new GetAPIData($_ENV);
         //Get data from FB API
-        $getAccountsId = $getAPIData->getAccountsId($getAPIData->env);
+        $getAccountsId = $getAPIData->getAccountsId($getAPIData->env['devId']);
 
         // Get Data from the 30 previous days (default)
-        $this->APIGlobalReport();
+//        $this->APIGlobalReport();
+
+        //Get Data from the 7 previous days -- Test works fine
+//        foreach ($getAccountsId as $iterAccount) {
+//            if ($iterAccount == '331859797400599') {
+//                $end = date("Y-m-d");
+//                $start = date('Y-m-d', strtotime("$end -7 day"));
+//                $this->APIGlobalReportDatesDay($iterAccount, $start, $end,'7');
+//            }
+//        }
+
+        //Get Data from the 14 previous days
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $end = date("Y-m-d");
+                $start = date('Y-m-d', strtotime("$end -14 day"));
+                $this->APIGlobalReportDatesDay($iterAccount, $start, $end, '14');
+            }
+        }
 
         // Get Data between two dates  -- Test works fine
-        foreach ($getAccountsId as $iterAccount) {
-            if ($iterAccount == '331859797400599') {
-                $start = '2019-01-1';
-                $end = '2020-01-12';
-                $this->APIGlobalReportDates($iterAccount, $start, $end);
-            }
-        }
+//        foreach ($getAccountsId as $iterAccount) {
+//            if ($iterAccount == '331859797400599') {
+//                $start = '2019-01-1';
+//                $end = '2020-01-12';
+//                $this->APIGlobalReportDates($iterAccount, $start, $end);
+//            }
+//        }
 
         // Get detailed data  -- Test works fine
-        foreach ($getAccountsId as $iterAccount) {
-            if ($iterAccount == '331859797400599') {
-                $this->APIdetailedReport($iterAccount);
-            }
-        }
+//        foreach ($getAccountsId as $iterAccount) {
+//            if ($iterAccount == '331859797400599') {
+//                $this->APIdetailedReport($iterAccount);
+//            }
+//        }
 
 
     }

@@ -166,7 +166,7 @@ header {
 
 canvas {
     background-color: #223265;
-
+    margin: auto;
     -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
@@ -236,7 +236,7 @@ canvas {
 
 #plotarea {
     position: relative;
-    width: 650px;
+    /*width: 850px;*/
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
@@ -708,7 +708,39 @@ section.fullDashboard {
 }
 
 #plotCostPerLead {
-    color: #f4abb6;
+    color: #29a7c3;
+}
+
+
+.shape1,
+.shape2 {
+    stroke-dasharray: 1120;
+    stroke-width: 5px;
+    fill: transparent;
+    stroke: #19f6e8;
+    border-bottom: 5px solid black;
+    transition-timing-function: linear;
+    transition: stroke-dashoffset 4s, stroke-dasharray 4s;
+}
+.shape1 {
+    stroke-dashoffset: 1120;
+}
+.shape2 {
+    stroke-dashoffset: -1120;
+}
+.text {
+    font-family: 'Roboto Condensed';
+    font-size: 22px;
+    line-height: 32px;
+    letter-spacing: 8px;
+    color: #fff;
+    top: -48px;
+    position: relative;
+}
+.svg-wrapper:hover .shape1,
+.svg-wrapper:hover .shape2 {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 1120;
 }
 
 .fullDashboard {
@@ -982,6 +1014,14 @@ h2 {
 
 
 @media (max-width: 650px) {
+    #connection {
+        width: 210px;
+    }
+
+    .connect {
+        width: 100px;
+    }
+
     #plotarea {
         width: 100%;
     }

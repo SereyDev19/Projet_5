@@ -10,18 +10,15 @@ class App {
     }
 
     plotSpend(id) {
-        console.log('plotSpend')
         this.PlotSpend = new PlotSpend(id, this.url_history);
     }
 
     plotLead(id) {
-        console.log('plotLead')
         this.PlotLead = new PlotLead(id, this.url_history);
         this.PlotLead.plot();
     }
 
     plotCostPerLead(id) {
-        console.log('plotCostPerLead')
         this.PlotCostPerLead = new PlotCostPerLead(id, this.url_history);
     }
 
