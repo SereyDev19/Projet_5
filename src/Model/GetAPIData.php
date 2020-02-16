@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
-use App\Config\Config;
+use App\Model\Manager;
 use Facebook\Facebook;
 
-class GetAPIData extends Config
+class GetAPIData extends Manager
 {
     protected $fb = '';
 

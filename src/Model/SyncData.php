@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Config\Config;
+use App\Model\Manager;
 
-class SyncData extends Config
+class SyncData extends Manager
 {
     public $accountList = [];
     public $adSetList = [];

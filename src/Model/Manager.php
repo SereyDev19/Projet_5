@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Config;
+namespace App\Model;
 
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\View\DefaultView;
 use PDO;
 
-class Config
+class Manager
 {
     public $db = '';
     protected $APP_HOST = '';

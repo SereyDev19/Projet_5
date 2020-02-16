@@ -3,9 +3,9 @@
 {% block content %}
     <header class="row col-sm-12">
         <div>
-            <img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png">
+            <a class="text-white" href="index.php"><img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png"></a>
         </div>
-{#        {{ SERVER_NAME }}#}
+        {#        {{ SERVER_NAME }}#}
         <div id="connection">
             {% if user_id and user_name %}
                 <div>
@@ -22,8 +22,29 @@
                     <div class="connect signIn"><a href="admin.php?action=signIn">S'enregistrer</a></div>
                 </div>
             {% endif %}
-
         </div>
     </header>
 
+    <div id="container">
+        <section class="presentation hero">
+            <h2>Vos statistiques principales en un clin d'oeil</h2>
+            <img class="presentation" src="images/mainData.png"/>
+        </section>
+        <section class="presentation">
+            <h2 class="row col-xl-6">Les statistiques sur les derniers mois</h2>
+            <div class="col-xl-12 d-flex">
+
+                <div class="col-xl-6 d-flex">
+                    <img class="col-xl-8" src="images/GraphiqueSixMois.PNG"/>
+                    <img class="col-xl-4" src="images/GraphiqueJours.PNG"/>
+                </div>
+
+                <div class="col-xl-6 d-flex">
+                    <img class="col-xl-8" src="images/EnsemblePubs.PNG"/>
+                    <img class="col-xl-4" src="images/Pubs.PNG"/>
+                </div>
+            </div>
+
+        </section>
+    </div>
 {% endblock %}

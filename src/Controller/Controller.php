@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 // Model Namespaces
-use App\Config\Config;
-use App\Config\PaginatedQuery;
+use App\Model\Manager;
 use App\Model\UserManager;
 use App\Model\ManageAccess;
 use App\Model\GetDBData;

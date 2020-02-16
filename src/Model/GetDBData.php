@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Config\Config;
+use App\Model\Manager;
 
-class GetDBData extends Config
+class GetDBData extends Manager
 {
 
     public $accounts = [];

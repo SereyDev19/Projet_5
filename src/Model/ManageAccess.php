@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Config\Config;
+use App\Model\Manager;
 
-class ManageAccess extends Config
+class ManageAccess extends Manager
 {
 
     public $accounts = [];

@@ -9,14 +9,13 @@
 body {
     /*background: #044370;*/
     /*background-color: #6a93cb;*/
-    height: 800px;
     background-image: linear-gradient(315deg, #044370 0%, #223265 74%);
 }
 
 #container {
     width: 400px;
     margin: auto;
-    margin-top: 150px;
+    /*margin-top: 150px;*/
 }
 
 .logo {
@@ -43,6 +42,7 @@ form, #confirm-message {
     width: 100%;
     margin: 0 auto;
     padding-bottom: 10px;
+    color:#223265;
 }
 
 form #slider {
@@ -54,35 +54,36 @@ form #slider {
 }
 
 form #step1 {
-    position: absolute;
-    margin: auto;
-    width: 390px;
+    /*position: absolute;*/
+    /*margin: auto;*/
+    /*width: 390px;*/
 }
 
 form #step2 {
-    position: absolute;
-    width: 390px;
-    left: 450px;
+    /*position: absolute;*/
+    /*width: 390px;*/
+    /*left: 450px;*/
 }
 
 form #step3 {
-    position: absolute;
-    width: 390px;
-    left: 450px;
-    z-index: 1;
+    /*position: absolute;*/
+    /*width: 390px;*/
+    /*left: 450px;*/
+    /*z-index: 1;*/
 
 }
 
 #NextStep {
-    position: absolute;
-    bottom: 10px;
-    left: 160px;
+    /*position: absolute;*/
+    /*bottom: 10px;*/
+    /*left: 160px;*/
 }
 
 form {
     position: relative;
-    height: 450px;
-    width: 450px;
+    margin-bottom: 30px;
+    height: auto;
+    width: 500px;
     z-index: 1;
     overflow: hidden;
 }

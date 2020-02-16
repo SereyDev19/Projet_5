@@ -29,6 +29,12 @@ class QueryAdsets {
 
 
                     var sectionAdsets = document.getElementById("sectionAdsets")
+                    if (sectionAdsets.getElementsByTagName("h3").length == 0) {
+                        var h3 = document.createElement("h3")
+                        h3.innerHTML = "Statistiques de l'ensemble de pubs";
+                        sectionAdsets.appendChild(h3);
+                    }
+
                     var tempdiv = document.createElement("div")
                     tempdiv.setAttribute("class", "data")
                     sectionAdsets.appendChild(tempdiv)
@@ -124,10 +130,10 @@ class QueryAdsets {
                     ads.forEach(function (ad) {
                         var anAd = document.createElement("div")
                         anAd.setAttribute("class", "sectionAd")
-                        var h4 = document.createElement("h4")
-                        h4.innerHTML = ad.ad_name
+                        var h3 = document.createElement("h3")
+                        h3.innerHTML = "Pub : " + ad.ad_name
                         var divtitle = document.createElement("div")
-                        divtitle.appendChild(h4)
+                        divtitle.appendChild(h3)
                         anAd.appendChild(divtitle)
                         data.appendChild(anAd)
 
@@ -173,7 +179,6 @@ class QueryAdsets {
                             p1.setAttribute("class", "title")
 
                             var div = anAd.getElementsByClassName(keys[index] + 'ad')[0];
-                            console.log(div)
 
                             var p2 = document.createElement("p")
                             if (keys[index] === 'spend30d' || keys[index] === 'cost_per_click30d' || keys[index] === 'cost_per_lead30d' || keys[index] === 'cpm30d') {
@@ -204,7 +209,7 @@ class QueryAdsets {
                     }
 
                 }.bind(this));
-            }
+            }.bind(this)
         )
     }
 }

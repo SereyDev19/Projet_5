@@ -1,5 +1,5 @@
 class Graphe {
-    constructor(type,data) {
+    constructor(type, data) {
         this.type = type;
         this.data = data;
         this.width = (document.body.clientWidth);
@@ -55,7 +55,7 @@ class Graphe {
                 labels: labelsValues,
                 datasets: [{
                     label: legend,
-                    fill:false,
+                    fill: false,
                     backgroundColor: backgroundColor,
                     borderColor: backgroundColor,
                     data: dataValues,
@@ -68,14 +68,15 @@ class Graphe {
                 title: {
                     display: true,
                     text: title,
-                    fontSize:this.fontSizeLarge,
-                    fontColor:'#fff'
+                    fontSize: this.fontSizeLarge,
+                    fontColor: '#fff'
                 },
                 legend: {
+                    display: true,
+                    position:'right',
                     labels: {
                         fontColor: fontColor,
                         fontSize: this.fontSizeMedium
-
                     }
                 },
 

@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use App\Config\Config;
-class UserManager extends Config
+use App\Model\Manager;
+class UserManager extends Manager
 {
     public $message = '';
     public $isCorrect = false;
