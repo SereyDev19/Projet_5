@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <header class="row col-sm-12">
+    <header class="row col-sm-12 mb-0">
         <div>
             <a class="text-white" href="index.php"><img id="logo" alt="logo" src="images/LOGOreportmeWHITE.png"></a>
         </div>
@@ -24,27 +24,82 @@
             {% endif %}
         </div>
     </header>
-
+    {#    <svg class="tcb-icon" viewBox="0 0 448 512" data-id="icon-telegram-plane-brands" data-name="">#}
+    {#        <path d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z"></path>#}
+    {#    </svg>#}
     <div id="container">
-        <section class="presentation hero">
-            <h2>Vos statistiques principales en un clin d'oeil</h2>
-            <img class="presentation" src="images/mainData.png"/>
-        </section>
-        <section class="presentation">
-            <h2 class="row col-xl-6">Les statistiques sur les derniers mois</h2>
-            <div class="col-xl-12 d-flex">
+        <section class="d-flex flex-column justify-content-around align-items-center presentation hero mt-0">
+            <div class="filter">
 
-                <div class="col-xl-6 d-flex">
-                    <img class="col-xl-8" src="images/GraphiqueSixMois.PNG"/>
-                    <img class="col-xl-4" src="images/GraphiqueJours.PNG"/>
-                </div>
-
-                <div class="col-xl-6 d-flex">
-                    <img class="col-xl-8" src="images/EnsemblePubs.PNG"/>
-                    <img class="col-xl-4" src="images/Pubs.PNG"/>
-                </div>
             </div>
+            <div class="center d-flex flex-column justify-content-around align-items-center">
+                <div class="title hero background">
 
+                </div>
+                <div class="d-flex flex-column justify-content-around align-items-center title hero">
+                    <h1>ReportMe</h1>
+                    <p>Les résultats de performances de vos publicités en un rien de temps.</p>
+                    <div class="connect signIn"><a href="admin.php?action=signIn">S'enregistrer</a></div>
+                </div>
+
+            </div>
+        </section>
+
+        {#    <div class="menu col-xl-12 d-flex center">#}
+        {#        <ul class="col-xl-4 offset-xl-4 nav nav-tabs nav-justified">#}
+        {#            <li class="active mainSection"><a href="#">Home</a></li>#}
+        {#            <li class="mainSection"><a href="#">Menu 1</a></li>#}
+        {#            <li class="mainSection"><a href="#">Menu 2</a></li>#}
+        {#            <li class="mainSection"><a href="#">Menu 3</a></li>#}
+        {#        </ul>#}
+        {#    </div>#}
+
+
+        <section class="col-xl-12 d-flex flex-wrap justify-content-around align-items-center presentation mainData">
+            <div class="col-xl-6 d-flex row">
+                <h2 class="col-xl-12">Les statistiques clés en un clin d'oeil</h2>
+                <ul>
+                    <li>Mise à jour quotidienne</li>
+                    <li>Export en format CSV</li>
+                </ul>
+            </div>
+            <img class="col-xl-6 presentation" src="images/mainData.png"/>
+        </section>
+        <section
+                class="col-xl-12  d-flex flex-wrap justify-content-around align-items-center presentation graphe6months">
+            <img class="col-xl-6 presentation" src="images/Graphes.PNG"/>
+            <div class="col-xl-6 d-flex row">
+                <h2 class="col-xl-12">Evolution sur les dernières périodes</h2>
+                <ul>
+                    <li>Visualisation graphique</li>
+                    <li>Périodes : 7 et 14 derniers jours, 6 derniers mois</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="d-flex flex-wrap justify-content-around align-items-center presentation adsets">
+            <div class="col-xl-6 d-flex row">
+                <h2 class="col-xl-12">Les performances en détail pour chaque publicité</h2>
+                <ul>
+                    <li>Mise à jour quotidienne</li>
+                    <li>Par ensemble publicitaire et par publicité</li>
+                    <li>Export en format CSV</li>
+                </ul>
+            </div>
+            <div class="col-xl-6">
+                <img class="col-xl-12 presentation" src="images/LesPubs-flou.PNG"/>
+            </div>
         </section>
     </div>
+{% endblock %}
+
+{% block footer %}
+    <footer>
+            <!-- Copyright -->
+            <div class="d-flex flex-column justify-content-around align-items-center">
+                <div>© 2020 Copyright :
+                    <a href="https://monymakerz.com/"> MonyMakerz SARL</a></div>
+                <div><a href="https://monymakerz.com/mentions-legales/">Mentions légales</a></div>
+            </div>
+    </footer>
 {% endblock %}

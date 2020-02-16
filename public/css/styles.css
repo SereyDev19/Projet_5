@@ -7,10 +7,11 @@
 
 @font-face {
     font-family: "ProximaNova-Regular";
-    src: url('font/proxima_ssv/ProximaNova-Regular.otf') format('OpenType Font');
+    src: url("../font/proxima_ssv/ProximaNova-Regular.otf") format('OpenType Font');
     font-weight: normal;
     font-style: normal;
 }
+
 
 @media (min-width: 1200px) {
     .container {
@@ -20,6 +21,7 @@
 
 body {
     font-family: Lato, Helvetica, sans-serif;
+    /*font-family: 'Proxima Nova', Georgia, sans-serif;*/
     background-color: #fff;
 }
 
@@ -70,17 +72,206 @@ header {
 /*    max-height: 500px;*/
 /*    max-width: 500px;*/
 /*}*/
-#container section.presentation {
-    /*background-color: rgba(35, 50, 102, 0.10);*/
+
+div.menu {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.mainSection {
+    font-size: 1.4rem;
+    background-color: #ea5a63;
+    width: 100px;
+    height: 50px;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.mainSection a {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    text-decoration: none;
+    color: #fff;
+}
+
+.mainSection:hover {
+    background-color: #fff;
+    color: #ea5a63;
+    border: 2px solid #ea5a63;
+}
+
+.mainSection:hover a {
+    color: #ea5a63;
+}
+
+.mainSection:first-of-type {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: 1px solid #fff;
 
 }
 
-#container section.presentation img {
-    width: 50%;
+.mainSection:last-of-type {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid #fff;
+}
+
+#container section.presentation {
+    min-height: 255px;
+    margin-top: 50px;
 }
 
 #container section.presentation.hero {
-    height: auto;
+    position: relative;
+}
+
+#container section div.title.hero.background {
+    position: relative;
+    width: 700px;
+    height: 160px;
+    padding: 10px;
+    border-radius: 150px;
+    background-color: #223265;
+    opacity: 0.5;
+}
+
+#container section div.title.hero {
+    position: absolute;
+    width: 700px;
+    height: 150px;
+    top: 0;
+}
+
+#container section .center {
+    position: absolute;
+    top: 150px;
+    right: 150px;
+    color: #fff;
+}
+
+#container section.presentation.hero.filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 500px;
+    height: 500px;
+    background-color: red;
+}
+
+#container section p {
+    font-size: 1.4rem;
+}
+
+
+#container section:nth-of-type(2n) {
+    /*background-color: rgba(249, 174, 35, 0.15);*/
+    /*background-color: rgba(238,116,128,0.56);*/
+}
+
+#container section h2 {
+    /*display: inline-block;*/
+    margin: 0 auto;
+    padding: 0 5px;
+    background-color: #ea5a63;
+    border-radius: 25px;
+    color: #fff;
+    /*box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.35);*/
+}
+
+#container section div:hover li {
+    /*visibility: hidden;*/
+    animation: slideAppear 1s ease forwards;
+}
+
+#container section div li {
+    margin-top: 3px;
+    opacity: 0;
+    background-color: #ee737f;
+    width: auto;
+    border-radius: 25px;
+    padding: 0 10px;
+    text-align: center;
+    color: #fff;
+}
+
+#container section div ul {
+    overflow: hidden;
+    list-style-type: none;
+    margin: auto;
+}
+
+@keyframes slideAppear {
+    0% {
+        transform: translateY(-50px);
+
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+#container section:nth-of-type(2n) h2::after {
+    content: "\f35a";
+    margin-left: 10%;
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+#container section:nth-of-type(2n+1) h2::before {
+    content: "\f359";
+    margin-right: 10%;
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+#container section h2:hover {
+    animation: turnRadius 1s ease forwards;
+}
+
+@keyframes turnRadius {
+    0% {
+    }
+
+    100% {
+        box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.35);
+
+    }
+}
+
+#container section.presentation.hero {
+    color: #fff;
+    height: 500px;
+    background-image: url("../images/will-francis-r02wxT3-PYw-unsplash.jpg");
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#container section.presentation img:hover {
+    animation: scaleHover 1s ease alternate;
+}
+
+@keyframes scaleHover {
+    0% {
+        transform: scale3d(1.0, 1.0, 1.0);
+    }
+
+    100% {
+        transform: scale3d(1.01, 1.01, 1.01);
+
+
+    }
+
+}
+
+#container section.presentation.hero {
     padding: 0 10px 15px 15px;
 }
 
@@ -95,6 +286,63 @@ header {
 /*        transform: rotateY(45deg);*/
 /*    }*/
 /*}*/
+
+/*body {*/
+/*    perspective: 800px;*/
+/*    perspective-origin: left;*/
+/*}*/
+
+/*#container section.adsets div img:nth-of-type(1) {*/
+/*    position: relative;*/
+/*}*/
+
+/*#container section.adsets div img:nth-of-type(2) {*/
+/*    position: absolute;*/
+/*    top: 0px;*/
+/*    left: 0px;*/
+/*}*/
+
+/*#container section.adsets div img:nth-of-type(1) {*/
+
+/*    animation: animate3Dp45 1s forwards;*/
+/*}*/
+
+/*#container section.adsets div img:nth-of-type(2) {*/
+
+/*    animation: animate3Dm45 1s forwards;*/
+/*}*/
+
+@keyframes animate3Dp45 {
+    0% {
+        opacity: 1;
+        transform-origin: 50% 50% -1000px;
+        transform: rotateY(0deg);
+    }
+    20% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: rotateY(180deg);
+    }
+}
+
+@keyframes animate3Dm45 {
+    0% {
+        opacity: 0;
+        transform-origin: 50% 50% -1000px;
+        transform: rotateY(-180deg);
+    }
+    20% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotateY(0deg);
+    }
+}
+
 
 #container.profile {
     width: 600px;
@@ -433,7 +681,7 @@ textarea#comment {
 /*}*/
 footer {
     /*position: fixed;*/
-    margin-top: 25px;
+    margin-top: 50px;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -1047,6 +1295,36 @@ h2 {
     }
 }
 
+@media (max-width: 1198px) {
+
+    #container section.presentation {
+        margin-top: 15px;
+    }
+
+    #container section:nth-of-type(2n) h2::after {
+        content: "";
+        margin: 0;
+    }
+
+    #container section:nth-of-type(2n+1) h2::before {
+        content: "";
+        margin: 0;
+    }
+
+    #container section:nth-of-type(2n+1) div {
+        order: -1;
+    }
+
+    #container section div li {
+        width: auto;
+        opacity: 1;
+    }
+
+    #container section div:hover li {
+        animation: none;
+    }
+}
+
 @media (max-width: 1100px) {
     #content {
         width: 100%;
@@ -1054,6 +1332,10 @@ h2 {
 
     h1 {
         font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
     }
 
     #username {
@@ -1078,6 +1360,26 @@ h2 {
     }
 }
 
+@media (max-width: 1000px) {
+    #container section .center {
+        right: 50px;
+    }
+
+    #container section div.title.hero.background {
+        width: 500px;
+        height: 160px;
+    }
+
+    #container section div.title.hero {
+        width: 480px;
+        height: 150px;
+    }
+
+    #container section p {
+        font-size: 1.2rem;
+    }
+}
+
 @media (max-width: 975px) {
     #blogTitle {
         font-size: 3.1rem;
@@ -1097,6 +1399,10 @@ h2 {
 
     h1 {
         font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
     }
 }
 
@@ -1152,6 +1458,26 @@ h2 {
     }
 }
 
+@media (max-width: 600px) {
+    #container section .center {
+        right: 50px;
+    }
+
+    #container section div.title.hero.background {
+        width: 380px;
+        height: 160px;
+    }
+
+    #container section div.title.hero {
+        width: 350px;
+        height: 150px;
+    }
+
+    #container section p {
+        font-size: 1.2rem;
+    }
+}
+
 @media (max-width: 520px) {
     #logo {
         width: 75px;
@@ -1161,6 +1487,30 @@ h2 {
     #blogTitle {
         font-size: 2.8rem;
         left: 4%;
+    }
+}
+
+
+@media (max-width: 500px) {
+    #container section .center {
+        right: 0px;
+    }
+
+    #container section div.title.hero.background {
+        width: 500px;
+        border-radius: unset;
+        height: 160px;
+    }
+
+    #container section div.title.hero {
+        right: 0px;
+        width: 350px;
+        height: 150px;
+    }
+
+    #container section p {
+        font-size: 1.2rem;
+        padding: 5px;
     }
 }
 
