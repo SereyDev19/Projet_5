@@ -25,9 +25,4 @@ class GetDays
         array_push($dates, $end);
         return $dates;
     }
-
-
 }
-//
-//$dates = getDatesBetween('2009-01-01', '2009-01-15');
-//print_r($dates);

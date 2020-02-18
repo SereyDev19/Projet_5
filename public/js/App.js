@@ -6,7 +6,6 @@ class App {
     }
 
     init() {
-        // this.CallButton = new CallButton();
     }
 
     plotSpend(id) {

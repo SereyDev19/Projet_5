@@ -109,10 +109,7 @@ class UserManager extends Manager
         //  Test si le password existe
         $sql = 'SELECT access_password FROM access WHERE access_id = ?';
         $resultat = $this->getOne($sql, [$access_id]);
-        var_dump($resultat);
 
-
-//        if ($resultat[0] != null) {
         if ($resultat['access_password'] != null) {
             $this->message = 'Un compte a déjà été créé pour l\'identifiant' . $access_id;
 

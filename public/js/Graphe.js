@@ -15,16 +15,19 @@ class Graphe {
                 var hoverBackgroundColor = "#86c59a";
                 var backgroundColor = "#18a85c";
                 var fontColor = "#fff";
+                this.ticksLimit = 5;
                 break;
             case 'Spend':
                 var hoverBackgroundColor = "#f4abb6";
                 var backgroundColor = "#ea5a63";
                 var fontColor = "#fff";
+                this.ticksLimit = 5;
                 break;
             case 'CostPerLead':
                 var hoverBackgroundColor = "#29a7c3";
                 var backgroundColor = "#29a7c3";
                 var fontColor = "#fff";
+                this.ticksLimit = 5;
                 break;
             default:
                 var hoverBackgroundColor = "rgba(232,105,90,0.8)";

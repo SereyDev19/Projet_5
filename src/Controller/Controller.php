@@ -96,7 +96,7 @@ class Controller
             $user_name = $_SESSION['username'];
             $getDBData = new GetDBData($_ENV);
 
-            $limit = 3; // 5 results per page
+            $limit = 3; // 3 results per page
             $allLetters = $getDBData->getLetters();
             $alphabet = [];
             foreach (range('A', 'Z') as $i) {
@@ -138,15 +138,23 @@ class Controller
     {
         $userManager = new UserManager($_ENV);
         $datavalidation = new DataValidation();
-        $email = $datavalidation->Validation($_POST['email']);
-        $password = $datavalidation->Validation($_POST['password']);
+        $email = $datavalidation->Validation($_POST['email'], 'email');
+        $password = $datavalidation->Validation($_POST['password'], 'password');
+        $flashbag = new FlashBag();
+
+        //Validate Data
+        if (!$email || !$password) {
+            $userManager->message = 'Veuillez vérifier les données rentrées';
+            $flashbag->add($userManager->message, 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            echo $this->twig->render('loginEmail.html.twig');
+        }
         $userExists = $userManager->verifyUser($email, $password);
 
         $manageAccess = new ManageAccess($_ENV);
         $manageAccess->isActivated($email);
 
-
-        $flashbag = new FlashBag();
 
         if (!$userManager->isCorrect) {
             $this->Login([]);
@@ -609,12 +617,22 @@ class Controller
         $AccessManager = new \App\Model\ManageAccess($_ENV);
         $AccessManager->getAccess();
 
-        $access_id = $dataValidation->Validation($params['access_id']);
-        $access_email = $dataValidation->Validation($params['access_email']);
-        $access_name = $dataValidation->Validation($params['access_name']);
-        $access_firstname = $dataValidation->Validation($params['access_firstname']);
-        $access_password = $dataValidation->Validation($params['access_password']);
-        $confirm_password = $dataValidation->Validation($params['confirm_password']);
+        $access_id = $dataValidation->Validation($params['access_id'], 'id');
+        $access_email = $dataValidation->Validation($params['access_email'], 'email');
+        $access_name = $dataValidation->Validation($params['access_name'], 'name');
+        $access_firstname = $dataValidation->Validation($params['access_firstname'], 'name');
+        $access_password = $dataValidation->Validation($params['access_password'], 'password');
+        $confirm_password = $dataValidation->Validation($params['confirm_password'], 'password');
+
+        // Validate Data
+        if (!$access_id || !$access_email || !$access_name || !$access_firstname || !$access_password || !$confirm_password) {
+            $userManager->message = 'Veuillez vérifier les données rentrées';
+            $flashbag->add($userManager->message, 'error');
+            $flashbag->flash();
+            $flashbag->fetchMessages();
+            echo $this->twig->render('createAccount.html.twig');
+            exit();
+        }
 
         //Check errors in typing password x2
         if ($userManager->errorDefiningPassword($access_password, $confirm_password)) {
@@ -622,6 +640,7 @@ class Controller
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
+            echo $this->twig->render('createAccount.html.twig');
             exit();
         }
 
@@ -629,10 +648,10 @@ class Controller
         $AccountCreated = $userManager->passwordDefined($access_id);
         if ($userManager->verifyEmail($access_email)) {
             $this->SignIn();
-
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
+            echo $this->twig->render('createAccount.html.twig');
             exit();
         }
 
@@ -641,6 +660,7 @@ class Controller
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
+            echo $this->twig->render('createAccount.html.twig');
             exit();
         }
 
@@ -649,6 +669,7 @@ class Controller
             $flashbag->add($userManager->message, 'error');
             $flashbag->flash();
             $flashbag->fetchMessages();
+            echo $this->twig->render('createAccount.html.twig');
             exit();
         }
 
@@ -665,6 +686,8 @@ class Controller
         //Convert the binary data into hexadecimal representation.
         $access_token = bin2hex($token);
 
+        //Crypt the password and register new user credentials
+        $access_password = password_hash($access_password, PASSWORD_BCRYPT);
         $AccessManager->registerAccess($access_id, $access_email, $access_name, $access_firstname, $access_password, $access_token);
 
 
@@ -902,7 +925,7 @@ class Controller
                 if ($goal == 'LEAD_GENERATION') {
                     $lead = $getAPIData->getDataActions($iterAccount, ['actions'])['lead']; // lead
                     $cost_lead = $getAPIData->getCost($iterAccount, ['cost_per_action_type'])['lead']; // cost per lead
-                } else {
+                } else { //This case is not used for the moment
                     $lead = -1;
                     $cost_lead = -1;
                 }
@@ -917,11 +940,6 @@ class Controller
                 ]);
             }
         }
-        var_dump('APIGlobalReport OK');
-//            //Get data from BD MYSQL
-//            $DBaccounts = $getDBaccounts->getAccounts();
-//        } else {
-//        }
     }
 
     /**
@@ -996,7 +1014,7 @@ class Controller
                     if ($ad->hasData) {
                         $bddAd->isregisteredAd($iterAd, $registerAd);
                         $result = $ad->getAdResult($iterAd, $iterAdSet);
-
+//                        var_dump('leads pour ', $iterAd, ' : ', $result[1]);
                         $bddAd->syncAd($accountId, $iterAdSet, $iterAd, [$goal, $name,
                             $adData[$iterAd]['spend'],
                             $adData[$iterAd]['cpm'],
@@ -1015,7 +1033,7 @@ class Controller
 
     /**
      * Cron Job
-     * update all data for all accounts
+     * update all data for all accounts every day
      */
     public function updateAllData()
     {
@@ -1024,16 +1042,16 @@ class Controller
         $getAccountsId = $getAPIData->getAccountsId($getAPIData->env['devId']);
 
         // Get Data from the 30 previous days (default)
-//        $this->APIGlobalReport();
+        $this->APIGlobalReport();
 
         //Get Data from the 7 previous days -- Test works fine
-//        foreach ($getAccountsId as $iterAccount) {
-//            if ($iterAccount == '331859797400599') {
-//                $end = date("Y-m-d");
-//                $start = date('Y-m-d', strtotime("$end -7 day"));
-//                $this->APIGlobalReportDatesDay($iterAccount, $start, $end,'7');
-//            }
-//        }
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $end = date("Y-m-d");
+                $start = date('Y-m-d', strtotime("$end -7 day"));
+                $this->APIGlobalReportDatesDay($iterAccount, $start, $end, '7');
+            }
+        }
 
         //Get Data from the 14 previous days
         foreach ($getAccountsId as $iterAccount) {
@@ -1044,23 +1062,21 @@ class Controller
             }
         }
 
-        // Get Data between two dates  -- Test works fine
-//        foreach ($getAccountsId as $iterAccount) {
-//            if ($iterAccount == '331859797400599') {
-//                $start = '2019-01-1';
-//                $end = '2020-01-12';
-//                $this->APIGlobalReportDates($iterAccount, $start, $end);
-//            }
-//        }
+        // Get Data from the 6 previous monthes
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $end = date("Y-m-d");
+                $start = date('Y-m-d', strtotime("$end -6 month"));
+                $this->APIGlobalReportDates($iterAccount, $start, $end);
+            }
+        }
 
         // Get detailed data  -- Test works fine
-//        foreach ($getAccountsId as $iterAccount) {
-//            if ($iterAccount == '331859797400599') {
-//                $this->APIdetailedReport($iterAccount);
-//            }
-//        }
-
-
+        foreach ($getAccountsId as $iterAccount) {
+            if ($iterAccount == '331859797400599') {
+                $this->APIdetailedReport($iterAccount);
+            }
+        }
     }
 
 }

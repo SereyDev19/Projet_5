@@ -65,7 +65,6 @@ class UploadFile
      */
     public function upload()
     {
-        // $user = $_GET['userid'];
         // Deleting potential former pictures in the user directory
         foreach (scandir("uploads/" . $this->userId) as $file) {
             if (!($file == "." or $file == "..")) {
@@ -110,7 +109,8 @@ class UploadFile
         }
 // Check if $uploadOk is set to 0 by an error
         if ($uploadOk == 0) {
-            $this->message = "Sorry, your file was not uploaded.";
+            $this->msgtype = 'error';
+            $this->message = $this->message . " Your file was not uploaded.";
 // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {

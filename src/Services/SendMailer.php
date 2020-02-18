@@ -38,7 +38,7 @@ class SendMailer
             $transport = (new Swift_SmtpTransport('smtp.ionos.fr', 587, 'tls'))
                 ->setUsername($this->env['mail_user'])
                 ->setPassword($this->env['mail_pwd']);
-            $content = '<a href="http://sc19dev.fr/Projet_5_Test/public/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
+            $content = '<a href="http://sc19dev.fr/ReportMe/public/admin.php?action=click2validate&token=' . $access_token . '"> Cliquez-ici pour finaliser votre inscription</a>';
 
         }
 // Create the Mailer using your created Transport

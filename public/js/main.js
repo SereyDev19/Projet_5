@@ -9,5 +9,3 @@ jQuery(function ($) {
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
-
-var app = new App;

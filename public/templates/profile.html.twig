@@ -41,16 +41,20 @@
             <a class="text-white" href="index.php"><i class="fas fa-arrow-left"></i>Retour vers l'accueil</a>
         </div>
         <div class="myprofile">
-            <div class="row col-md-8 align-items-center justify-content-around">
+            <div class="row flex-wrap col-md-8 col-lg-8 col-xl-8 align-items-center justify-content-around">
                 <img src="uploads/{{ user_id }}/{{ file }}" class="oval" style="width:200px;height: auto"/>
                 <p class="username font-weight-bold">{{ user_name }}</p>
+                <p class="useremail font-weight-bold">{{ user_email }}</p>
             </div>
 
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                Modifier
-            </button>
+            <div class="col-xl-6">
+                <!-- Button trigger modal -->
+                <button type="button" class="offset-4 btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Modifier
+                </button>
+            </div>
+
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -77,9 +81,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-
     </div>
 {% endblock %}

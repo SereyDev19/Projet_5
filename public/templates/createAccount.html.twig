@@ -14,15 +14,17 @@
         </div>
         <form action="admin.php?action=CreateAccount" method="POST">
             <div class="logo">
-                <img id="logo" alt="logo" src="images/LOGOreportme.png">
+                <img class="logo" alt="logo" src="images/LOGOreportme.png">
             </div>
             <h1>Inscription</h1>
 
             <div class="step row" id="step1">
-                <label for="access_id"><b>Identifiant</b></label>
+                <label for="access_id" data-toggle="tooltip" data-placement="top"
+                       title="Cet identifiant vous a été communiqué par l'agence MonyMakerz"><b>Identifiant </b><i class="fas fa-question-circle"></i></label>
                 <input id="access_id" type="number" placeholder="Identifiant" name="access_id" required>
                 <label for="access_email"><b>E-mail</b></label>
                 <input id="access_email" type="email" placeholder="E-mail" name="access_email" required>
+                <span class="error" aria-live="polite"></span> <br>
             </div>
             {#            <div id="NextStep">Suivant</div>#}
             <div class="step row d-flex justify-content-around" id="step2">
@@ -43,7 +45,7 @@
                 <input type="password" placeholder="Confirmer le mot de passe" name="confirm_password"
                        id="confirm_password" required>
 
-                <input type="submit" id='submit' name='signIn' value='Inscription'>
+                <input type="submit" id="submit" class="disabled" name="signIn" disabled value="Inscription">
             </div>
         </form>
     </div>
@@ -52,6 +54,8 @@
 
 {% block scripts %}
     <script>
-        var logform = new LogForm();
+        var checkValidity = new CheckValidity("access_email");
+        checkValidity.check();
     </script>
+
 {% endblock %}

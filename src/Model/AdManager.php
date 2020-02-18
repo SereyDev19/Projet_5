@@ -265,8 +265,13 @@ class AdManager extends GetAPIData
         $this->optimGoal($adSetId);
         if ($this->optimization_goal == 'LEAD_GENERATION') {
             $action = 'lead';
-            $result = $this->getDataActions($adId, ['actions'])[$action];
-            $cost_per_result = $this->getCost($adId, ['cost_per_action_type'])[$action];
+            if (array_key_exists($action, $this->getDataActions($adId, ['actions']))) {
+                $result = $this->getDataActions($adId, ['actions'])[$action];
+                $cost_per_result = $this->getCost($adId, ['cost_per_action_type'])[$action];
+            } else {
+                $result = 0;
+                $cost_per_result = 0;
+            }
         } elseif ($this->optimization_goal == 'THRUPLAY') {
             $action = 'video_thruplay_watched_actions';
             $result = $this->DataFromFields($adId, [$action])[$adId][$action][0]['value'];

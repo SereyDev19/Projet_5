@@ -227,11 +227,16 @@ class AdSetManager extends GetAPIData
     {
 
         $this->optimGoal($adSetId);
-        var_dump('optimization goal', $this->optimization_goal);
+//        var_dump('optimization goal', $this->optimization_goal);
         if ($this->optimization_goal == 'LEAD_GENERATION') {
             $action = 'lead';
-            $result = $this->getDataActions($adSetId, ['actions'])[$action];
-            $cost_per_result = $this->getCost($adSetId, ['cost_per_action_type'])[$action];
+            if (array_key_exists($action, $this->getDataActions($adSetId, ['actions']))) {
+                $result = $this->getDataActions($adSetId, ['actions'])[$action];
+                $cost_per_result = $this->getCost($adSetId, ['cost_per_action_type'])[$action];
+            } else {
+                $result = 0;
+                $cost_per_result = 0;
+            }
         } elseif ($this->optimization_goal == 'THRUPLAY') {
             $action = 'video_thruplay_watched_actions';
             $result = $this->DataFromFields($adSetId, [$action])[$adSetId][$action][0]['value'];

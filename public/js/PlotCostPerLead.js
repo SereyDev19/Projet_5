@@ -2,6 +2,8 @@ class PlotCostPerLead {
     constructor(id, url) {
         this.id = id
         this.button = document.getElementById(id);
+        this.width = (document.body.clientWidth);
+        this.height = (document.body.clientHeight);
         this.url = url;
         this.legend = 'Coût par lead';
         this.hasClicked = true
@@ -30,16 +32,29 @@ class PlotCostPerLead {
             this.plotarea.insertAdjacentElement("beforeend", this.canvas);
 
             //Div with two graphes : 7 days and 14 days
-            this.div = this.createElement("div", false, "row chart-container col-sm-12 col-md-8 col-lg-8 col-xl-6")
-            this.plotarea.insertAdjacentElement("beforeend", this.div);
+            // this.div = this.createElement("div", false, "row chart-container col-sm-12 col-md-8 col-lg-8 col-xl-6")
+            this.div = this.createElement("div", false, "row chart-container col-sm-12 col-md-12 col-lg-12 col-xl-6")
+            if (this.width >= 1200) {
+                this.plotarea.insertAdjacentElement("beforeend", this.div);
+            }
 
             //Preparing Canvas for 7 previous days
-            this.canvas = this.createElement("canvas", "CostPerLead7d", "col-sm-8 col-md-8 col-lg-8 col-xl-8 mb-2")
-            this.div.insertAdjacentElement("beforeend", this.canvas);
+            this.canvas = this.createElement("canvas", "CostPerLead7d", "col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-2 mb-2")
+            //Responsive => Graphes goes inside the six months one
+            if (this.width < 1200) {
+                this.plotarea.insertAdjacentElement("beforeend", this.canvas);
+            } else {
+                this.div.insertAdjacentElement("beforeend", this.canvas);
+            }
 
             //Preparing Canvas for 14 previous days
-            this.canvas = this.createElement("canvas", "CostPerLead14d", "col-sm-8 col-md-8 col-lg-8 col-xl-8 mt-2")
-            this.div.insertAdjacentElement("beforeend", this.canvas);
+            this.canvas = this.createElement("canvas", "CostPerLead14d", "col-sm-12 col-md-8 col-lg-8 col-xl-8")
+            //Responsive => Graphes goes inside the six months one
+            if (this.width < 1200) {
+                this.plotarea.insertAdjacentElement("beforeend", this.canvas);
+            } else {
+                this.div.insertAdjacentElement("beforeend", this.canvas);
+            }
 
             this.graph = new Graphe('bar', 'CostPerLead');
             var js_dates = Object.keys(response.history_costperlead);

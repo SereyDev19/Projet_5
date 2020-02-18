@@ -51,7 +51,7 @@ class QueryAdsets {
                     data.appendChild(tempdiv)
 
                     tempdiv = document.createElement("div")
-                    tempdiv.setAttribute("class", "costsgroup d-flex justify-content-around mb-2")
+                    tempdiv.setAttribute("class", "costsgroup d-flex flex-wrap justify-content-around mb-2")
                     data.appendChild(tempdiv)
 
                     var sectionresultsgroup = document.getElementsByClassName("resultsgroup")[0]
@@ -82,7 +82,12 @@ class QueryAdsets {
                         'leads30d',
                         'cost_per_lead30d']
 
-                    var realkeys = ['Objectif', 'Dépenses', 'CPM', 'Clics', 'Coût par clic', 'Leads', 'Coût par lead']
+                    if (this.res['optimization_goal'] === 'LEAD_GENERATION'){
+                        var result = 'Leads'
+                    }else {
+                        var result = 'Résultat'
+                    }
+                    var realkeys = ['Objectif', 'Dépenses', 'CPM', 'Clics', 'Coût par clic', result, 'Coût par lead']
 
                     // Erase previous data in sectionAdsets
                     var sectionAds = document.getElementById("sectionAdsets")
@@ -147,7 +152,7 @@ class QueryAdsets {
                         anAd.appendChild(tempdiv)
 
                         tempdiv = document.createElement("div")
-                        tempdiv.setAttribute("class", "costsgroup d-flex justify-content-around mb-2")
+                        tempdiv.setAttribute("class", "costsgroup d-flex flex-wrap justify-content-around mb-2")
                         anAd.appendChild(tempdiv)
 
                         var sectionresultsgroup = anAd.getElementsByClassName("resultsgroup")[0]
@@ -185,6 +190,7 @@ class QueryAdsets {
                                 unite = '€'
                             }
                             p2.innerHTML = ad[keys[index]] + unite;
+
                             // this.div.innerHTML = this.res[keys[index]];
                             div.appendChild(p1);
                             div.appendChild(p2)

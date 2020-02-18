@@ -46,7 +46,6 @@ class Router
         switch ($action) {
             case 'reportAccount':
                 $this->Controller->fullDashboard($params['account_id']);
-                //$this->Controller->ReportAccount($params['account_id']);
                 break;
             case 'signIn':
                 $this->Controller->SignIn();

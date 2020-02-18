@@ -5,8 +5,9 @@
     <meta charset="utf-8"/>
     <title>ReportMe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css"
-          href="font/proxima-nova-web-fonts-master/proxima-nova-web-fonts-master/fontsfonts.min.css"/>
+{#    <link rel="stylesheet" type="text/css"#}
+{#          href="font/proxima-nova-web-fonts-master/proxima-nova-web-fonts-master/fontsfonts.min.css"/>#}
+    <link rel="shortcut icon" href="images/LOGOreportme.png">
     <link href="css/styles.css" rel="stylesheet"/>
     <link href="css/styles-admin.css" rel="stylesheet"/>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +26,7 @@
 
 {% block content %}{% endblock %}
 
-{%  block footer %}{% endblock %}
+{% block footer %}{% endblock %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -33,15 +34,10 @@
 <script src="https://kit.fontawesome.com/87f6388a53.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-<script src="js/ajax.js"></script>
 <script src="js/AjaxRequest.js"></script>
+<script src="js/CheckValidity.js"></script>
 <script src="js/ReformatDate.js"></script>
-<script src="js/AddRowAdset.js"></script>
-<script src="js/FilterAds.js"></script>
-{#<script src="js/LogForm.js"></script>#}
 <script src="js/Graphe.js"></script>
-<script src="js/CallButton.js"></script>
-<script src="js/Plot.js"></script>
 <script src="js/PlotSpend.js"></script>
 <script src="js/PlotLead.js"></script>
 <script src="js/PlotCostPerLead.js"></script>
@@ -51,13 +47,5 @@
 
 {% block scripts %}{% endblock %}
 
-{#<footer class="">#}
-{#    <!-- Copyright -->#}
-{#    <div class="d-flex justify-content-around align-self-center">#}
-{#        <div>© 2020 Copyright:#}
-{#            <a href="https://monymakerz.com/"> MonyMakerz SARL</a></div>#}
-{#        <div><a href="https://monymakerz.com/mentions-legales/">Mentions légales</a></div>#}
-{#    </div>#}
-{#</footer>#}
 </body>
 </html>

@@ -62,7 +62,6 @@ class GetMonths
      */
     public function isSooner($date1, $date2)
     {
-//        var_dump('on compare ', $date1, ' avec ', $date2);
         $date1 = mktime(0, 0, 0, date_parse($date1)['month'], date_parse($date1)['day'], date_parse($date1)['year']);
         $date2 = mktime(0, 0, 0, date_parse($date2)['month'], date_parse($date2)['day'], date_parse($date2)['year']);
         if ($date1 < $date2) {

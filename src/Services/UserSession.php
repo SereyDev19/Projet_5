@@ -38,23 +38,4 @@ class UserSession extends Session
             return $connect;
         }
     }
-
-    /**
-     * @param $username
-     */
-    public function getUserInfo($username)
-    {
-        $this->userName = $_SESSION['username'];
-        $this->userId = $_SESSION['username'];
-    }
-
-    /**
-     *
-     */
-    public function getCurrentSessionInfo()
-    {
-        var_dump($this->userId);
-        var_dump($this->userName);
-        var_dump($this->levelAccess);
-    }
 }

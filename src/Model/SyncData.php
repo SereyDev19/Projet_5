@@ -348,6 +348,7 @@ class SyncData extends Manager
     {
         $firstArr = [$adId];
         $values = array_merge($values, $firstArr);
+//        var_dump('valeurs à mettre a jour : ',$values);
         $sql = 'UPDATE ads SET optimization_goal = ?,
                                         ad_name = ?,
                                         spend30d = ?,
@@ -357,7 +358,7 @@ class SyncData extends Manager
                                         leads30d = ?,
                                         cost_per_lead30d = ?,
                                         sell_rate30d = ?
-                                        WHERE adset_id= ?';
+                                        WHERE ad_id= ?';
         $req = $this->executeStatement($sql, $values);
     }
 

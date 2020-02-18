@@ -25,9 +25,6 @@
                     <a class="dropdown-item" href="admin.php?action=profile">
                         Profil
                     </a>
-                    <a class="dropdown-item" href="admin.php?action=glossary">
-                        Glossaire
-                    </a>
                     <a class="dropdown-item" href="admin.php?action=logout">
                         <i class="fas fa-power-off"></i> Déconnexion
                     </a>
@@ -119,7 +116,7 @@
                                 </td>
 
                                 <td>
-                                    <a href="admin.php?action=deleteAccess&amp;access_id={{ iterAccess.access_id }}">Supprimer</a>
+                                    <a class="deleteAccess" href="admin.php?action=deleteAccess&amp;access_id={{ iterAccess.access_id }}">Supprimer</a>
                                 </td>
                             </tr>
                         {% endif %}
@@ -147,4 +144,11 @@
             {% endfor %}
         </section>
     </div>
+{% endblock %}
+
+{% block scripts %}
+        <script>
+            var manageAccess = new ManageAccess();
+        </script>
+
 {% endblock %}

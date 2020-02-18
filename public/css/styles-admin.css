@@ -258,10 +258,10 @@ section {
     margin-top: 75px;
 }
 
-section:first {
-    margin-top: 10px;
+/*section:first {*/
+/*    margin-top: 10px;*/
 
-}
+/*}*/
 
 .fa-file-csv, .fa-file-pdf {
     /*color: #18a85c!important;*/
